@@ -1,0 +1,77 @@
+🤝 Répartition du travail
+
+Binôme A : Parsing
+	Tokenizer (split en mots + opérateurs).
+	Gestion quotes.
+	Expansion $VAR et $?.
+	Construction des structures de commande.
+
+Binôme B : Exécution
+	Gestion des forks, execve, redirections, pipes.
+	Implémentation des builtins.
+	Gestion des signaux.
+___________________________________________________________
+
+
+✅ Conseils pratiques
+
+Faites des branches Git par fonctionnalité (ex : parsing-quotes, exec-redirs), 
+	puis mergez via PR pour relire le code de l’autre.
+Commencez par un minishell minimal (juste exécuter ls avec execve), puis ajoutez petit à petit.
+Toujours tester sur bash pour comparer.
+Notez vos choix de structures dans un README technique → ça vous évite d’oublier pourquoi vous avez fait tel design.
+
+
+
+🗓️ AGENDA:
+
+- mardi    	02/08: 15h on explique la struct de nos code srx!
+- mercredi 	03/08:
+
+
+
+___________________________________________________________
+
+
+Lecture / Parsing des commandes
+	Parsing = transformer la ligne de texte que l’utilisateur tape en
+		une structure de données que l’exécution pourra utiliser.
+	Lire la ligne avec readline.
+	Lexer / tokenizer : lire la chaîne et produire une liste de tokens (mots, opérateurs |, <, >, >>, <<).
+	Parser : transformer la liste de tokens en une liste de commandes (chaque commande a argv[], redirections, etc.).
+	Gérer les quotes (simples et doubles).
+	Implémenter l’expansion des variables d’environnement ($VAR, $?).
+	Construire une structure de commande (par ex. une liste chaînée de commandes avec leurs args,
+		redirections, etc.).
+	👉 Une fois ça fait, tu peux déjà tester en affichant une "AST" simplifiée (commande + args + redirs).
+
+3. Exécution des commandes
+	Gestion du PATH → trouver le binaire avec execve.
+	Gestion des redirections (dup2, open).
+	Gestion des pipes (chaîner avec pipe et fork).
+	Récupérer le status pour $?.
+
+4. Builtins
+	Les intégrer progressivement :
+	Faciles : echo, pwd, env.
+	Moyens : cd, export, unset.
+	Délicat : exit (bien gérer les cas d’erreurs et la fin du programme).
+
+	⚠️ Certains builtins doivent s’exécuter sans fork (cd, export, unset, exit), 
+	 donc il faudra prévoir une logique spéciale.
+
+5. Gestion des signaux
+	ctrl-C : affiche une nouvelle ligne + prompt.
+	ctrl-D : quitte le shell.
+	ctrl-\ : ignore.
+
+	⚠️ Bien utiliser une seule variable globale pour stocker le signal.
+
+6. Finalisation obligatoire
+	Tests avec beaucoup de cas (quotes mal fermées, pipes multiples, heredoc, redirs combinées, etc.).
+	Nettoyer les fuites mémoire (valgrind).
+	Vérifier les signaux en interactif.
+
+7. Bonus (si temps dispo)
+	Implémenter && et || avec priorités (donc parser une mini-grammaire).
+	Wildcards * (glob sur fichiers du cwd).

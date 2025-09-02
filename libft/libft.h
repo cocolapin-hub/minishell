@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:14:34 by claffut           #+#    #+#             */
-/*   Updated: 2025/08/04 12:03:10 by claffut          ###   ########.fr       */
+/*   Updated: 2025/09/01 16:44:31 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 char	*get_next_line(int fd);
+char	*ft_strcpy(char *s1, char *s2);
 
 typedef struct s_list
 {
