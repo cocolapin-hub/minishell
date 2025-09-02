@@ -15,7 +15,7 @@ ___________________________________________________________
 
 ✅ Conseils pratiques
 
-Faites des branches Git par fonctionnalité (ex : parsing-quotes, exec-redirs), 
+Faites des branches Git par fonctionnalité (ex : parsing-quotes, exec-redirs),
 	puis mergez via PR pour relire le code de l’autre.
 Commencez par un minishell minimal (juste exécuter ls avec execve), puis ajoutez petit à petit.
 Toujours tester sur bash pour comparer.
@@ -25,8 +25,8 @@ Notez vos choix de structures dans un README technique → ça vous évite d’o
 
 🗓️ AGENDA:
 
-- mardi    	02/08: 15h on explique la struct de nos code srx!
-- mercredi 	03/08:
+- mardi    	02/08: 15h on explique la struct de nos code srx! ✅
+- mercredi 	03/08: 
 
 
 
@@ -57,7 +57,7 @@ Lecture / Parsing des commandes
 	Moyens : cd, export, unset.
 	Délicat : exit (bien gérer les cas d’erreurs et la fin du programme).
 
-	⚠️ Certains builtins doivent s’exécuter sans fork (cd, export, unset, exit), 
+	⚠️ Certains builtins doivent s’exécuter sans fork (cd, export, unset, exit),
 	 donc il faudra prévoir une logique spéciale.
 
 5. Gestion des signaux
