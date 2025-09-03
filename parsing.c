@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:21:07 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/02 15:31:37 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/03 10:17:22 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,3 +41,13 @@
 //    - Attribution des arguments, redirections, et liens entre commandes (pour les pipes)
 //    - Préparation des structures pour l'exécution ultérieure
 
+// // avec "" ls -l -a " le parsing aura produit :
+	cmd = "ls"
+	args = {"ls", "-l", "-a", NULL} // le tableau doit etre termin par NULL et argv[0] = cmd
+	find_in_path("ls", envp) doit renvoyer : /bin/ls
+		// Pour ça, il faut :
+			Trouver la ligne PATH=... dans envp.
+			Découper la valeur (/usr/local/bin:/usr/bin:/bin:...) avec ft_split (":").
+			Pour chaque dossier, construire dir + "/" + cmd (/bin/ls, /usr/bin/ls, …).
+			Vérifier avec access(path, X_OK) si le fichier existe et est exécutable.
+			Retourner le premier trouvé.
