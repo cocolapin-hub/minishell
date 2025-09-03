@@ -3,43 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/02 15:21:07 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/03 10:17:22 by claffut          ###   ########.fr       */
+/*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/09/03 10:58:53 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 /*parsing*/
 
-// 1. Analyse de l'input
-//    - Récupération de la ligne de commande brute depuis l'utilisateur
-//    - Gestion des cas particuliers
-//			- ligne vide
-//			- EOF
-//			- Caractères spéciaux non valides ou non imprimables
-//			- Longueur excessive
-//			- Gestion des espaces et tabulations
-//			- Gestion des guillemets et échappements
+/* PARSING MINISHELL */
 
+// 1. Analyse de l'input
+//    - Récupération de la ligne de commande brute depuis l'utilisateur (readline)
+//    - Gestion des cas particuliers :
+//         - ligne vide → ignorer et afficher prompt suivant
+//         - EOF (Ctrl-D) → quitter le shell
+//         - caractères spéciaux non valides ou non imprimables
+//         - longueur excessive
+//         - gestion des espaces et tabulations
+//         - gestion des guillemets et échappements
 
 // 2. Tokenisation
 //    - Découpage de la ligne en tokens (mots, opérateurs, redirections, pipes)
-//    - Utilisation de l'enum t_token_type pour identifier le type de chaque token
-//    - Création d'une liste chaînée de t_token
+//    - Remplissage de la liste chaînée t_token
+//        - type : WORD, PIPE, REDIR_IN, REDIR_OUT, REDIR_APPEND, REDIR_HEREDOC
+//        - quote : Q_NONE, Q_SINGLE, Q_DOUBLE
+//        - value : texte exact du token (avec quotes si présentes)
+//    - Chaque token garde l’information sur les quotes pour l’étape suivante
 
+// 3. Expansion et quote removal sur t_token
+//    - Parcourir chaque token de type WORD
+//    - Si quote != Q_SINGLE : remplacer les variables d’environnement ($VAR, $?) par leur valeur
+//    - Supprimer les quotes entourant le token pour obtenir la valeur finale utilisable par execve
 
-// 3. Analyse syntaxique
-//    - Vérification de la validité de la syntaxe (ex : pas de pipe en fin de ligne)
-//    - Vérification que chaque redirection est suivie d'un fichier valide
-//    - Gestion des erreurs et messages utilisateurs
+// 4. Analyse syntaxique
+//    - Vérification de la validité de la syntaxe :
+//         - pas de pipe au début ou à la fin
+//         - pas de double pipe consécutif
+//         - chaque redirection est suivie d’un token WORD valide
+//    - Gestion des erreurs et affichage des messages utilisateurs
 
-
-// 4. Construction de la structure interne
+// 5. Construction de la structure interne
 //    - Organisation des tokens en commandes (t_command)
-//    - Attribution des arguments, redirections, et liens entre commandes (pour les pipes)
-//    - Préparation des structures pour l'exécution ultérieure
+//    - Pour chaque commande :
+//         - args : tableau des mots de la commande (argv)
+//         - redir : liste chaînée des redirections (<, >, >>, <<)
+//         - next : commande suivante si pipe
+//    - Préparation des structures pour l’exécution ultérieure
+
 
 // // avec "" ls -l -a " le parsing aura produit :
 	cmd = "ls"
