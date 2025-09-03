@@ -1,20 +1,29 @@
-NAME = minishell
+NAME    = minishell
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+SRCS    = 	src/main.c \
+			src/parsing.c \
 
-SRC = src/main.c
-OBJ = $(SRC:.c=.o)
+
+
+CC      = gcc
+CFLAGS  = -Wall -Wextra -Werror -g
+
+OBJS    = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -lreadline
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline
+
+%.o: %.c minishell.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJS)
 
 fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+.PHONY: all clean fclean re
