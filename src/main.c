@@ -1,14 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/01 14:14:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/02 14:50:07 by ochkaoul         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,7 +29,11 @@ int main(void)
 
 
 
-
+/*
+ readline → pour lire la ligne.
+ find_in_path → pour trouver la commande.
+ exec_command → pour exécuter.
+*/
 
 
 
