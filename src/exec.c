@@ -1,5 +1,6 @@
 
-#include "minishell.h"
+#include "../minishell.h"
+#include "../libft/libft.h"
 #include <sys/wait.h>
 
 static void	print_error(char *cmd, char *msg)

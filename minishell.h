@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/01 10:29:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/03 14:23:57 by claffut          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 #define MINISHELL_H
@@ -42,10 +31,14 @@ typedef struct s_command {
 	struct s_command *next;// prochaine commande (si pipe)
 }   t_command;
 
+void	exec_command(t_command *cmd, char **envp);
+void	free_split(char **array);
+char	*find_in_path(char *cmd, char **envp);
+
 #endif
 
 
-/*_________________________________________EXEMPLE_____*/
+/*_________________________________________EXEMPLE_____
 
 cat -n < in.txt | grep hello > out.txt
 
@@ -74,3 +67,4 @@ args     = ["grep", "hello", NULL];
 in_redir = NULL;
 out_redir= [ { type: REDIR_OUT, filename: "out.txt" } ];
 next     = NULL;
+*/

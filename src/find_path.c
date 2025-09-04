@@ -1,7 +1,8 @@
 
-#include "minishell.h"
+#include "../minishell.h"
+#include "../libft/libft.h"
 
-char	*get_path_line(char **envp)
+static char	*get_path_line(char **envp)
 {
 	int	i;
 
@@ -15,7 +16,7 @@ char	*get_path_line(char **envp)
 	return (NULL);
 }
 
-char	*build_path(char *dir, char *cmd)
+static char	*build_path(char *dir, char *cmd)
 {
 	char	*tmp;
 	char	*full;
@@ -69,7 +70,7 @@ char	*find_in_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-
+/*
 
 //Ce qu’on doit vraiment faire côté exécution
 	Récupérer la commande dans ta structure t_command (ex : cmd = "cat", args = ["cat", "-n", NULL]).
@@ -95,3 +96,4 @@ char	*find_in_path(char *cmd, char **envp)
 			char *args[] = {"echo", "hello", NULL};
 			execve("/bin/echo", args, envp);
 
+*/
