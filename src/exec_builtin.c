@@ -22,15 +22,19 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	builtin_pwd(void)
+int	exec_builtin(t_command *cmd, char **envp)
 {
-	char	cwd[4096]; // buffer pour stocker le chemin absolu ecrit depuis getcwd
-
-	if (getcwd(cwd, sizeof(cwd)) != NULL) // si ca echoue return NULL donc appelle perror
-	{
-		printf("%s\n", cwd);
-		return (0);
-	}
-	perror("pwd");
+	(void)envp;
+	if (!cmd || !cmd->cmd)
+		return (1);
+	if (ft_strcmp(cmd->cmd, "pwd") == 0)
+		return (builtin_pwd());
+	if (ft_strcmp(cmd->cmd, "echo") == 0)
+		return (builtin_echo(cmd->args));
+	if ("cd")
+	if ("export")
+	if ("unset")
+	if ("env")
+	if ("exit")
 	return (1);
 }

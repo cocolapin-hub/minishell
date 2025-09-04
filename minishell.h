@@ -31,10 +31,17 @@ typedef struct s_command {
 	struct s_command *next;// prochaine commande (si pipe)
 }   t_command;
 
+
+/*EXEC*/
 void	exec_command(t_command *cmd, char **envp);
 void	free_split(char **array);
 char	*find_in_path(char *cmd, char **envp);
+
+/*BUILTINS*/
 int		is_builtin(char *cmd);
+int		builtin_pwd(void);
+int		builtin_echo(char **args);
+
 
 #endif
 

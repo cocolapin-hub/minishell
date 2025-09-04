@@ -37,14 +37,13 @@ void	exec_command(t_command *cmd, char **envp)
 	// 	exec_builtin(cmd, envp);
 	// else
 	// 	exec_external(cmd, envp);	fork/execve
-	pid = fork();
-	if (pid == -1)
-		return (print_error(cmd->cmd, "fork failed"));
-	if (pid == 0)
-		child_process(cmd, envp);
-	else
-		waitpid(pid, &status, 0);
-	
+		pid = fork();
+		if (pid == -1)
+			return (print_error(cmd->cmd, "fork failed"));
+		if (pid == 0)
+			child_process(cmd, envp);
+		else
+			waitpid(pid, &status, 0);
 }
 
 /*
