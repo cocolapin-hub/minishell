@@ -1,7 +1,9 @@
 NAME    = minishell
 
-SRCS    = 	src/main.c \
-			src/parsing.c \
+SRCS    = 	main.c \
+			parsing/print_error.c \
+			parsing/check_input.c \
+			parsing/parsing.c \
 
 
 

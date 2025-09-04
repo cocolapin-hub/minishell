@@ -86,21 +86,21 @@ Lecture / Parsing des commandes
 
 /* PARSING MINISHELL */
 
-/// 1. Analyse de l'input
+// 1. Analyse de l'input
 //    - Récupération de la ligne de commande brute depuis l'utilisateur (readline)
 //    - Gestion des cas particuliers :
-//         - ligne vide → ignorer et afficher prompt suivant
-//         - EOF (Ctrl-D) → quitter le shell
-//         - caractères spéciaux non valides ou non imprimables
-//         - longueur excessive
-//         - gestion des espaces et tabulations (hors quotes)
+//         -x ligne vide → ignorer et afficher prompt suivant
+//         -x EOF (Ctrl-D) → quitter le shell
+//         -x caractères spéciaux non valides ou non imprimables
+//         -x longueur excessive
+//         -x gestion des espaces et tabulations
 
 // 2. Tokenisation
-//    - Découpage de la ligne en tokens (mots, opérateurs, redirections, pipes)
+//    -x Découpage de la ligne en tokens (mots, opérateurs, redirections, pipes)
 //    - Remplissage de la liste chaînée t_token
-//        - type : WORD, PIPE, REDIR_IN, REDIR_OUT, REDIR_APPEND, REDIR_HEREDOC
-//        - quote : Q_NONE, Q_SINGLE, Q_DOUBLE
-//        - value : texte exact du token (avec quotes si présentes)
+//        -x type : WORD, PIPE, REDIR_IN, REDIR_OUT, REDIR_APPEND, REDIR_HEREDOC
+//        -x quote : Q_NONE, Q_SINGLE, Q_DOUBLE
+//        -x value : texte exact du token (avec quotes si présentes)
 
 // 3. Expansion et quote removal sur t_token
 //    - Parcourir chaque token de type WORD

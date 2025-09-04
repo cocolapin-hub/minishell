@@ -3,24 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 10:59:43 by claffut           #+#    #+#             */
-/*   Updated: 2025/04/18 11:35:07 by claffut          ###   ########.fr       */
+/*   Updated: 2025/09/04 16:01:05 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "libft.h"
+#include "../minishell.h"
 
-t_list	*ft_lstnew(void *content)
+void	quotes_assignation(char quotes, t_quote *amount)
 {
-	t_list	*node;
+	if (quotes == 34)
+		*amount = Q_DOUBLE;
+	else if (quotes == 39)
+		*amount = Q_SINGLE;
+	else
+		*amount = Q_NONE;
+}
 
-	node = (t_list *)malloc(sizeof(t_list));
+void	type_assignation(char *content, t_element *type)
+{
+	if (content[0] ==  '|' && !content[1])
+		*type = PIPE;
+
+	else if (content[0] == '<' && !content[1])
+		*type = REDIR_IN;
+
+	else if (content[0] == '>' && !content[1])
+		*type = REDIR_OUT;
+
+	else if (content[0] == '>' && content[1] == '>' && !content[2])
+		*type = REDIR_APPEND;
+
+	else if (content[0] == '<' && content[1] == '<' && !content[2])
+		*type = REDIR_HEREDOC;
+
+	else
+		*type = WORD;
+}
+
+t_token	*ft_lstnew(char *content, char quotes)
+{
+	t_token	*node;
+
+	node = (t_token *)malloc(sizeof(t_token));
 	if (!node)
-		return (NULL);
-	node->content = content;
+		exit (1);
+
+	/*content*/
+	node->value = content;
+
+	/*element*/
+	type_assignation(content, &node->type);
+
+	/*content*/
+	quotes_assignation(quotes, &node->amount);
+
 	node->next = NULL;
 	return (node);
 }

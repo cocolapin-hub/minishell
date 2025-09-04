@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:29:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/03 16:48:23 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/04 12:43:58 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,18 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 #include <stdio.h>
 //#include <  .h>
 //#include <  .h>
 //#include <  .h>
-//#include <  .h>
 
 
-typedef enum e_quote { Q_NONE, Q_SINGLE, Q_DOUBLE } t_quote;
+typedef enum e_quote {
+	Q_NONE,
+	Q_SINGLE,
+	Q_DOUBLE
+}	t_quote;
 
 typedef enum e_element {
 	WORD,
@@ -52,16 +56,14 @@ typedef struct s_command {
 
 
 /*parsing*/
+void		print_error(char *line, char *msg);
+char		*check_input(char *line);
 t_command	*parsing(char *line);
 
 
 /*executable*/
 
 #endif
-
-
-
-
 
 
 
@@ -91,4 +93,4 @@ t_command	*parsing(char *line);
 // args = ["grep", "hello", NULL]
 // redir = [ { type: REDIR_OUT, quote: Q_NONE, value: "out.txt" } ]
 // next = NULL
-// */
+
