@@ -34,6 +34,7 @@ typedef struct s_command {
 void	exec_command(t_command *cmd, char **envp);
 void	free_split(char **array);
 char	*find_in_path(char *cmd, char **envp);
+int		is_builtin(char *cmd);
 
 #endif
 

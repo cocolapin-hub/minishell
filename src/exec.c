@@ -33,7 +33,10 @@ void	exec_command(t_command *cmd, char **envp)
 {
 	pid_t	pid;
 	int		status;
-
+	// if (is_builtin(cmd->cmd))
+	// 	exec_builtin(cmd, envp);
+	// else
+	// 	exec_external(cmd, envp);	fork/execve
 	pid = fork();
 	if (pid == -1)
 		return (print_error(cmd->cmd, "fork failed"));
@@ -41,6 +44,7 @@ void	exec_command(t_command *cmd, char **envp)
 		child_process(cmd, envp);
 	else
 		waitpid(pid, &status, 0);
+	
 }
 
 /*
