@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 14:14:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/05 17:07:47 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 19:23:42 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,20 @@
 //unset VAR									--> delete var de l'env
 //export 									--> printf stock_local
 
+
 int 	main(int argc, char **argv, char **envp)
 {
+	char 		*line;
 	t_command	*cmd = NULL;
-	t_local		*env = NULL;
-    char 		*line;
+	t_SHELL		*all = NULL;
 
 	(void)argc;
 	(void)argv;
 	setup_signal();
-	setup_env(&env, envp);
+	setup_shell(&all, envp);
 
 	/*-----------------------------------------------------------------------------------*/
-	t_local *tmp = env; // assuming 'env' is your head pointer
+	t_local *tmp = all->env; // assuming 'env' is your head pointer
 	while (tmp)
 	{
 		printf("Key: %s, Value: %s\n", tmp->key, tmp->value ? tmp->value : "(null)");
@@ -53,7 +54,7 @@ int 	main(int argc, char **argv, char **envp)
 		/*parsing*/
         if (*line)
 		{
-			cmd = parsing(line, env);
+			cmd = parsing(line, all);
             //add_history(line);
 		}
 

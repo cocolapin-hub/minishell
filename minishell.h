@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:29:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/05 17:21:33 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 19:14:16 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ typedef struct s_local {
     char            		*value;   		// Word or PATH
     struct s_local   		*next;
 }   t_local;
+
+typedef struct s_SHELL {
+    t_local           		*env;     		// VAR || $HOME ETC
+    int						last_status;   	// Word or PATH
+}   t_SHELL;
 
 typedef enum e_quote {
 	Q_NONE,
@@ -56,7 +61,7 @@ typedef struct s_token {
 typedef struct s_command {
 	char 					**args;        // tous les arguments, ex: ["ls", "-la", NULL]
     t_token 				*redir;		   // liste chaînée des redirs
-	t_local					*env;
+	t_SHELL					*all;
 	struct s_command 		*next;		   // prochaine commande (si pipe)
 }   t_command;
 
@@ -70,15 +75,16 @@ void			print_error(char *line, char *msg);
 t_token			*ft_lstlast(t_token *lst);
 size_t			ft_strlen(const char *s);
 void			setup_signal(void);
+char			*ft_itoa(int n);
 
 /*setup*/
-void			setup_env(t_local **env, char **envp);
+void			setup_shell(t_SHELL **all, char **envp);
 void			setup_signal(void);
 
 /*parsing*/
+void			expansion(t_local *env, int last_status, t_token **list);
 void			tokenisation(char *line, t_token **list);
-void			expansion(t_local *env, t_token **list);
-t_command		*parsing(char *line, t_local *env);
+t_command		*parsing(char *line, t_SHELL *all);
 char			*check_input(char *line);
 
 

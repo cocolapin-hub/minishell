@@ -6,23 +6,23 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/05 17:23:25 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 18:25:48 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 
-t_command	*parsing(char *line, t_local *env)
+t_command	*parsing(char *line, t_SHELL *all)
 {
 	t_token 	*list = NULL;
 	t_command 	*cmd = NULL;
-	(void)env;
+	(void)all;
 	/*Etapes de mon parsing*/
 
 	check_input(line);						// Analyse de l'input
 	tokenisation(line, &list);				// Cree les Token
-	expansion(env, &list);					// Expansion et quote
+	expansion(all->env, all->last_status, &list);					// Expansion et quote
 
 
 	// error_handling();			// Analyse syntaxique

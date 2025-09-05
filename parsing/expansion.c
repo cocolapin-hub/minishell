@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/05 18:00:50 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 19:22:49 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@
 	//remplacer les words par leur reel valeur si necessaire
 	//remplacer $? par valeur de sortie (0 / 1)
 
-
-
-
-void		expansion(t_local *env, t_token **list)
+void		expansion(t_local *env, int last_status, t_token **list)
 {
 	/*this handles when we need to do expansions*/
 	t_token *lst2 = *list;
@@ -34,22 +31,30 @@ void		expansion(t_local *env, t_token **list)
 	while(lst2)
 	{
 		env2 = env;
-		if (lst2->value[0] == '$')
+
+		/*Handles $?*/
+		if (strcmp(lst2->value, "$?") == 0 && lst2->amount != Q_SINGLE)
+		{
+			free(lst2->value);
+			lst2->value = ft_itoa(last_status);
+		}
+
+		/*Handle $VAR*/
+		else if (lst2->value[0] == '$' && lst2->amount != Q_SINGLE)
 		{
 			value = ft_strdup(lst2->value, 1, ft_strlen(lst2->value) - 1);
 			while(env2)
 			{
-				if (strcmp(value, env2->key) == 0 && lst2->amount != Q_SINGLE)
+				if (strcmp(value, env2->key) == 0 )
 				{
-					(lst2)->value = env2->value;
+					free(lst2->value);
+					lst2->value = ft_strdup(env2->value, 0, ft_strlen(env2->value));
 					break;
 				}
 				env2 = env2->next;
 			}
+			free(value);
 		}
 		lst2 = (lst2)->next;
 	}
-
-	/*second part handles $?, i will do it later by myself*/
-
 }
