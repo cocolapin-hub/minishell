@@ -1,9 +1,20 @@
 NAME    = minishell
 
 SRCS    = 	main.c \
-			parsing/print_error.c \
+			parsing/tokenisation.c \
 			parsing/check_input.c \
 			parsing/parsing.c \
+			fonctions/ft_lstadd_back_bonus.c \
+			fonctions/ft_lstlast_bonus.c \
+			fonctions/ft_lstnew_token.c \
+			fonctions/ft_lstnew_env.c \
+			fonctions/print_error.c \
+			fonctions/ft_strdup.c \
+			fonctions/ft_strlen.c \
+			setup/setup_signal.c \
+			setup/setup_env.c \
+
+
 
 
 

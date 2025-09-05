@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 10:59:43 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/04 16:01:05 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 15:45:28 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	type_assignation(char *content, t_element *type)
 		*type = WORD;
 }
 
-t_token	*ft_lstnew(char *content, char quotes)
+t_token	*ft_lstnew_token(char *content, char quotes)
 {
 	t_token	*node;
 

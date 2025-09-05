@@ -6,14 +6,14 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:14:23 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/04 16:09:11 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 17:00:31 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 
-int		skip_space_and_tabs(char *line, int x)
+int			skip_space_and_tabs(char *line, int x)
 {
 	while (line[x] == 32 || line[x] == 9)
 		x++;
@@ -21,7 +21,7 @@ int		skip_space_and_tabs(char *line, int x)
 	return(x);
 }
 
-int		handles_normal_command(char *line, int x, t_token **list)
+int			handles_normal_command(char *line, int x, t_token **list)
 {
 	t_token	*new;
 	char	*cmd;
@@ -43,7 +43,7 @@ int		handles_normal_command(char *line, int x, t_token **list)
 		cmd = ft_strdup(line, x, len);
 
 		/*creats the 1st list element*/
-		new = ft_lstnew(cmd, ' ');
+		new = ft_lstnew_token(cmd, ' ');
 		if (!*list)
 			*list = new;
 
@@ -54,7 +54,7 @@ int		handles_normal_command(char *line, int x, t_token **list)
 	return (y);
 }
 
-int		handles_quoted_command(char *line, int x, t_token **list)
+int			handles_quoted_command(char *line, int x, t_token **list)
 {
 	t_token	*new;
 	char	quote;
@@ -81,7 +81,7 @@ int		handles_quoted_command(char *line, int x, t_token **list)
 		cmd = ft_strdup(line, x + 1, len);
 
 		/*creats the 1st list element*/
-		new = ft_lstnew(cmd, quote);
+		new = ft_lstnew_token(cmd, quote);
 		if (!*list)
 			*list = new;
 
@@ -93,10 +93,44 @@ int		handles_quoted_command(char *line, int x, t_token **list)
 	return (y);
 }
 
-t_token		*tokenisation(char *line, t_token *list)
+int			handles_special_char(char *line, int x, t_token **list)
+{
+	t_token	*new;
+	char	*cmd;
+	int		y;
+
+	y = x;
+	/*saves the pipe*/
+	if (line[x] == 124)
+		cmd = ft_strdup(line, x, 1);
+
+	/*saves arrows*/
+	else if (line[x] == 60 || line[x] == 62)
+	{
+		if (line[x + 1] == line[x])
+		{
+			cmd = ft_strdup(line, x, 2);
+			y++;
+		}
+		else
+			cmd = ft_strdup(line, x, 1);
+	}
+
+	/*creats the 1st list element*/
+	new = ft_lstnew_token(cmd, ' ');
+	if (!*list)
+		*list = new;
+
+	/*creats others list element*/
+	else
+		ft_lstadd_back(list, new);
+
+	return (y + 1);
+}
+
+void		tokenisation(char *line, t_token **list)
 // cat -n < in.txt | grep "hello   hello" > out.txt
 {
-	char	*element;
 	int 	x = 0;
 
 	while(line[x])
@@ -107,12 +141,14 @@ t_token		*tokenisation(char *line, t_token *list)
 			break;
 
 		if (line[x] == 39 || line [x] == 34)
-			x = handles_quoted_command(line, x, &list);
+			x = handles_quoted_command(line, x, list);
+
+		else if (line[x] == '|' || line[x] == '<' || line[x] == '>')
+			x= handles_special_char(line, x, list);
 
 		else
-			x = handles_normal_command(line, x, &list);
+			x = handles_normal_command(line, x, list);
 	}
-
-	//point back to head if necessary
-	return (list);
+	free(line);
+	//return (list);
 }

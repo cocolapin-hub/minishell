@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/04 12:01:35 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 10:33:58 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char 		*clean_line(char *line)
 	int 	y;
 	int		len;
 
-	len = strlen(line);
+	len = ft_strlen(line);
 	new_line = malloc(sizeof(char) * len + 1);
 	if (!new_line)
 		return NULL;

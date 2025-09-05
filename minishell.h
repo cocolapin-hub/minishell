@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:29:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/04 12:43:58 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 17:02:39 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@
 //#include <  .h>
 //#include <  .h>
 
+typedef struct s_local {
+    char            		*key;     		// VAR || $HOME ETC
+    char            		*value;   		// Word or PATH
+    struct s_local   		*next;
+}   t_local;
 
 typedef enum e_quote {
 	Q_NONE,
@@ -51,21 +56,35 @@ typedef struct s_token {
 typedef struct s_command {
 	char 					**args;        // tous les arguments, ex: ["ls", "-la", NULL]
     t_token 				*redir;		   // liste chaînée des redirs
+	t_local					*env;
 	struct s_command 		*next;		   // prochaine commande (si pipe)
 }   t_command;
 
 
+/*fonctions*/
+t_token			*ft_lstnew_token(char *content, char quotes);
+void			ft_lstadd_back(t_token **lst, t_token *new);
+char			*ft_strdup(const char *s, int x, int len);
+t_local			*ft_lstnew_env(char *value, char *key);
+void			print_error(char *line, char *msg);
+t_token			*ft_lstlast(t_token *lst);
+size_t			ft_strlen(const char *s);
+void			setup_signal(void);
+
+/*setup*/
+void			setup_env(t_local **env, char **envp);
+void			setup_signal(void);
+
 /*parsing*/
-void		print_error(char *line, char *msg);
-char		*check_input(char *line);
-t_command	*parsing(char *line);
+//t_token		expansion(t_local *env, t_token **list);
+void			tokenisation(char *line, t_token **list);
+t_command		*parsing(char *line, t_local *env);
+char			*check_input(char *line);
 
 
 /*executable*/
 
 #endif
-
-
 
 // /*_________________________________________EXEMPLE_____*/
 
