@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/05 17:08:52 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 17:23:25 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,3 +37,6 @@ t_command	*parsing(char *line, t_local *env)
 
 	return (cmd);
 }
+
+
+

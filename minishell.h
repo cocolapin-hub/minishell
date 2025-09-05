@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:29:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/05 17:02:39 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/05 17:21:33 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void			setup_env(t_local **env, char **envp);
 void			setup_signal(void);
 
 /*parsing*/
-//t_token		expansion(t_local *env, t_token **list);
 void			tokenisation(char *line, t_token **list);
+void			expansion(t_local *env, t_token **list);
 t_command		*parsing(char *line, t_local *env);
 char			*check_input(char *line);
 

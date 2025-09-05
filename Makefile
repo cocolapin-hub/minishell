@@ -3,6 +3,7 @@ NAME    = minishell
 SRCS    = 	main.c \
 			parsing/tokenisation.c \
 			parsing/check_input.c \
+			parsing/expansion.c \
 			parsing/parsing.c \
 			fonctions/ft_lstadd_back_bonus.c \
 			fonctions/ft_lstlast_bonus.c \
