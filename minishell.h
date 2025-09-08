@@ -22,25 +22,31 @@ typedef struct s_token {
 
 
 typedef struct s_command {
-	char **args;           // tous les arguments, ex: ["ls", "-la", NULL]
-    char *cmd;             // argument concerne, ex: "ls"
+	char **args;            // ex: ["ls", "-la", NULL]
+    char *cmd;              // ex: "ls"
 
-    t_token *in_redir;     // liste chaînée des redirections d'entrée
-    t_token *out_redir;    // liste chaînée des redirections de sortie
+    t_token *in_redir;
+    t_token *out_redir;
 
-	struct s_command *next;// prochaine commande (si pipe)
+	struct s_command *next; // prochaine commande (si pipe)
 }   t_command;
 
+/*ENV*/
+char	*find_env_value(char **env, const char *key);
+void	free_env(char **env);
 
 /*EXEC*/
-void	exec_command(t_command *cmd, char **envp);
+void	run_command(t_command *cmd, char **envp); void	exec_command(t_command *cmd, char **envp);
 void	free_split(char **array);
 char	*find_in_path(char *cmd, char **envp);
 
+
 /*BUILTINS*/
 int		is_builtin(char *cmd);
+int		exec_builtin(t_command *cmd, char **envp);
 int		builtin_pwd(void);
 int		builtin_echo(char **args);
+int		builtin_export(char **args, char **env);
 
 
 #endif

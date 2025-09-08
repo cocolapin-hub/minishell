@@ -38,3 +38,11 @@ int	exec_builtin(t_command *cmd, char **envp)
 	if ("exit")
 	return (1);
 }
+
+void	run_command(t_command *cmd, char **envp)
+{
+	if (is_builtin(cmd->cmd))
+		exec_builtin(cmd, envp);
+	else
+		exec_command(cmd, envp);
+}

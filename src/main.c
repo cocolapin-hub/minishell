@@ -45,7 +45,7 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 			break;
 		}
-		exec_command(&cmd, envp);
+		run_command(&cmd, envp);
 		free_split(args);
 		free(line);
 	}
