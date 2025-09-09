@@ -1,28 +1,39 @@
 
 #include "../minishell.h"
 
-int	builtin_cd(char **args, char **envp)
+static void	update_pwd(t_env *env)
+{
+	char	cwd[4096];
+	char	*oldpwd;
+
+	oldpwd = get_env_value(env, "PWD");		   // recup l'ancienne valeur de pwd
+	if (oldpwd)
+		set_env_value(&env, "OLDPWD", oldpwd); // maj de oldpwd
+	if (getcwd(cwd, sizeof(cwd)))			   // recup le chemin courant apres chdir
+		set_env_value(&env, "PWD", cwd);
+}
+
+int	builtin_cd(char **args, t_env *env)
 {
 	char *path;
 
-	if (!args[1]) // no arg -> HOME
+	if (!args[1]) 							   // no arg -> HOME
 	{
-		path = find_env_value(envp, "HOME");
+		path = get_env_value(env, "HOME");
 		if (!path)
 		{
-			//write(2, "error...\n, ...);
+			write(2, "minishell: cd: HOME not set\n", 28);
 			return (1);
 		}
 	}
 	else
 		path = args[1];
-	if (chdir(path) == -1) // return 0 si succes, -1 si erreur
+	if (chdir(path) == -1)					   // return 0 si succes, -1 si erreur
 	{
 		perror("minishell: cd");
 		return (1);
 	}
-	// mise à jour de PWD/OLDPWD sera faite plus tard avec envp custom
-	(void)envp;
+	update_pwd(env);						   // maj de pwd et oldpwd
 	return (0);
 }
 /*

@@ -2,16 +2,13 @@
 #include "../minishell.h"
 #include "../libft/libft.h"
 
-static char	*get_path_line(char **envp)
+static char	*get_path_line(t_env *env)
 {
-	int	i;
-
-	i = 0;
-	while (envp[i])
+	while (env)
 	{
-		if(ft_strncmp(envp[i], "PATH=", 5) == 0)
-			return (envp[i] + 5);
-		i++;
+		if(ft_strcmp(env->key, "PATH=") == 0)
+			return (env->value);
+		env = env->next;
 	}
 	return (NULL);
 }
@@ -29,29 +26,14 @@ static char	*build_path(char *dir, char *cmd)
 	return (full);
 }
 
-void	free_split(char **array)
-{
-	int i;
-
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
-
-char	*find_in_path(char *cmd, char **envp)
+char	*find_in_path(char *cmd, t_env *env)
 {
 	char	**dirs;
 	char	*path_line;
 	char	*full;
 	int		i;
 
-	path_line = get_path_line(envp);
+	path_line = get_path_line(env);
 	if (!path_line)
 		return (NULL);
 	dirs = ft_split(path_line, ':');

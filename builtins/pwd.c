@@ -3,7 +3,7 @@
 
 int	builtin_pwd(void)
 {
-	char	cwd[4096]; // buffer pour stocker le chemin absolu ecrit depuis getcwd
+	char	cwd[4096]; 					  // buffer pour stocker le chemin absolu ecrit depuis getcwd
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL) // si ca echoue return NULL donc appelle perror
 	{

@@ -1,89 +1,81 @@
 
 #include "../minishell.h"
-#include "../libft/libft.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static char	**split_input(char *line)
+t_env	*new_env_node(char *key, char *value) // duplique key et value pour éviter de modifier l’original envp.
 {
-	char	**args;
+	t_env	*node;
 
-	args = ft_split(line, ' ');
-	return (args);
+	node = malloc(sizeof(t_env));
+	if (!node)
+		return (NULL);
+	node->key = ft_strdup(key);
+	node->value = ft_strdup(value);
+	node->next = NULL;						 // next = NULL car c’est un maillon isolé pour l’instant.
+	return (node);
+}
+
+void	add_env_node(t_env **env, t_env *new_node)
+{
+	t_env	*tmp;
+
+	if (!env || !new_node)
+		return ;
+	if (!*env) 			  // Si la liste est vide
+	{
+		*env = new_node;  // le nouveau devient la tête.
+		return ;
+	}
+	tmp = *env;
+	while (tmp->next)	  // on parcourt jusqu’au dernier
+		tmp = tmp->next;
+	tmp->next = new_node; // et on relie
+}
+
+t_env	*env_init(char **envp)
+{
+	t_env	*env;
+	t_env	*node;
+	int		i;
+	char	*eq;
+
+	env = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		eq = ft_strchr(envp[i], '='); 			  // strchr pointe vers sur '='
+		if (eq)
+		{
+			*eq = '\0'; 						  // coupe la string "PATH=/bin" -> "PATH" et "/bin"
+			node = new_env_node(envp[i], eq + 1); // crée node {key=PATH, value=/bin}
+			*eq = '='; 							  // remet le '=' pour pas casser envp original
+			add_env_node(&env, node);
+		}
+		i++;
+	}
+	return (env);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	char		*line;
-	char		**args;
-	t_command	cmd;
+	t_env	*env;
 
 	(void)argc;
 	(void)argv;
+	env = env_init(envp);
 
-	while (1)
+	// debug: afficher les premières variables
+	t_env *tmp = env;
+	while (tmp && tmp->next)
 	{
-		line = readline("minishell$ ");
-		if (!line) // ctrl-D
-			break;
-		if (*line)
-			add_history(line);
-		args = split_input(line);
-		if (!args)
-		{
-			free(line);
-			continue;
-		}
-		cmd.cmd = args[0];
-		cmd.args = args;
-		cmd.next = NULL;
-		if (ft_strncmp(cmd.cmd, "exit", 4) == 0)
-		{
-			free_split(args);
-			free(line);
-			break;
-		}
-		run_command(&cmd, envp);
-		free_split(args);
-		free(line);
+		printf("%s=%s\n", tmp->key, tmp->value);
+		tmp = tmp->next;
 	}
-	return (0);
 }
 
 
 
-
-
-
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <readline/readline.h>
-// #include <readline/history.h>
-
-// int main(void)
-// {
-//     char *line;
-
-//     while (1)
-//     {
-//         line = readline("minishell$ ");
-//         if (!line) // ctrl-D
-//             break;
-//         if (*line)
-//             add_history(line);
-//         if (strcmp(line, "exit") == 0)
-//         {
-//             free(line);
-//             break;
-//         }
-//         printf("You typed: %s\n", line);
-
-//         free(line);
-//     }
-//     return 0;
-// }
 
 
 

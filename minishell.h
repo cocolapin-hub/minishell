@@ -3,6 +3,7 @@
 #define MINISHELL_H
 
 # include "libft/libft.h"
+# include <sys/wait.h>
 
 typedef enum e_token_type {
 	WORD,
@@ -13,26 +14,30 @@ typedef enum e_token_type {
     REDIR_HEREDOC  			// <<
 }   t_token_type;
 
+typedef struct s_env {
+	char			*key;    // "PATH"
+	char			*value;  // "/usr/bin:/bin"
+	struct s_env	*next;
+}	t_env;
+
 
 typedef struct s_token {
-    t_token_type type;
-    char *value;
-    struct s_token *next;
+    t_token_type	type;
+    char 			*value;
+    struct s_token	*next;
 }   t_token;
 
 
 typedef struct s_command {
-	char **args;            // ex: ["ls", "-la", NULL]
-    char *cmd;              // ex: "ls"
-
-    t_token *in_redir;
-    t_token *out_redir;
-
-	struct s_command *next; // prochaine commande (si pipe)
+	char				*cmd;		// "echo"
+    char				**args;		// ["echo", "hello", NULL]
+    t_token				*in_redir;	// liste chainée redir entrée
+    t_token				*out_redir; // liste chainée redir sortie
+	struct s_command	*next;		// commande suivante (pipe)
 }   t_command;
 
 /*ENV*/
-char	*find_env_value(char **env, const char *key);
+char	*get_env_value(t_env *env, const char *key);
 void	free_env(char **env);
 
 /*EXEC*/
@@ -81,4 +86,9 @@ args     = ["grep", "hello", NULL];
 in_redir = NULL;
 out_redir= [ { type: REDIR_OUT, filename: "out.txt" } ];
 next     = NULL;
+
+
+char **env → lecture seule, tu peux parcourir et lire les variables (get_env_value).
+char ***env → écriture, tu peux modifier le pointeur env lui-même (ajouter ou supprimer des variables).
+
 */
