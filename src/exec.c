@@ -22,26 +22,27 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(t_command *cmd, t_env *env)
+int exec_builtin(t_command *cmd, t_local *env) // *cmd = pointeur sur la variable locale utiliser par la fonction pour acceder a la structure entière
 {
-	if (!cmd || !cmd->cmd)
+	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
-	if (ft_strcmp(cmd->cmd, "pwd") == 0)
+	if (ft_strcmp(cmd->args[0], "pwd") == 0)
 		return (builtin_pwd());
-	if (ft_strcmp(cmd->cmd, "echo") == 0)
+	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		return (builtin_echo(cmd->args));
-	if (ft_strcmp(cmd->cmd, "cd") == 0)
-		return (builtin_cd(cmd->args, env));
-	if (ft_strcmp(cmd->cmd, "export") == 0)
-		return (builtin_export(cmd->args, env));
-	if (ft_strcmp(cmd->cmd, "unset") == 0)
-		return (builtin_unset(cmd->args, env));
-	if (ft_strcmp(cmd->cmd, "env") == 0)
-		return (builtin_env(env));
-	if (ft_strcmp(cmd->cmd, "exit") == 0)
+	if (ft_strcmp(cmd->args[0], "cd") == 0)
+		return (builtin_cd(cmd->args, &cmd->all->env));
+	if (ft_strcmp(cmd->args[0], "export") == 0)
+		return (builtin_export(cmd->args, &cmd->all->env));
+	if (ft_strcmp(cmd->args[0], "unset") == 0)
+		return (builtin_unset(cmd->args, &cmd->all->env));
+	if (ft_strcmp(cmd->args[0], "env") == 0)
+		return (builtin_env(cmd->all->env));
+	if (ft_strcmp(cmd->args[0], "exit") == 0)
 		return (builtin_exit(cmd->args));
 	return (1);
 }
+
 static void	print_error(char *cmd, char *msg)
 {
 	//write(2, "minishell: ", 11); zsh ??
@@ -51,47 +52,55 @@ static void	print_error(char *cmd, char *msg)
 	write(2, "\n", 1);
 }
 
-static void child_process(t_command *cmd, t_env *env)
+void child_process(t_command *cmd, t_local *env)
 {
 	char	*path;
 	char	**envp;
 
+	if (apply_redirections(cmd->redir) != 0) // appliquer les redirs avant execve
+        exit(1); // erreur ouverture fichier, on sort
 	envp = env_to_tab(env);					// convertit liste chainée en char **
-	path = find_in_path(cmd->cmd, envp);
+	path = find_in_path(cmd->args[0], envp);
 	if (!path)
 	{
-		print_error(cmd->cmd, "command not found");
+		print_error(cmd->args[0], "command not found");
 		free_split(envp);
 		exit(127);
 	}
 	if (execve(path, cmd->args, envp) == -1)
 	{
-		print_error(cmd->cmd, "execution failed");
+		print_error(cmd->args[0], "execution failed");
 		free_split(envp);
 		exit(1);
 	}
 }
 
-void	run_command(t_command *cmd, t_env *env)
+void	run_command(t_command *cmd)
 {
 	pid_t	pid;
 	int		status;
 
-	if (is_builtin(cmd->cmd))
+	if (is_builtin(cmd->args[0]))
 	{
-		exec_builtin(cmd, env); 	// pas besoin de fork
+		cmd->all->last_status = exec_builtin(cmd);		 // pas besoin de fork
 		return ;
 	}
 	pid = fork();
 	if (pid == -1)
 	{
-		print_error(cmd->cmd, "fork failed");
+		print_error(cmd->args[0], "fork failed");
 		return ;
 	}
 	if (pid == 0)
-		child_process(cmd, env);	// processus enfant
+		child_process(cmd, cmd->all->env);				 // processus enfant
 	else
-		waitpid(pid, &status, 0);	// parent attend fin de l'enfant
+	{
+		waitpid(pid, &status, 0);						 // parent attend fin de l'enfant
+		if (WIFEXITED(status))
+			cmd->all->last_status = WEXITSTATUS(status); // succes normal
+		else
+			cmd->all->last_status = 1;					 // si signal ou plantage
+	}
 }
 
 

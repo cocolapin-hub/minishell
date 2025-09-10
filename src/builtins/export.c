@@ -12,7 +12,7 @@
 // static void	export_assign(char *arg, char ***env)
 
 
-int	builtin_export(char **args, t_env *env)
+int	builtin_export(char **args, t_local *env)
 {
 	int		i;
 	char	*equal;

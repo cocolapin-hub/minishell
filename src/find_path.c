@@ -2,11 +2,11 @@
 #include "../minishell.h"
 #include "../libft/libft.h"
 
-static char	*get_path_line(t_env *env)
+static char	*get_path_line(t_local *env)
 {
 	while (env)
 	{
-		if(ft_strcmp(env->key, "PATH=") == 0)
+		if(ft_strcmp(env->key, "PATH") == 0)
 			return (env->value);
 		env = env->next;
 	}
@@ -26,7 +26,7 @@ static char	*build_path(char *dir, char *cmd)
 	return (full);
 }
 
-char	*find_in_path(char *cmd, t_env *env)
+char	*find_in_path(char *cmd, t_local *env)
 {
 	char	**dirs;
 	char	*path_line;

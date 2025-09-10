@@ -1,9 +1,9 @@
 
 #include "../minishell.h"
 
-static void	update_pwd(t_env *env)
+static void	update_pwd(t_local *env)
 {
-	char	cwd[4096];
+	char	cwd[MAX_LINE_LEN];
 	char	*oldpwd;
 
 	oldpwd = get_env_value(env, "PWD");		   // recup l'ancienne valeur de pwd
@@ -13,7 +13,7 @@ static void	update_pwd(t_env *env)
 		set_env_value(&env, "PWD", cwd);
 }
 
-int	builtin_cd(char **args, t_env *env)
+int	builtin_cd(char **args, t_local *env)
 {
 	char *path;
 

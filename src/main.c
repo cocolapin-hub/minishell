@@ -3,11 +3,11 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-t_env	*new_env_node(char *key, char *value) // duplique key et value pour éviter de modifier l’original envp.
+t_local	*new_env_node(char *key, char *value) // duplique key et value pour éviter de modifier l’original envp.
 {
-	t_env	*node;
+	t_local	*node;
 
-	node = malloc(sizeof(t_env));
+	node = malloc(sizeof(t_local));
 	if (!node)
 		return (NULL);
 	node->key = ft_strdup(key);
@@ -16,9 +16,9 @@ t_env	*new_env_node(char *key, char *value) // duplique key et value pour évite
 	return (node);
 }
 
-void	add_env_node(t_env **env, t_env *new_node)
+void	add_env_node(t_local **env, t_local *new_node)
 {
-	t_env	*tmp;
+	t_local	*tmp;
 
 	if (!env || !new_node)
 		return ;
@@ -33,10 +33,10 @@ void	add_env_node(t_env **env, t_env *new_node)
 	tmp->next = new_node; // et on relie
 }
 
-t_env	*env_init(char **envp)
+t_local	*env_init(char **envp)
 {
-	t_env	*env;
-	t_env	*node;
+	t_local	*env;
+	t_local	*node;
 	int		i;
 	char	*eq;
 
@@ -59,14 +59,14 @@ t_env	*env_init(char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env	*env;
+	t_local	*env;
 
 	(void)argc;
 	(void)argv;
 	env = env_init(envp);
 
 	// debug: afficher les premières variables
-	t_env *tmp = env;
+	t_local *tmp = env;
 	while (tmp && tmp->next)
 	{
 		printf("%s=%s\n", tmp->key, tmp->value);

@@ -13,3 +13,9 @@ int	builtin_pwd(void)
 	perror("pwd");
 	return (1);
 }
+
+/*
+
+faire attention au scénario ou env n'est pas setup et PWD= n'existe pas
+
+*/

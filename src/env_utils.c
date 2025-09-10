@@ -1,7 +1,7 @@
 
 #include "../minishell.h"
 
-char    *get_env_value(t_env *env, const char *key)
+char    *get_env_value(t_local *env, const char *key) // recoit la valeur du pointeur vers la tete de liste, peut lire et modifier les champs des noeuds, affecte la lst d'origine mais ne peut pas changer la valeur du pointeur comme créer un new node
 {
     while (env)
     {
@@ -12,9 +12,9 @@ char    *get_env_value(t_env *env, const char *key)
     return (NULL);
 }
 
-void    set_env_value(t_env **env, char *key, char *value)
+void    set_env_value(t_local **env, char *key, char *value) // pointeur vers le pointeur tete, peut lire la list via *env ET modifier la tete (*env = new_node)
 {
-    t_env   *node;
+    t_local   *node;
 
     node = *env;
     while (node)
@@ -27,7 +27,7 @@ void    set_env_value(t_env **env, char *key, char *value)
         }
         node = node->next;
     } // si pas trouvé, on crée un nouveau maillon
-    node = malloc(sizeof(t_env));
+    node = malloc(sizeof(t_local));
     if (!node)
         return ;
     node->key = ft_strdup(key);
@@ -36,10 +36,10 @@ void    set_env_value(t_env **env, char *key, char *value)
     *env = node;
 }
 
-void    unset_env_value(t_env **env, char *key)
+void    unset_env_value(t_local **env, char *key) // *env : lecture seule ou modif d'un noeud existant | **env : possibilité de changer la tete ou changer env elle meme
 {
-    t_env   *prev;
-    t_env   *cur;
+    t_local   *prev;
+    t_local   *cur;
 
     prev = NULL;
     cur = *env;
@@ -76,7 +76,7 @@ void	free_split(char **array)
 	free(array);
 }
 
-void	free_envp(char **envp) // same shit, nom a changer avec l'autre free_split
+void	free_envp(char **envp) // same shit que free_split, a merge plus tard
 {
 	int	i;
 
@@ -115,29 +115,31 @@ char	*ft_strjoin3(char *s1, char *s2, char *s3)
 
 #include <stdlib.h>
 
-char	**env_to_tab(t_env *env)
+char	**env_to_tab(t_local *env)
 {
 	char	**tab;
 	char	*joined;
 	int		size;
 	int		i;
+	t_local	*tmp;
 
 	size = 0;
-	while (env)									// 1. Compter le nombre de variables
+	tmp = env;
+	while (tmp)									// 1. Compter le nombre de variables
 	{
 		size++;
-		env = env->next;
+		tmp = tmp->next;
 	}
 	tab = malloc(sizeof(char *) * (size + 1));	// 2. Allouer le tableau (+1 pour NULL)
 	if (!tab)
 		return (NULL);
 	i = 0;
-	while (env) 								// 3. Remplir avec "KEY=VALUE"
+	tmp = env;
+	while (tmp) 								// 3. Remplir avec "KEY=VALUE"
 	{
-		joined = ft_strjoin3(env->key, "=", env->value);
-		tab[i] = joined;
-		i++;
-		env = env->next;
+		joined = ft_strjoin3(tmp->key, "=", tmp->value);
+		tab[i++] = joined;
+		tmp = tmp->next;
 	}
 	tab[i] = NULL;
 	return (tab);
