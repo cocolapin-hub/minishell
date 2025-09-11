@@ -6,12 +6,11 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:14:23 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/05 17:00:31 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:35:25 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 int			skip_space_and_tabs(char *line, int x)
 {
@@ -40,7 +39,7 @@ int			handles_normal_command(char *line, int x, t_token **list)
 		}
 
 		/*saves the cmd*/
-		cmd = ft_strdup(line, x, len);
+		cmd = ft_strdup_m(line, x, len);
 
 		/*creats the 1st list element*/
 		new = ft_lstnew_token(cmd, ' ');
@@ -74,11 +73,14 @@ int			handles_quoted_command(char *line, int x, t_token **list)
 			y++;
 			len++;
 		}
-		if (line[y] == quote)
+		if (line[y] == '\0')
+			quote = 35;
+
+		else if (line[y] == quote)
 			y++;
 
 		/*saves the cmd*/
-		cmd = ft_strdup(line, x + 1, len);
+		cmd = ft_strdup_m(line, x + 1, len);
 
 		/*creats the 1st list element*/
 		new = ft_lstnew_token(cmd, quote);
@@ -102,18 +104,18 @@ int			handles_special_char(char *line, int x, t_token **list)
 	y = x;
 	/*saves the pipe*/
 	if (line[x] == 124)
-		cmd = ft_strdup(line, x, 1);
+		cmd = ft_strdup_m(line, x, 1);
 
 	/*saves arrows*/
 	else if (line[x] == 60 || line[x] == 62)
 	{
 		if (line[x + 1] == line[x])
 		{
-			cmd = ft_strdup(line, x, 2);
+			cmd = ft_strdup_m(line, x, 2);
 			y++;
 		}
 		else
-			cmd = ft_strdup(line, x, 1);
+			cmd = ft_strdup_m(line, x, 1);
 	}
 
 	/*creats the 1st list element*/

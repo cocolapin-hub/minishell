@@ -6,13 +6,13 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:31:01 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/11 10:47:24 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:33:24 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_strdup(const char *s, int x, int len)
+char	*ft_strdup_m(const char *s, int x, int len)
 {
 	size_t	i;
 	char	*copy;

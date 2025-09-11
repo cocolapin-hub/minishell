@@ -6,11 +6,11 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 14:14:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/11 10:51:38 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:39:10 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
+#include "minishell.h"
 
 // EXEC:
 // export VAR=value  						--> add var dans l'env
@@ -22,11 +22,8 @@
 // modified ft_lstnew
 
 
-//TO_DO : // error_handling
-		  // strdup renaming because coco use it too
-		  // tokenisation: gerer quand les quotes se fermes pas ou quand ' " grace a  Q_ERROR
+//TO_DO : 
 
-#include "minishell.h"
 
 int 	main(int argc, char **argv, char **envp)
 {
@@ -63,8 +60,4 @@ int 	main(int argc, char **argv, char **envp)
     }
     return 0;
 }
-
-
-
-
 

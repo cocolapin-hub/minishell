@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
+/*   ft_lstnew_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 10:59:43 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/05 15:45:28 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:22:16 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	quotes_assignation(char quotes, t_quote *amount)
 		*amount = Q_DOUBLE;
 	else if (quotes == 39)
 		*amount = Q_SINGLE;
+	else if (quotes == 35)
+		*amount = Q_ERROR;
 	else
 		*amount = Q_NONE;
 }

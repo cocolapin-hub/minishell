@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:39:27 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/05 18:48:43 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:35:41 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void	setup_env(t_local **env, char *tab, char *value, char *key)
 	/*save key & value*/
 	if (tab[y] == 0)
 	{
-		key = ft_strdup(tab, 0, y);
+		key = ft_strdup_m(tab, 0, y);
 		value = NULL;
 	}
 	else
 	{
-		key = ft_strdup(tab, 0, y);
+		key = ft_strdup_m(tab, 0, y);
 		y++;
-		value = ft_strdup(tab, y, len - y);
+		value = ft_strdup_m(tab, y, len - y);
 	}
 
 	/*send to env*/
