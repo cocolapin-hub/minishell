@@ -6,24 +6,27 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 14:14:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/05 19:23:42 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/11 10:51:38 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+
+
+// EXEC:
+// export VAR=value  						--> add var dans l'env
+// unset VAR								--> delete var de l'env
+// export 									--> printf stock_local
 
 // NOTE:
 // modified ft_strdup
 // modified ft_lstnew
 
-//TO_DO : //verifier que la tokenisation marche (printf), debuter le quote handling
 
+//TO_DO : // error_handling
+		  // strdup renaming because coco use it too
+		  // tokenisation: gerer quand les quotes se fermes pas ou quand ' " grace a  Q_ERROR
 
-//exec:
-//export VAR=value  						--> add var dans l'env
-//unset VAR									--> delete var de l'env
-//export 									--> printf stock_local
-
+#include "minishell.h"
 
 int 	main(int argc, char **argv, char **envp)
 {
@@ -35,15 +38,6 @@ int 	main(int argc, char **argv, char **envp)
 	(void)argv;
 	setup_signal();
 	setup_shell(&all, envp);
-
-	/*-----------------------------------------------------------------------------------*/
-	t_local *tmp = all->env; // assuming 'env' is your head pointer
-	while (tmp)
-	{
-		printf("Key: %s, Value: %s\n", tmp->key, tmp->value ? tmp->value : "(null)");
-		tmp = tmp->next;
-	}
-	/*-----------------------------------------------------------------------------------*/
 
     while (1)
     {

@@ -1,42 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/11 10:47:49 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:03:56 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
-t_command	*parsing(char *line, t_SHELL *all)
+void	check_pipe()
 {
-	t_token 	*list = NULL;
-	t_command 	*cmd = NULL;
-	(void)all;
-
-	/*Etapes de mon parsing*/
-	check_input(line);									// Analyse de l'input
-	tokenisation(line, &list);							// Cree les Token
-	expansion(all->env, all->last_status, &list);		// Expansion et quote
-
-//	error_handling(list);								// Analyse syntaxique
-	// set_command();									// Construction de la structure
-
-
-	/* ____PRINT CHECK____*/
-	while(list)
-	{
-		printf("type: %d\nquotes: %d\ncmd: %s\n\n", list->type, list->amount, list->value);
-		list = list->next;
-	}
-
-	return (cmd);
+//	| au début ou à la fin
+}
+void	check_heredoc()
+{
+//	Heredoc sans délimiteur
+}
+void	check_redir()
+{
+//	>, <, >>, << sans mot après
+//	Deux redirections consécutives sans mot au milieu
+}
+void	check_quotes()
+{
+//	quotes non ferme
 }
 
+void 	check_if_unkown()
+{
+//	si tu recoit un || ou && par exemple
+}
 
+void	error_handling(t_token *list)
+{
 
+	// grande loop qui appliqur a chaque token chaque fonctions
+	//when error found then change $? ?
+}

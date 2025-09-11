@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/05 19:22:49 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/10 14:19:55 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 void		expansion(t_local *env, int last_status, t_token **list)
 {
 	/*this handles when we need to do expansions*/
-	t_token *lst2 = *list;
+	t_token *lst2 	= *list;
 	t_local *env2;
 	char 	*value;
 
