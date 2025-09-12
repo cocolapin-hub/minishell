@@ -6,23 +6,23 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 10:59:43 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/11 11:22:16 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/12 15:05:01 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	quotes_assignation(char quotes, t_quote *amount)
-{
-	if (quotes == 34)
-		*amount = Q_DOUBLE;
-	else if (quotes == 39)
-		*amount = Q_SINGLE;
-	else if (quotes == 35)
-		*amount = Q_ERROR;
-	else
-		*amount = Q_NONE;
-}
+// void	quotes_assignation(char quotes, t_quote *amount)
+// {
+// 	if (quotes == 34)
+// 		*amount = Q_DOUBLE;
+// 	else if (quotes == 39)
+// 		*amount = Q_SINGLE;
+// 	else if (quotes == 35)
+// 		*amount = Q_ERROR;
+// 	else
+// 		*amount = Q_NONE;
+// }
 
 void	type_assignation(char *content, t_element *type)
 {
@@ -45,7 +45,7 @@ void	type_assignation(char *content, t_element *type)
 		*type = WORD;
 }
 
-t_token	*ft_lstnew_token(char *content, char quotes)
+t_token	*ft_lstnew_token(char *content)
 {
 	t_token	*node;
 
@@ -58,9 +58,6 @@ t_token	*ft_lstnew_token(char *content, char quotes)
 
 	/*element*/
 	type_assignation(content, &node->type);
-
-	/*content*/
-	quotes_assignation(quotes, &node->amount);
 
 	node->next = NULL;
 	return (node);

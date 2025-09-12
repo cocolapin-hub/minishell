@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/11 13:55:43 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/12 15:59:36 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,8 @@
 
 t_token 	*check_word(t_token *list, t_SHELL **all)
 {
-	/*check quotes*/
-	if (list->amount == Q_ERROR)
-	{
-		write(2, "syntax error: unclosed quote\n", 29);
-		(*all)->last_status = 258;
-		return NULL;
-	}
-
 	/*if it is && or ||*/
-	else if ((strcmp(list->value, "||") == 0 || strcmp(list->value, "&&") == 0) && list->amount == Q_NONE)
+	if ((strcmp(list->value, "||") == 0 || strcmp(list->value, "&&") == 0))
 	{
 		write(2, "syntax error: unkwon character\n", 31);
 		(*all)->last_status = 258;

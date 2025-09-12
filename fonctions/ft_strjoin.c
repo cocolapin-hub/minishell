@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 16:47:12 by claffut           #+#    #+#             */
-/*   Updated: 2025/08/04 16:01:27 by claffut          ###   ########.fr       */
+/*   Updated: 2025/09/12 15:25:04 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "libft.h"
+#include "../minishell.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char const *s2)
 {
 	char	*joined;
 	size_t	i;
@@ -37,6 +36,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		j++;
 	}
 	joined[i + j] = '\0';
+	free(s1);
 	return (joined);
 }
 /*

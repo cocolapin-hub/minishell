@@ -1,39 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup_m.c                                      :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 17:31:01 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/12 14:14:51 by ochkaoul         ###   ########.fr       */
+/*   Created: 2025/04/11 15:40:04 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/09/12 15:19:13 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-char	*ft_strdup_m(const char *s, int x, int len)
-{
-	size_t	i;
-	char	*copy;
-
-	i = 0;
-	copy = (char *)malloc(sizeof(char) * (len + 1));
-	if (!copy)
-		exit (1);
-	i = 0;
-	while (len != 0)
-	{
-		copy[i++] = s[x++];
-		len--;
-	}
-	copy[i] = '\0';
-	return (copy);
-}
-/*
-#include <stdio.h>
-#include <string.h>
-
 
 char	*ft_strdup(const char *s)
 {
@@ -52,20 +29,12 @@ char	*ft_strdup(const char *s)
 	dst[x] = 0;
 	return (dst);
 }
-	
+/*
+#include <stdio.h>
+
 int	main(void)
 {
-	const char *src = "Salut les copains !";
+	printf("%s", ft_strdup("mari"));
 
-	char *dup1 = ft_strdup(src);
-	char *dup2 = strdup(src);
 
-	printf("ft_strdup : %s\n", dup1);
-	printf("strdup    : %s\n", dup2);
-
-	free(dup1);
-	free(dup2);
-
-	return 0;
-}
-*/
+}*/
