@@ -6,53 +6,78 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/12 14:40:11 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:00:13 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// 3. Expansion et quote removal sur t_token
-//    - Parcourir chaque token de type WORD
-//    - Si quote != Q_SINGLE : remplacer les variables d’environnement ($VAR, $?) par leur valeur
-
-	// sauvegarde des var
-
-	//remplacer les words par leur reel valeur si necessaire
-	//remplacer $? par valeur de sortie (0 / 1)
-
-char		*expansion(t_local *env, int last_status, char *str, char quote)
+char		*split_for_expansion(char *str, char *key, int start, char *key_value)
 {
-	/*this handles when we need to do expansions*/
-	t_local *env2;
-	char 	*value;
+	char 	*split1 = NULL;
+	char 	*split2 = NULL;
+	char 	*split3 = NULL;
+	char 	*tmp;
+	size_t 	key_len;
+	size_t	str_len ;
 
+	if (strcmp(key, "$?") != 0)
+		key_len = strlen(key) + 1;
+	else
+		key_len = strlen(key);
+
+	str_len = strlen(str);
+
+	if (start == 0)
+		split1 = ft_strdup("");
+	else
+		split1 = ft_strdup_m(str, 0, start);
+
+	split2 = ft_strdup(key_value);
+
+	if (start + key_len < str_len)
+		split3 = ft_strdup_m(str, start + key_len, str_len - (start + key_len));
+	else
+		split3 = ft_strdup("");
+
+	tmp = ft_strjoin(split1, split2);
+	str = ft_strjoin(tmp, split3);
+	return (str);
+}
+
+
+char		*expansion(t_local *env, int last_status, char *str, int x)
+{
+	t_local 	*env2;
+	int			start;
 
 	env2 = env;
-
-	/*Handles $?*/
-	if (strcmp(str, "$?") == 0 && quote != 39)
+	start = 0;
+	while(str[x])
 	{
-		free(str);
-		str = ft_itoa(last_status);
-	}
-
-	/*Handle $VAR*/
-	else if (str[0] == '$' && quote != 39)
-	{
-		value = ft_strdup_m(str, 1, ft_strlen(str) - 1);
-		while(env2)
+		if (str[x] == '$' && str[x + 1] == '?')
 		{
-			if (strcmp(value, env2->key) == 0 )
-			{
-				free(str);
-				str = ft_strdup_m(env2->value, 0, ft_strlen(env2->value));
-				break;
-			}
-			env2 = env2->next;
+			str = split_for_expansion(str, "$?", x, ft_itoa(last_status));
+			x = 0;
+			continue;
 		}
-		free(value);
+		else
+		{
+			start = ft_strstr(str, env2->key) - 1;
+			if (start > -1)
+			{
+				str = split_for_expansion(str, env2->key, start, env2->value);
+				x = start + strlen(env2->value);
+				env2 = env;
+				continue;
+			}
+			env2= env2->next;
+		}
+		x++;
 	}
-	return (str);
-
+	return str;
 }
+
+
+
+

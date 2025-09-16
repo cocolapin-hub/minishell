@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:29:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/12 15:14:05 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/16 11:54:25 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 //#include <  .h>
 //#include <  .h>
 
-typedef struct s_local {					// my env_
+typedef struct s_local {
     char            		*key;     		// VAR || $HOME ETC
     char            		*value;   		// Word or PATH
     struct s_local   		*next;
@@ -52,23 +52,27 @@ typedef struct s_token {
 }   t_token;
 
 typedef struct s_command {
-	char 					**args;        // tous les arguments, ex: ["ls", "-la", NULL]
-    t_token 				*redir;		   // liste chaînée des redirs
+	char 					**args;        	// tous les arguments, ex: ["ls", "-la", NULL]
+    t_token 				*element;		// liste chaînée des redirs
 	t_SHELL					*all;
-	struct s_command 		*next;		   // prochaine commande (si pipe)
+	struct s_command 		*next;		   	// prochaine commande (si pipe)
 }   t_command;
 
 
 /*fonctions*/
+//t_command		*ft_lstnew_cmd(char **args, t_token **list, t_SHELL *all);
+int				ft_strstr(const char *big, const char *little);
 void			ft_lstadd_back(t_token **lst, t_token *new);
 char			*ft_strdup_m(const char *s, int x, int len);
-char			*ft_strjoin(char *s1, char const *s2);
 t_local			*ft_lstnew_env(char *value, char *key);
+char			*ft_strjoin(char *s1, char const *s2);
 void			print_error(char *line, char *msg);
 t_token			*ft_lstnew_token(char *content);
+void			free_tokens(t_token **list);
 t_token			*ft_lstlast(t_token *lst);
 char			*ft_strdup(const char *s);
 size_t			ft_strlen(const char *s);
+int				ft_lstsize(t_token *lst);
 void			setup_signal(void);
 char			*ft_itoa(int n);
 
@@ -77,9 +81,9 @@ void			setup_shell(t_SHELL **all, char **envp);
 void			setup_signal(void);
 
 /*parsing*/
-char			*expansion(t_local *env, int last_status, char *str, char quote);
-void			tokenisation(char *line, t_token **list, t_SHELL **all);
-//void 			error_handling(t_SHELL **all, t_token **list);
+char			*expansion(t_local *env, int last_status, char *str, int x);
+t_token			*tokenisation(char *line, t_token **list, t_SHELL **all);
+void 			error_handling(t_SHELL **all, t_token **list);
 t_command		*parsing(char *line, t_SHELL *all);
 char			*check_input(char *line);
 

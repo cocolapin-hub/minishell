@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 14:14:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/11 15:49:21 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/16 10:00:41 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@
 // modified ft_strdup
 // modified ft_lstnew
 
-//TO_DO :	//start set_command
+//TO_DO :	//-
+			//code prints one tokens only : bug
+			//finish error_handling
+			//start cmd
 
-// BUG	:	//"ec""ho"  fonctionne comme echo mais pas "ec" "ho" ou "ec""ho ".  --> quote handling
-
+// BUG	:	//echo -nnnnnnnn and echo -n   -n    -n works but not -n-n-n --> exec
 
 int 	main(int argc, char **argv, char **envp)
 {
@@ -47,7 +49,7 @@ int 	main(int argc, char **argv, char **envp)
         if (*line)
 		{
 			cmd = parsing(line, all);
-            //add_history(line);
+            //add_history(line); --> how to use this ?
 		}
 
 		/*executable*/

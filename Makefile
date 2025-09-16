@@ -6,13 +6,17 @@ SRCS    = 	main.c \
 			parsing/check_input.c \
 			parsing/expansion.c \
 			parsing/parsing.c \
-			fonctions/ft_lstadd_back_bonus.c \
-			fonctions/ft_lstlast_bonus.c \
 			fonctions/ft_lstnew_token.c \
+			fonctions/ft_lstadd_back.c \
 			fonctions/ft_lstnew_env.c \
+			fonctions/ft_lstnew_cmd.c \
 			fonctions/print_error.c \
+			fonctions/free_tokens.c \
 			fonctions/ft_strdup_m.c \
+			fonctions/ft_lstlast.c \
 			fonctions/ft_strjoin.c \
+			fonctions/ft_lstsize.c \
+			fonctions/ft_strstr.c \
 			fonctions/ft_strdup.c \
 			fonctions/ft_strlen.c \
 			fonctions/ft_itoa.c \

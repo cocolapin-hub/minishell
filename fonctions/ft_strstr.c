@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:30:10 by claffut           #+#    #+#             */
-/*   Updated: 2025/04/23 11:03:26 by claffut          ###   ########.fr       */
+/*   Updated: 2025/09/15 11:00:21 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#include "../minishell.h"
 
-char	*ft_strnstr(const char *big, const char *little, size_t len)
+int	ft_strstr(const char *big, const char *little)
 {
 	size_t	i;
 	size_t	j;
 
-	if (!*little)
-		return ((char *)big);
 	i = 0;
-	while (big[i] && i < len)
+	while (big[i])
 	{
 		j = 0;
-		while (little[j] && big[i + j] == little[j] && (i + j) < len)
+		while (little[j] && big[i + j] == little[j])
 			j++;
 		if (!little[j])
-			return ((char *)&big[i]);
+			return (i);
 		i++;
 	}
-	return (NULL);
+	return (-1);
 }
 /*
 #include <stdio.h>
