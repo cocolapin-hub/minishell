@@ -4,10 +4,13 @@ SRCS    = 	main.c \
 			parsing/error_handling.c \
 			parsing/tokenisation.c \
 			parsing/check_input.c \
+			parsing/set_command.c \
 			parsing/expansion.c \
 			parsing/parsing.c \
+			fonctions/ft_lstadd_back_cmd.c \
 			fonctions/ft_lstnew_token.c \
 			fonctions/ft_lstadd_back.c \
+			fonctions/ft_lstlast_cmd.c \
 			fonctions/ft_lstnew_env.c \
 			fonctions/ft_lstnew_cmd.c \
 			fonctions/print_error.c \

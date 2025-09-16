@@ -1,36 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_cmd.c                                    :+:      :+:    :+:   */
+/*   ft_lstlast_cmd.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/16 10:41:18 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/16 14:41:35 by ochkaoul         ###   ########.fr       */
+/*   Created: 2025/04/18 11:52:48 by claffut           #+#    #+#             */
+/*   Updated: 2025/09/16 14:57:08 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_SHELL *all)
+t_command	*ft_lstlast_cmd(t_command *lst)
 {
-	t_command	*node;
-
-	node = malloc(sizeof(t_command));
-	if (!node)
-		exit (1); //--> end code;
-
-	//malloc and give all args
-	node->args = args;
-
-	/*all nodes withing the cmd*/
-	node->elements = elements;
-
-	/*the same env*/
-	node->all = all;
-
-	/*pointer to next*/
-	node->next = NULL;
-
-	return(node);
+	if (!lst)
+		return (NULL);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
 }

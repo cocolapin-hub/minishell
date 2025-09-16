@@ -6,110 +6,106 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 10:41:18 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/16 12:59:16 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/16 15:17:41 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../minishell.h"
 
-t_command	*ft_lstnew_cmd(char **args, t_token **list, t_SHELL *all)
-{
-	t_command	*node;
-
-	node = malloc(sizeof(t_command));
-	if (!node)
-		exit (1); //--> end code;
-
-	//malloc and give all args
-	node->args = args;
-
-	/*the right t_token*/ //--> not working out yet
-	while((*list)->value != PIPE && *list)
-	{
-		node->element = list;
-		if ((*list)->next->value == PIPE || !(*list))
-			list = NULL? ???????
-
-
-			
-		*list = (*list)->next;
-	}
-
-
-	/*the same env*/
-	node->all = all;
-
-	/*pointer to next*/
-	node->next = NULL;
-
-	return(node);
-}
-
-void	fill_args(t_token **list, char ***args)
+void	fill_args(t_token *list, char ***args)
 {
 	int 	token_count;
-	char	*arg;
-	int		x = 0;
+	t_token	*tmp;
+	int		x;
 
-	while ((*list)->value == WORD)
+	token_count = 0;
+	tmp = list;
+	x = 0;
+
+	/*count len with a tmp*/
+	while (tmp && tmp->type == WORD)
 	{
 		token_count++;
-		(*list) = (*list)->next;
+		tmp = tmp->next;
 	}
 
+	/*creates args */
 	*args = malloc(sizeof(char *) * (token_count + 1));
 	if (!(*args))
 		exit (1); 						//--> end code propery later;
 	(*args)[token_count] = 0;
 
-	while ((*list)->value == WORD)
+	/*allocate value*/
+	while (list && list->type == WORD)
 	{
-		(*args)[x++] = ft_strdup((*list)->value);
-		(*list) = (*list)->next;
+		(*args)[x++] = ft_strdup(list->value);
+		list = list->next;
 	}
 
-	while ((*list)->type != PIPE && (*list))
-		(*list) = (*list)->next;
+	//lst modifications are constrained here
+}
 
-	if ((*list)->next && (*list)->type == PIPE)
-		list = (*list)->next;
+void	fill_elements(t_token **list, t_token **elements)
+{
+	t_token	*start;
+	t_token	*end;
+
+	if (!(*list) || !list)
+	{
+		*elements = NULL;
+		return ;
+	}
+
+	start = *list;
+	end = *list;
+
+	/*place end*/
+	while(end && end->type != PIPE)
+		end = end->next;
+
+	/*set list & set start*/
+	*elements = start;
+	if (end)
+	{
+		*list = end->next;
+		end->next = NULL;
+	}
+	else
+		*list = NULL;
 }
 
 void	set_command(t_command **cmd, t_token *list, t_SHELL *all)
 {
 	t_command	*new;
-	t_token		*tmp;
+	t_token		*elements;
 	char 		**args;
 
-	tmp = list;
 	while(list)
 	{
-		fill_args(&tmp, &args); 					//done
-		new = ft_lstnew_cmd(args, &list, all);		//adjuste element (fonction)
+		fill_args(list, &args);
+		fill_elements(&list, &elements);
+
+		new = ft_lstnew_cmd(args, elements, all);
 		if (!*cmd)
 			*cmd = new;
 		else
-			ft_lstadd_back(cmd, new);
+			ft_lstadd_back_cmd(cmd, new);
 	}
 }
 
 
-
-
 /*
+EXEMPLE:
 
 cmd1:
  args    = ["cat", "-n", NULL]
  element = [cat, -n, <, in.txt]
- all	 = env
+ all	 = all env
  next    = cmd2
 
 cmd2:
  args    = ["grep", "hello", NULL]
  element = [grep, hello, >, out.txt]
-  all	 = env
+  all	 = all env
  next    = NULL
-
-
 */

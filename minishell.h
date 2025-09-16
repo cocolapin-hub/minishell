@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:29:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/16 11:54:25 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/16 14:57:24 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,15 @@ typedef struct s_token {
 
 typedef struct s_command {
 	char 					**args;        	// tous les arguments, ex: ["ls", "-la", NULL]
-    t_token 				*element;		// liste chaînée des redirs
+    t_token 				*elements;		// liste chaînée des redirs
 	t_SHELL					*all;
 	struct s_command 		*next;		   	// prochaine commande (si pipe)
 }   t_command;
 
 
 /*fonctions*/
-//t_command		*ft_lstnew_cmd(char **args, t_token **list, t_SHELL *all);
+t_command		*ft_lstnew_cmd(char **args, t_token *elements, t_SHELL *all);
+void			ft_lstadd_back_cmd(t_command **lst, t_command *new);
 int				ft_strstr(const char *big, const char *little);
 void			ft_lstadd_back(t_token **lst, t_token *new);
 char			*ft_strdup_m(const char *s, int x, int len);
@@ -68,6 +69,7 @@ t_local			*ft_lstnew_env(char *value, char *key);
 char			*ft_strjoin(char *s1, char const *s2);
 void			print_error(char *line, char *msg);
 t_token			*ft_lstnew_token(char *content);
+t_command		*ft_lstlast_cmd(t_command *lst);
 void			free_tokens(t_token **list);
 t_token			*ft_lstlast(t_token *lst);
 char			*ft_strdup(const char *s);
@@ -82,15 +84,18 @@ void			setup_signal(void);
 
 /*parsing*/
 char			*expansion(t_local *env, int last_status, char *str, int x);
+void			set_command(t_command **cmd, t_token *list, t_SHELL *all);
 t_token			*tokenisation(char *line, t_token **list, t_SHELL **all);
 void 			error_handling(t_SHELL **all, t_token **list);
 t_command		*parsing(char *line, t_SHELL *all);
 char			*check_input(char *line);
 
-
 /*executable*/
 
 #endif
+
+
+
 
 // /*_________________________________________EXEMPLE_____*/
 
@@ -118,4 +123,3 @@ char			*check_input(char *line);
 // args = ["grep", "hello", NULL]
 // redir = [ { type: REDIR_OUT, quote: Q_NONE, value: "out.txt" } ]
 // next = NULL
-

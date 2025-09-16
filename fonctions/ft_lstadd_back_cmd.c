@@ -1,36 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_cmd.c                                    :+:      :+:    :+:   */
+/*   ft_lstadd_back_cmd.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/16 10:41:18 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/16 14:41:35 by ochkaoul         ###   ########.fr       */
+/*   Created: 2025/04/18 12:01:15 by claffut           #+#    #+#             */
+/*   Updated: 2025/09/16 14:57:42 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_SHELL *all)
+void	ft_lstadd_back_cmd(t_command **lst, t_command *new)
 {
-	t_command	*node;
+	t_command	*last;
 
-	node = malloc(sizeof(t_command));
-	if (!node)
-		exit (1); //--> end code;
-
-	//malloc and give all args
-	node->args = args;
-
-	/*all nodes withing the cmd*/
-	node->elements = elements;
-
-	/*the same env*/
-	node->all = all;
-
-	/*pointer to next*/
-	node->next = NULL;
-
-	return(node);
+	if (!lst || !new)
+		return ;
+	if (!*lst)
+	{
+		*lst = new;
+		return ;
+	}
+	last = ft_lstlast_cmd(*lst);
+	last->next = new;
 }

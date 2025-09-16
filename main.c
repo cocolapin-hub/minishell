@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 14:14:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/16 10:00:41 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/16 14:56:26 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,14 @@
 // modified ft_lstnew
 
 //TO_DO :	//-
-			//code prints one tokens only : bug
-			//finish error_handling
-			//start cmd
+			//-
+			//-
+			//finish set cmdmake re
 
 // BUG	:	//echo -nnnnnnnn and echo -n   -n    -n works but not -n-n-n --> exec
+
+// OPTI	:	//merge both ft_lstadd_back_cmd and ft_lstadd_back
+			//merge both ft_lstlast_cmd and ft_lstlast
 
 int 	main(int argc, char **argv, char **envp)
 {
