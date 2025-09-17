@@ -22,7 +22,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int exec_builtin(t_command *cmd, t_local *env) // *cmd = pointeur sur la variable locale utiliser par la fonction pour acceder a la structure entière
+int exec_builtin(t_command *cmd) // *cmd = pointeur sur la variable locale utiliser par la fonction pour acceder a la structure entière
 {
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
@@ -31,11 +31,11 @@ int exec_builtin(t_command *cmd, t_local *env) // *cmd = pointeur sur la variabl
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		return (builtin_echo(cmd->args));
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
-		return (builtin_cd(cmd->args, &cmd->all->env));
+		return (builtin_cd(cmd->args, cmd->all->env));
 	if (ft_strcmp(cmd->args[0], "export") == 0)
-		return (builtin_export(cmd->args, &cmd->all->env));
+		return (builtin_export(cmd->args, cmd->all->env));
 	if (ft_strcmp(cmd->args[0], "unset") == 0)
-		return (builtin_unset(cmd->args, &cmd->all->env));
+		return (builtin_unset(cmd->args, cmd->all->env));
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (builtin_env(cmd->all->env));
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
@@ -57,10 +57,10 @@ void child_process(t_command *cmd, t_local *env)
 	char	*path;
 	char	**envp;
 
-	if (apply_redirections(cmd->redir) != 0) // appliquer les redirs avant execve
+	if (apply_redir(cmd->redir) != 0) // appliquer les redirs avant execve
         exit(1); // erreur ouverture fichier, on sort
 	envp = env_to_tab(env);					// convertit liste chainée en char **
-	path = find_in_path(cmd->args[0], envp);
+	path = find_in_path(cmd->args[0], env);
 	if (!path)
 	{
 		print_error(cmd->args[0], "command not found");

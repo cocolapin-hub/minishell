@@ -1,5 +1,5 @@
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 static void	update_pwd(t_local *env)
 {

@@ -1,7 +1,7 @@
 
 #include "../minishell.h"
 
-char    *get_env_value(t_local *env, const char *key) // recoit la valeur du pointeur vers la tete de liste, peut lire et modifier les champs des noeuds, affecte la lst d'origine mais ne peut pas changer la valeur du pointeur comme créer un new node
+char    *get_env_value(t_local *env, char *key) // recoit la valeur du pointeur vers la tete de liste, peut lire et modifier les champs des noeuds, affecte la lst d'origine mais ne peut pas changer la valeur du pointeur comme créer un new node
 {
     while (env)
     {

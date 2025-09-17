@@ -1,5 +1,5 @@
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 // static void	export_error(char *arg) // affiche les messages d'erreurs
 // {

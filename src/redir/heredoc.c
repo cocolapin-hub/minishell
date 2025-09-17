@@ -1,16 +1,16 @@
 #include "../../minishell.h"
 
-int	create_heredoc(const char *limiter) // avec fichier tmp
-{
-	char	*line;
-	int		fd;
+// int	create_heredoc(const char *limiter) // avec fichier tmp
+// {
+// 	char	*line;
+// 	int		fd;
 
-	fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644); 
-	if (fd < 0)
-		return (-1);
-}
+// 	fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644); 
+// 	if (fd < 0)
+// 		return (-1);
+// }
 
-int	create_heredoc2(const char *limiter) // avec pipe,  besy option je pense
+int	create_heredoc(char *limiter) // avec pipe,  besy option je pense
 {
 	int		pipefd[2]; // tab à deux cases car fd[0] et fd[1]
 	char	*line;

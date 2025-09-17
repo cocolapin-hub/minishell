@@ -1,8 +1,8 @@
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
-#define MAX_LINE_LEN 4096
+# define MAX_LINE_LEN 4096
 
 # include "libft/libft.h"
 # include <readline/readline.h>
@@ -59,30 +59,30 @@ typedef struct s_command {
 // t_local → interne à l’env (manipulation des variables).
 
 /*fonctions*/
-t_token			*ft_lstnew_token(char *content, char quotes);
-void			ft_lstadd_back(t_token **lst, t_token *new);
-char			*ft_strdup(const char *s, int x, int len);
-t_local			*ft_lstnew_env(char *value, char *key);
-void			print_error(char *line, char *msg);
-t_token			*ft_lstlast(t_token *lst);
-size_t			ft_strlen(const char *s);
-void			setup_signal(void);
-char			*ft_itoa(int n);
+// t_token			*ft_lstnew_token(char *content, char quotes);
+// void			ft_lstadd_back(t_token **lst, t_token *new);
+// char			*ft_strdup(const char *s, int x, int len);
+// t_local			*ft_lstnew_env(char *value, char *key);
+// void			print_error(char *line, char *msg);
+// t_token			*ft_lstlast(t_token *lst);
+// size_t			ft_strlen(const char *s);
+// void			setup_signal(void);
+// char			*ft_itoa(int n);
 
-/*setup*/
-void			setup_shell(t_SHELL **all, char **envp);
-void			setup_signal(void);
+// /*setup*/
+// void			setup_shell(t_SHELL **all, char **envp);
+// void			setup_signal(void);
 
-/*parsing*/
-void			expansion(t_local *env, int last_status, t_token **list);
-void			tokenisation(char *line, t_token **list);
-t_command		*parsing(char *line, t_SHELL *all);
-char			*check_input(char *line);
+// /*parsing*/
+// void			expansion(t_local *env, int last_status, t_token **list);
+// void			tokenisation(char *line, t_token **list);
+// t_command		*parsing(char *line, t_SHELL *all);
+// char			*check_input(char *line);
 
 /*__________executable____________*/
 
 /*ENV*/
-char	*get_env_value(t_local *env, const char *key);
+char	*get_env_value(t_local *env, char *key);
 void    set_env_value(t_local **env, char *key, char *value);
 void    unset_env_value(t_local **env, char *key);
 void	free_envp(char **envp);
@@ -97,7 +97,7 @@ void	child_process(t_command *cmd, t_local *env);
 
 /*BUILTINS*/
 int		is_builtin(char *cmd);
-int		exec_builtin(t_command *cmd, t_local *env);
+int		exec_builtin(t_command *cmd);
 int		builtin_pwd(void);
 int		builtin_echo(char **args);
 int		builtin_export(char **args, t_local *env);
@@ -105,6 +105,14 @@ int		builtin_unset(char **args, t_local *env);
 int		builtin_cd(char **args, t_local *env);
 int		builtin_env(t_local *env);
 int		builtin_exit(char **args);
+
+/*REDIR*/
+int apply_redir(t_token *redir);
+int	create_heredoc(char *limiter);
+
+/*PIPE*/
+void	exec_pipe(t_command *cmd_list, t_SHELL *all);
+
 
 #endif
 

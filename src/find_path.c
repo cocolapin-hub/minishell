@@ -1,6 +1,5 @@
 
 #include "../minishell.h"
-#include "../libft/libft.h"
 
 static char	*get_path_line(t_local *env)
 {
