@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/16 10:40:36 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:00:37 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void 	error_handling(t_SHELL **all, t_token **list)
 	{
 		write(2, "syntax error :start with pipe or redir\n", 39);
 		(*all)->last_status = 258;
-		free_tokens(list);
+		free_tokens(*list);
 	}
 
 	/*check other syntax*/
@@ -67,7 +67,7 @@ void 	error_handling(t_SHELL **all, t_token **list)
 		/*end if an error was caught*/
 		if (!lst2)
 		{
-			free_tokens(list);
+			free_tokens(*list);
 			return;
 		}
 		lst2 = lst2->next;

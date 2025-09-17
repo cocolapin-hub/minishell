@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:14:23 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/15 16:51:19 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:13:18 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int			handles_command(char *line, int x, t_token **list, t_SHELL **all)
 	t_token	*new;
 	char	*cmd;
 	char	*tmp;
-	char	quote;
+	char	quote = 0;
 	int		y;
 
 	y = x;
@@ -80,8 +80,10 @@ int			handles_command(char *line, int x, t_token **list, t_SHELL **all)
 			tmp = outside_quotes(line, &x, &y, all);
 
 		if (!tmp)
+		{
+			free(cmd);
 			return (-1);
-
+		}
 		cmd = ft_strjoin(cmd, tmp);
 		free(tmp);
 	}
@@ -95,6 +97,7 @@ int			handles_command(char *line, int x, t_token **list, t_SHELL **all)
 		else
 			ft_lstadd_back(list, new);
 
+		//free(cmd);
 		return (x);
 }
 
@@ -150,9 +153,11 @@ t_token		*tokenisation(char *line, t_token **list, t_SHELL **all)
 		{
 			x = handles_command(line, x, list, all);
 			if ((*all)->last_status == 258 || x == -1)
+			{
+				free_tokens(*list);
 				return NULL;
+			}
 		}
 	}
-	free(line);
 	return (*list);
 }

@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:31:01 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/12 14:14:51 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/17 13:46:23 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*ft_strdup(const char *s)
 	dst[x] = 0;
 	return (dst);
 }
-	
+
 int	main(void)
 {
 	const char *src = "Salut les copains !";

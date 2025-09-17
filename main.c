@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 14:14:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/16 14:56:26 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:14:28 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@
 // modified ft_strdup
 // modified ft_lstnew
 
-//TO_DO :	//-
-			//-
-			//-
-			//finish set cmdmake re
-
-// BUG	:	//echo -nnnnnnnn and echo -n   -n    -n works but not -n-n-n --> exec
+//TO_DO :	// remove leaks
+			// remettre les quotes dans token
+			// regroup work
 
 // OPTI	:	//merge both ft_lstadd_back_cmd and ft_lstadd_back
 			//merge both ft_lstlast_cmd and ft_lstlast
+
+// leaks:	//free cmd dans tokenisation?
+			//leaks dans expansion corrige?
 
 int 	main(int argc, char **argv, char **envp)
 {
@@ -46,7 +46,7 @@ int 	main(int argc, char **argv, char **envp)
     {
 		line = readline("minishell$ ");
 		if (!line)
-			exit (1);
+			end_code(cmd);
 
 		/*parsing*/
         if (*line)
@@ -54,6 +54,7 @@ int 	main(int argc, char **argv, char **envp)
 			cmd = parsing(line, all);
             //add_history(line); --> how to use this ?
 		}
+
 
 		/*executable*/
 		// if (strlen(line) != 0 && line != NULL)
@@ -64,6 +65,9 @@ int 	main(int argc, char **argv, char **envp)
 		//printf("You typed: %s\n", line);
 
     }
+
+	free(line);
+	end_code(cmd);
     return 0;
 }
 

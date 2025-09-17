@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/16 10:00:13 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:08:54 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,16 @@ char		*split_for_expansion(char *str, char *key, int start, char *key_value)
 
 	tmp = ft_strjoin(split1, split2);
 	str = ft_strjoin(tmp, split3);
+
+	free(split2);
+	free(split3);
 	return (str);
 }
 
 
 char		*expansion(t_local *env, int last_status, char *str, int x)
 {
+	char		*status;
 	t_local 	*env2;
 	int			start;
 
@@ -57,7 +61,9 @@ char		*expansion(t_local *env, int last_status, char *str, int x)
 	{
 		if (str[x] == '$' && str[x + 1] == '?')
 		{
-			str = split_for_expansion(str, "$?", x, ft_itoa(last_status));
+			status = ft_itoa(last_status);
+			str = split_for_expansion(str, "$?", x, status);
+			free(status);
 			x = 0;
 			continue;
 		}

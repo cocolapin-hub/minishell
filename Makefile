@@ -22,6 +22,9 @@ SRCS    = 	main.c \
 			fonctions/ft_strstr.c \
 			fonctions/ft_strdup.c \
 			fonctions/ft_strlen.c \
+			fonctions/free_args.c \
+			fonctions/free_env.c \
+			fonctions/end_code.c \
 			fonctions/ft_itoa.c \
 			setup/setup_signal.c \
 			setup/setup_shell.c \

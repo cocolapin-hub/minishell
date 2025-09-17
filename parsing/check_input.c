@@ -6,24 +6,25 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/05 10:33:58 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:43:35 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char 		*clean_line(char *line)
+char		*clean_line(char *line)
 {
 	char 	*new_line;
-	char	quote;
+	char	quote = 0;
+	int		len;
 	int 	x;
 	int 	y;
-	int		len;
+
 
 	len = ft_strlen(line);
 	new_line = malloc(sizeof(char) * len + 1);
 	if (!new_line)
-		return NULL;
+		return (NULL);
 
 	y = 0;
 	x = 0;
@@ -57,29 +58,20 @@ char 		*clean_line(char *line)
 
 char		*check_input(char *line)
 {
-	int x = 0;
-
-	/*ligne vide*/
-	if (strcmp(line, "exit") == 0)
-	{
-		free(line);
-		exit (1);
-	}
+	int 	x = 0;
 
 	/*caractères spéciaux*/
 	while(line[x])
 	{
 		if (line[x] < 32 && line[x] != 9)
-			line = NULL;
+			return (NULL);
 		x++;
 	}
 
 	/*longueur excessive*/
 	if (x >= MAX_LINE_LEN)
-		line = NULL;
+		return (NULL);
 
 	/*espaces et tabulations*/
-	line = clean_line(line);
-
-	return line;
+	return (clean_line(line));
 }

@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 10:29:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/16 14:57:24 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/17 15:10:05 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,20 @@ char			*ft_strjoin(char *s1, char const *s2);
 void			print_error(char *line, char *msg);
 t_token			*ft_lstnew_token(char *content);
 t_command		*ft_lstlast_cmd(t_command *lst);
-void			free_tokens(t_token **list);
+void			free_tokens(t_token *list);
 t_token			*ft_lstlast(t_token *lst);
 char			*ft_strdup(const char *s);
 size_t			ft_strlen(const char *s);
 int				ft_lstsize(t_token *lst);
+void			free_args(char **args);
+void			free_env(t_SHELL *all);
 void			setup_signal(void);
 char			*ft_itoa(int n);
+
+/*free*/
+void			end_code(t_command *cmd);
+//void			free_env(t_SHELL *all);
+
 
 /*setup*/
 void			setup_shell(t_SHELL **all, char **envp);
@@ -84,7 +91,7 @@ void			setup_signal(void);
 
 /*parsing*/
 char			*expansion(t_local *env, int last_status, char *str, int x);
-void			set_command(t_command **cmd, t_token *list, t_SHELL *all);
+t_command		*set_command(t_command **cmd, t_token *list, t_SHELL *all);
 t_token			*tokenisation(char *line, t_token **list, t_SHELL **all);
 void 			error_handling(t_SHELL **all, t_token **list);
 t_command		*parsing(char *line, t_SHELL *all);

@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tokens.c                                      :+:      :+:    :+:   */
+/*   free_args.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/17 13:59:45 by ochkaoul         ###   ########.fr       */
+/*   Created: 2025/09/17 15:08:32 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/09/17 15:08:53 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	free_tokens(t_token *list)
+void	free_args(char **args)
 {
-	t_token	*tmp;
+	int	x;
 
-	while(list)
-	{
-		tmp = list->next;
-		free(list->value);
-		free (list);
-		list = tmp;
-	}
+	x = 0;
+
+	if (!args)
+		return;
+
+	while (args[x])
+		free(args[x++]);
+
+	free(args);
 }
