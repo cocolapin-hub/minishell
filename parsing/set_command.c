@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 10:41:18 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/17 15:18:56 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/18 13:41:58 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,18 +99,21 @@ t_command	*set_command(t_command **cmd, t_token *list, t_SHELL *all)
 }
 
 
-/*
-EXEMPLE:
 
-cmd1:
- args    = ["cat", "-n", NULL]
- element = [cat, -n, <, in.txt]
- all	 = all env
- next    = cmd2
+// EXEMPLE:
+// cat -n < in.txt | grep hello > out.txt
 
-cmd2:
- args    = ["grep", "hello", NULL]
- element = [grep, hello, >, out.txt]
-  all	 = all env
- next    = NULL
-*/
+
+
+
+// cmd1:
+//  args    = ["cat", "-n", NULL]
+//  element = [cat, -n, <, in.txt]
+//  all	 = all env
+//  next    = cmd2
+
+// cmd2:
+//  args    = ["grep", "hello", NULL]
+//  element = [grep, hello, >, out.txt]
+//   all	 = all env
+//  next    = NULL

@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 10:04:27 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/17 15:10:34 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/18 14:23:46 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ void	end_code(t_command *cmd)
 {
 	t_command	*tmp;
 
+	if (cmd->all)
+			free_env(cmd->all);
+
 	while(cmd)
 	{
 		tmp = cmd->next;
-
-		if (cmd->all)
-			free_env(cmd->all);
 
 		if (cmd->args)
 			free_args(cmd->args);
@@ -32,7 +32,6 @@ void	end_code(t_command *cmd)
 		free(cmd);
 		cmd = tmp;
 	}
-
 	exit(1);
 }
 

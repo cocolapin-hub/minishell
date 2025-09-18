@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 14:14:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/17 16:14:28 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/18 13:52:56 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,42 @@
 // leaks:	//free cmd dans tokenisation?
 			//leaks dans expansion corrige?
 
+
+void	free_all(t_SHELL *all)
+{
+    t_local *tmp;
+
+    if (!all)
+        return;
+
+    // Libérer chaque maillon de la liste env
+    while (all->env)
+    {
+        tmp = all->env->next;
+        if (all->env->key)
+            free(all->env->key);
+        if (all->env->value)
+            free(all->env->value);
+        free(all->env);
+        all->env = tmp;
+    }
+
+    // Libérer la structure shell elle-même
+    free(all);
+}
+
 int 	main(int argc, char **argv, char **envp)
 {
-	char 		*line;
+	t_command 	*old_cmd = NULL;
 	t_command	*cmd = NULL;
 	t_SHELL		*all = NULL;
+	char 		*line;
 
+	(void)line;
 	(void)argc;
 	(void)argv;
+	(void)cmd;
+
 	setup_signal();
 	setup_shell(&all, envp);
 
@@ -49,25 +77,31 @@ int 	main(int argc, char **argv, char **envp)
 			end_code(cmd);
 
 		/*parsing*/
-        if (*line)
+		if (*line)
 		{
+			old_cmd = cmd;
 			cmd = parsing(line, all);
-            //add_history(line); --> how to use this ?
+			if(old_cmd)
+				end_code(old_cmd);
 		}
 
+		free(line);
 
 		/*executable*/
 		// if (strlen(line) != 0 && line != NULL)
 		// 	exec(cmd);
 
 
-		(void)cmd;
+
 		//printf("You typed: %s\n", line);
 
     }
 
-	free(line);
-	end_code(cmd);
+	free_all(all);
+//	end_code(cmd);
     return 0;
 }
 
+
+
+			//add_history(line); --> how to use this ?

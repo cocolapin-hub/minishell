@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/17 16:10:12 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:06:10 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@ t_command	*parsing(char *line, t_SHELL *all)
 {
 	t_token 	*list = NULL;
 	t_command 	*cmd = NULL;
+	char		*cleaned_line;
+
+	(void)cmd;
+	(void)all;
 
 	/*ligne vide*/
 	if (strcmp(line, "exit") == 0)
@@ -26,12 +30,12 @@ t_command	*parsing(char *line, t_SHELL *all)
 	}
 
 	/*Etapes de mon parsing*/
-	line = check_input(line);
+	cleaned_line = check_input(line);
 
-	if (!line)
+	if (!cleaned_line)
 		return NULL;
 
-	tokenisation(line, &list, &all);
+	tokenisation(cleaned_line, &list, &all);
 	error_handling(&all, &list);
 
 	if(!set_command(&cmd, list, all))
@@ -50,11 +54,6 @@ t_command	*parsing(char *line, t_SHELL *all)
 
 	if(list)
 		free_tokens(list);
-
+	free(cleaned_line);
 	return (cmd);
-
-
-
-//	note:	//strdup exit a place de close cleanly
-			//ft_strjoin exit a place de close cleanly
 }

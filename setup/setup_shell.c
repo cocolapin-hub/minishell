@@ -6,18 +6,18 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:39:27 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/17 10:15:36 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:19:55 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	setup_env(t_local **env, char *tab, char *value, char *key)
+void	setup_env(t_local **env, char *tab, int len, int y)
 {
+	char	*value = NULL;
+	char	*key = NULL;
 	t_local *last;
 	t_local	*new;
-	int		len;
-	int		y;
 
 	len = ft_strlen(tab);
 	y = 0;
@@ -52,8 +52,7 @@ void	setup_env(t_local **env, char *tab, char *value, char *key)
 
 void	setup_shell(t_SHELL **all, char **envp)
 {
-	char	*value = NULL;
-	char	*key = NULL;
+
 	int 	x;
 
 	*all = malloc(sizeof(t_SHELL));
@@ -65,7 +64,7 @@ void	setup_shell(t_SHELL **all, char **envp)
 	x = 0;
 	while (envp[x])
 	{
-		setup_env(&((*all)->env), envp[x], value, key);
+		setup_env(&((*all)->env), envp[x], 0, 0);
 		x++;
 	}
 }
