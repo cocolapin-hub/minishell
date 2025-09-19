@@ -1,45 +1,90 @@
 
 #include "../../minishell.h"
 
+static int	handle_redir_in(t_token *redir)
+{
+	int	fd;
+
+	if (redir->type == REDIR_IN)			// "< file"
+	{
+		fd = open(redir->value, O_RDONLY);
+		if (fd < 0)
+		{
+			perror("minishell: redir in");
+			return (1);
+		}
+		dup2(fd, STDIN_FILENO);				// stdin = fd standard input
+		close(fd);
+		return (0);
+	}
+}
+
+static int	handle_redir_out(t_token *redir)
+{
+	int fd;
+
+	if (redir->type == REDIR_OUT)		// "> file"
+	{
+		fd = open(redir->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd < 0)
+		{
+			perror("minishell: redir out");
+			return (1);
+		}
+		dup2(fd, STDOUT_FILENO);			// stdout = fd standard output
+		close(fd);
+		return (0);
+	}
+}
+
+static int	handle_redir_append(t_token *redir)
+{
+	int fd;
+
+	if (redir->type == REDIR_APPEND)	// ">> file"
+	{
+		fd = open(redir->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd < 0)
+		{
+			perror("minishell: redir append");
+			return (1);
+		}
+		dup2(fd, STDOUT_FILENO);			// stdout = fd standard output
+		close(fd);
+		return (0);
+	}
+}
+
+static int	handle_redir_heredoc(t_token *redir)
+{
+	int fd;
+
+	if (redir->type == REDIR_HEREDOC)	// "<< limiter"
+	{
+		fd = create_heredoc(redir->value);
+		if (fd < 0)
+		{
+			perror("heredoc");
+			return (1);
+		}
+		dup2(fd, STDIN_FILENO);				// branche l'entrée standard sur le pipe
+		close(fd);
+		return (0);
+	}
+}
 int apply_redir(t_token *redir)
 {
-    int fd;
-
     while (redir)
     {
-        if (redir->type == REDIR_IN)			// "< file"
-        {
-            fd = open(redir->value, O_RDONLY);
-            if (fd < 0)
-                return (perror("minishell: redir in"), 1);
-            dup2(fd, STDIN_FILENO);				// stdin = fd standard input
-            close(fd);
-        }
-        else if (redir->type == REDIR_OUT)		// "> file"
-        {
-            fd = open(redir->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd < 0)
-                return (perror("minishell: redir out"), 1);
-            dup2(fd, STDOUT_FILENO);			// stdout = fd standard output
-            close(fd);
-        }
-        else if (redir->type == REDIR_APPEND)	// ">> file"
-        {
-            fd = open(redir->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
-            if (fd < 0)
-                return (perror("minishell: redir append"), 1);
-            dup2(fd, STDOUT_FILENO);			// stdout = fd standard output
-            close(fd);
-        }
-        else if (redir->type == REDIR_HEREDOC)	// "<< limiter"
-        {
-			fd = create_heredoc(redir->value);
-			if (fd < 0)
-				return (perror("heredoc"), 1);
-			dup2(fd, STDIN_FILENO);				// branche l'entrée standard sur le pipe
-			close(fd);
-        }
-        redir = redir->next;
+		if (redir->type == REDIR_IN && handle_redir_in(redir))
+			return (1);
+		if (redir->type == REDIR_OUT && handle_redir_out(redir))
+			return (1);
+		if (redir->type == REDIR_APPEND && handle_redir_append(redir))
+			return (1);
+		if (redir->type == REDIR_HEREDOC && handle_redir_heredoc(redir))
+			return (1);
+		redir = redir->next;
     }
     return (0);
 }

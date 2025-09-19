@@ -39,7 +39,7 @@ int exec_builtin(t_command *cmd) // *cmd = pointeur sur la variable locale utili
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (builtin_env(cmd->all->env));
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return (builtin_exit(cmd->args));
+		exit_clean_af(cmd->all, cmd, cmd->all->last_status);
 	return (1);
 }
 
@@ -57,8 +57,8 @@ void child_process(t_command *cmd, t_local *env)
 	char	*path;
 	char	**envp;
 
-	if (apply_redir(cmd->redir) != 0) // appliquer les redirs avant execve
-        exit(1); // erreur ouverture fichier, on sort
+	if (apply_redir(cmd->elem) != 0) // appliquer les redirs avant execve
+        fatal_error("redirection", 1); // erreur ouverture fichier, on sort
 	envp = env_to_tab(env);					// convertit liste chainée en char **
 	path = find_in_path(cmd->args[0], env);
 	if (!path)
@@ -73,6 +73,26 @@ void child_process(t_command *cmd, t_local *env)
 		free_split(envp);
 		exit(1);
 	}
+}
+
+static void	run_child(t_command *cmd)
+{
+		signal(SIGINT, SIG_DFL);						 // mettre les signaux par défaut,
+		signal(SIGQUIT, SIG_DFL);						 // pour que CTRL-C ou -\ tuent la commande enfant et pas minishell + le parent capture le retour avec waitpid $? est mis à jour (130 ou 131)
+		child_process(cmd, cmd->all->env);				 // création processus enfant
+}
+
+static void	run_parent(t_command *cmd, pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);							// parent attend fin de l'enfant + maj last_status en dessous
+	if (WIFEXITED(status))
+		cmd->all->last_status = WEXITSTATUS(status);	// succes normal
+	else if (WIFSIGNALED(status))
+		cmd->all->last_status = 128 + WTERMSIG(status);	// si process tué par un sig : last_status = 128
+	else
+		cmd->all->last_status = 1;					 	// si signal ou plantage
 }
 
 void	run_command(t_command *cmd)
@@ -92,15 +112,9 @@ void	run_command(t_command *cmd)
 		return ;
 	}
 	if (pid == 0)
-		child_process(cmd, cmd->all->env);				 // processus enfant
+		run_child(cmd);
 	else
-	{
-		waitpid(pid, &status, 0);						 // parent attend fin de l'enfant
-		if (WIFEXITED(status))
-			cmd->all->last_status = WEXITSTATUS(status); // succes normal
-		else
-			cmd->all->last_status = 1;					 // si signal ou plantage
-	}
+		run_parent(cmd, pid);
 }
 
 

@@ -13,6 +13,15 @@
 # include <fcntl.h>
 # include <string.h>
 
+typedef struct s_pipe
+{
+	int						prev_fd;		// stdin par défaut si pas de pipe avant (valeur sentinelle)
+	int						pipefd[2];
+	pid_t					last_pid;		// on garde le dernier enfant (dernier fork qui est la commande la plus à droite du pipe) on doit l'utiliser pour $?
+	pid_t					pid;
+	t_command				*cmd_list;
+}	t_pipe;
+
 typedef struct s_local {
     char            		*key;     		// VAR || $HOME ETC
     char            		*value;   		// Word or PATH
@@ -30,25 +39,25 @@ typedef enum e_quote {
 	Q_DOUBLE
 }	t_quote;
 
-typedef enum e_element {
+typedef enum e_type {
 	WORD,
 	PIPE,									// |
     REDIR_IN,      							// <
     REDIR_OUT,     							// >
     REDIR_APPEND,  							// >>
     REDIR_HEREDOC				  			// <<
-}   t_element;
+}   t_type;
 
 typedef struct s_token {
-    t_element 				type;
-	t_quote  				amount;
-	char 					*value;
+    t_type 					type;			// word, opérateur (|), ou redirection
+	t_quote  				amount;			// si le mot est entouré de ' ou "
+	char 					*value;			// contenu textuel (ls, "hello", '*.c' etc)
     struct s_token 			*next; 
 }   t_token;
 
 typedef struct s_command {
-	char 					**args;        // tous les arguments, ex: ["ls", "-la", NULL]
-    t_token 				*redir;		   // liste chaînée des redirs (<,>,>>,...)
+	char 					**args;        // tous les arguments, ex: ["ls", "-la", NULL] à passer à execve ou à builtin
+    t_token 				*elem;		   // liste chaînée des redirs (<,>,>>,...)
 	t_SHELL					*all;		   // contient env et last_status
 	struct s_command 		*next;		   // prochaine commande (si pipe)
 }   t_command;
@@ -113,6 +122,10 @@ int	create_heredoc(char *limiter);
 /*PIPE*/
 void	exec_pipe(t_command *cmd_list, t_SHELL *all);
 
+/*SIGNAL*/
+void	setup_sig(void);
+void	sigint_handler(int sig);
+
 
 #endif
 
@@ -142,5 +155,3 @@ void	exec_pipe(t_command *cmd_list, t_SHELL *all);
 // args = ["grep", "hello", NULL]
 // redir = [ { type: REDIR_OUT, quote: Q_NONE, value: "out.txt" } ]
 // next = NULL
-
-

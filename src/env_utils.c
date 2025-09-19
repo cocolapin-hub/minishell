@@ -1,9 +1,9 @@
 
 #include "../minishell.h"
 
-char    *get_env_value(t_local *env, char *key) // recoit la valeur du pointeur vers la tete de liste, peut lire et modifier les champs des noeuds, affecte la lst d'origine mais ne peut pas changer la valeur du pointeur comme créer un new node
-{
-    while (env)
+char    *get_env_value(t_local *env, char *key)
+{ // recoit la valeur du pointeur vers la tete de liste, peut lire et modifier les champs des noeuds, affecte la lst d'origine mais ne peut pas changer la valeur du pointeur comme créer un new node
+    while (env) 
     {
         if (ft_strcmp(env->key, key) == 0)
             return (env->value);
@@ -12,8 +12,8 @@ char    *get_env_value(t_local *env, char *key) // recoit la valeur du pointeur 
     return (NULL);
 }
 
-void    set_env_value(t_local **env, char *key, char *value) // pointeur vers le pointeur tete, peut lire la list via *env ET modifier la tete (*env = new_node)
-{
+void    set_env_value(t_local **env, char *key, char *value)
+{ // pointeur vers le pointeur tete, peut lire la list via *env ET modifier la tete (*env = new_node)
     t_local   *node;
 
     node = *env;
@@ -36,8 +36,8 @@ void    set_env_value(t_local **env, char *key, char *value) // pointeur vers le
     *env = node;
 }
 
-void    unset_env_value(t_local **env, char *key) // *env : lecture seule ou modif d'un noeud existant | **env : possibilité de changer la tete ou changer env elle meme
-{
+void    unset_env_value(t_local **env, char *key)
+{ // *env : lecture seule ou modif d'un noeud existant | **env : possibilité de changer la tete ou changer env elle meme
     t_local   *prev;
     t_local   *cur;
 
@@ -61,36 +61,6 @@ void    unset_env_value(t_local **env, char *key) // *env : lecture seule ou mod
     }
 }
 
-void	free_split(char **array)
-{
-	int i;
-
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
-
-void	free_envp(char **envp) // same shit que free_split, a merge plus tard
-{
-	int	i;
-
-	if (!envp)
-		return ;
-	i = 0;
-	while (envp[i])
-	{
-		free(envp[i]);
-		i++;
-	}
-	free(envp);
-}
-
 char	*ft_strjoin3(char *s1, char *s2, char *s3)
 {
 	char	*res;
@@ -112,8 +82,6 @@ char	*ft_strjoin3(char *s1, char *s2, char *s3)
 	res[len1 + len2 + len3] = '\0';
 	return (res);
 }
-
-#include <stdlib.h>
 
 char	**env_to_tab(t_local *env)
 {

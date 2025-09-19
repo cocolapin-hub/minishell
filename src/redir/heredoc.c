@@ -10,7 +10,7 @@
 // 		return (-1);
 // }
 
-int	create_heredoc(char *limiter) // avec pipe,  besy option je pense
+int	create_heredoc(char *limiter)
 {
 	int		pipefd[2]; // tab à deux cases car fd[0] et fd[1]
 	char	*line;

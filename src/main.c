@@ -59,84 +59,31 @@ t_local	*env_init(char **envp)
 
 int main(int argc, char **argv, char **envp)
 {
+	t_SHELL all;
+
     (void)argc;
     (void)argv;
 
-    // === Initialiser l'environnement ===
-    t_SHELL all;
     all.env = env_init(envp);
     all.last_status = 0;
 
-    // === Exemple 1 : une seule commande ===
-    t_command cmd1;
-    char *args1[] = {"ls", "-l", NULL};
+	setup_sig();	// active les handlers du parent
 
-    cmd1.args = args1;
-    cmd1.redir = NULL;
-    cmd1.all = &all;
-    cmd1.next = NULL;
+	while (1)
+    {
+        char *line = readline("minishell$ ");
+        if (!line)	// CTRL-D
+        {
+            printf("exit\n");
+            clean_exit(&all, 0);
+        }
+        if (*line)
+            add_history(line);
 
-    printf("\n--- Test 1 : commande simple ---\n");
-    run_command(&cmd1);
-    printf("last_status = %d\n", all.last_status);
+        // parsing → génération cmd_list
+        
+		exec_pipe(cmd_list, &all);
 
-    // === Exemple 2 : pipeline "ls -l | grep minishell" ===
-    t_command cmd2;
-    t_command cmd3;
-    char *args2[] = {"ls", "-l", NULL};
-    char *args3[] = {"grep", "minishell", NULL};
-
-    cmd2.args = args2;
-    cmd2.redir = NULL;
-    cmd2.all = &all;
-    cmd2.next = &cmd3;
-
-    cmd3.args = args3;
-    cmd3.redir = NULL;
-    cmd3.all = &all;
-    cmd3.next = NULL;
-
-    printf("\n--- Test 2 : pipeline ---\n");
-    exec_pipe(&cmd2, &all);
-    printf("last_status = %d\n", all.last_status);
-
-    // === Exemple 3 : builtin "pwd" ===
-    t_command cmd4;
-    char *args4[] = {"pwd", NULL};
-
-    cmd4.args = args4;
-    cmd4.redir = NULL;
-    cmd4.all = &all;
-    cmd4.next = NULL;
-
-    printf("\n--- Test 3 : builtin ---\n");
-    run_command(&cmd4);
-    printf("last_status = %d\n", all.last_status);
-
-    return 0;
+        free(line);
+    }
 }
-
-
-
-
-
-
-
-/*
- readline → pour lire la ligne.
- find_in_path → pour trouver la commande.
- exec_command → pour exécuter.
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
