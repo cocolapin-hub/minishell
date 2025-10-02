@@ -1,5 +1,5 @@
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 static char	*get_path_line(t_local *env)
 {

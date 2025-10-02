@@ -12,10 +12,13 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <string.h>
+# include <errno.h>
+
+extern int		g_in_heredoc;
 
 typedef struct s_pipe
 {
-	int						prev_fd;		// stdin par défaut si pas de pipe avant (valeur sentinelle)
+	int						prev_fd;		// stdin par défaut si pas de pipe avant ( -1 : valeur sentinelle)
 	int						pipefd[2];
 	pid_t					last_pid;		// on garde le dernier enfant (dernier fork qui est la commande la plus à droite du pipe) on doit l'utiliser pour $?
 	pid_t					pid;
@@ -31,6 +34,7 @@ typedef struct s_local {
 typedef struct s_SHELL {
     t_local           		*env;     		// VAR || $HOME ETC
     int						last_status;   	// Word or PATH
+	int						in_heredoc;		// 0 = non, 1 = oui dans heredoc
 }   t_SHELL;
 
 typedef enum e_quote {
@@ -91,18 +95,16 @@ typedef struct s_command {
 /*__________executable____________*/
 
 /*ENV*/
-char	*get_env_value(t_local *env, char *key);
 void    set_env_value(t_local **env, char *key, char *value);
 void    unset_env_value(t_local **env, char *key);
-void	free_envp(char **envp);
-char	*ft_strjoin3(char *s1, char *s2, char *s3);
+char	*get_env_value(t_local *env, char *key);
 char	**env_to_tab(t_local *env);
 
 /*EXEC*/
 void	run_command(t_command *cmd);
 char	*find_in_path(char *cmd, t_local *env);
-void	free_split(char **array);
 void	child_process(t_command *cmd, t_local *env);
+void	exec_pipe(t_command *cmd_list, t_SHELL *all);
 
 /*BUILTINS*/
 int		is_builtin(char *cmd);
@@ -113,23 +115,32 @@ int		builtin_export(char **args, t_local *env);
 int		builtin_unset(char **args, t_local *env);
 int		builtin_cd(char **args, t_local *env);
 int		builtin_env(t_local *env);
-int		builtin_exit(char **args);
 
 /*REDIR*/
-int apply_redir(t_token *redir);
-int	create_heredoc(char *limiter);
-
-/*PIPE*/
-void	exec_pipe(t_command *cmd_list, t_SHELL *all);
+int		apply_redir(t_token *redir, t_SHELL *all);
+int		create_heredoc(char *limiter);
 
 /*SIGNAL*/
 void	setup_sig(void);
 void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
+void	sigint_heredoc(int sig);
+void 	setup_heredoc_signals(void);
+
+/*ERROR & FREE*/
+void	free_env(t_local *env);
+void	free_split(char **array);
+void	free_command(t_command *cmd);
+void	print_error(char *cmd, char *msg);
+int		redir_error(char *file, char *msg);
+int		exec_error(const char *cmd, const char *msg, int code);
+void	fatal_error(const char *msg, int code);
+void	exit_clean_af(t_SHELL *all, t_command *cmd_list, int code);
 
 
 #endif
 
-// /*_________________________________________EXEMPLE_____*/
+// /*_______________EXEMPLE_________________________*/
 
 // /*Ligne de commande*/
 // cat -n < in.txt | grep hello > out.txt

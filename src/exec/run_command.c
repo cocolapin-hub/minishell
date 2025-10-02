@@ -1,77 +1,26 @@
 
-#include "../minishell.h"
-
-int	is_builtin(char *cmd)
-{
-	if (!cmd)
-		return (0);
-	if (ft_strcmp(cmd, "echo") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "cd") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "pwd") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "export") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "unset") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "env") == 0)
-		return (1);
-	if (ft_strcmp(cmd, "exit") == 0)
-		return (1);
-	return (0);
-}
-
-int exec_builtin(t_command *cmd) // *cmd = pointeur sur la variable locale utiliser par la fonction pour acceder a la structure entière
-{
-	if (!cmd || !cmd->args || !cmd->args[0])
-		return (1);
-	if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		return (builtin_pwd());
-	if (ft_strcmp(cmd->args[0], "echo") == 0)
-		return (builtin_echo(cmd->args));
-	if (ft_strcmp(cmd->args[0], "cd") == 0)
-		return (builtin_cd(cmd->args, cmd->all->env));
-	if (ft_strcmp(cmd->args[0], "export") == 0)
-		return (builtin_export(cmd->args, cmd->all->env));
-	if (ft_strcmp(cmd->args[0], "unset") == 0)
-		return (builtin_unset(cmd->args, cmd->all->env));
-	if (ft_strcmp(cmd->args[0], "env") == 0)
-		return (builtin_env(cmd->all->env));
-	if (ft_strcmp(cmd->args[0], "exit") == 0)
-		exit_clean_af(cmd->all, cmd, cmd->all->last_status);
-	return (1);
-}
-
-static void	print_error(char *cmd, char *msg)
-{
-	//write(2, "minishell: ", 11); zsh ??
-	write(2, cmd, ft_strlen(cmd));
-	write(2, ": ", 2);
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-}
+#include "../../minishell.h"
 
 void child_process(t_command *cmd, t_local *env)
 {
 	char	*path;
 	char	**envp;
 
-	if (apply_redir(cmd->elem) != 0) // appliquer les redirs avant execve
-        fatal_error("redirection", 1); // erreur ouverture fichier, on sort
-	envp = env_to_tab(env);					// convertit liste chainée en char **
+	if (apply_redir(cmd->elem, cmd->all) != 0)	// appliquer les redirs avant execve
+        fatal_error("redirection", 1);	// erreur ouverture fichier, on exit
+	envp = env_to_tab(env);				// convertit liste chainée en char **
+	if (!envp)
+		fatal_error("malloc", 1);
 	path = find_in_path(cmd->args[0], env);
 	if (!path)
 	{
-		print_error(cmd->args[0], "command not found");
 		free_split(envp);
-		exit(127);
+		exit(exec_error(cmd->args[0], "command not found", 127));
 	}
 	if (execve(path, cmd->args, envp) == -1)
 	{
-		print_error(cmd->args[0], "execution failed");
 		free_split(envp);
-		exit(1);
+		exit(exec_error(cmd->args[0], strerror(errno), 126));	// verif le code d'erreur de bash car je suis pas sur
 	}
 }
 
@@ -90,7 +39,7 @@ static void	run_parent(t_command *cmd, pid_t pid)
 	if (WIFEXITED(status))
 		cmd->all->last_status = WEXITSTATUS(status);	// succes normal
 	else if (WIFSIGNALED(status))
-		cmd->all->last_status = 128 + WTERMSIG(status);	// si process tué par un sig : last_status = 128
+		cmd->all->last_status = 128 + WTERMSIG(status);	// si process tué par un sig : last_status =
 	else
 		cmd->all->last_status = 1;					 	// si signal ou plantage
 }

@@ -14,7 +14,7 @@ static void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
 		close(pipefd[1]);	// ferme pipefd[1] car dup2 a fait la copie
 	}						// IMPORTANT  : ces deux dup2 positionnent stdin/out par défaut pour la cmd 
 							//			(apply_redir peut ensuite appeler d'autrs dup2 pour écraser ces réglages avec un redir > ou <)
-	if (apply_redir(cmd->elem) != 0)		// applique les redir propre a la cmd, viennent apres la config du pipe (dernier dup2 wins)
+	if (apply_redir(cmd->elem, cmd->all) != 0)		// applique les redir propre a la cmd, viennent apres la config du pipe (dernier dup2 wins)
 		fatal_error("redir", 1);
 	if (is_builtin(cmd->args[0]))			// dans un pipe meme le builtin s'execute dans l'enfant, on va gérer plus haut pour les commandes uniques dans exec_command()
 		exit(exec_builtin(cmd));			// on exit en appelant exec_builtin pour que l'enfant finisse avec le bon code de sortie ET leurs modifications d’environnement ne doivent pas affecter le shell parent (c’est le comportement standard)
@@ -39,14 +39,14 @@ static void	wait_pipeline(t_SHELL *all, pid_t last_pid)
 	int		status;
 	pid_t	wpid;
 
-	while (wpid = wait(&status) > 0)		// attendre tous les enfants + récup statut du dernier
+	while ((wpid = wait(&status)) > 0)		// attendre tous les enfants + récup statut du dernier
 	{
 		if (wpid == last_pid)				// uniquement le dernier process
 		{
-			if (WIFEXITED(status))			// WIFEXITED et WEXITSTATUS récup le code de retour si le process s'est terminé normalement
+			if (WIFEXITED(status))			// mettre a jour $? WIFEXITED et WEXITSTATUS récup le code de retour si le process s'est terminé normalement
 				all->last_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))	// WIFSIGNALED et WTERMSIG si process tué par un signal (Ctrl-C)
-				all->last_status = 128 + WTERMSIG(status);	// on imite bash
+				all->last_status = 128 + WTERMSIG(status);	// quand une commande est interromp		CTRL-C: $? = 130 | CTRL-\: $? = 131
 			else
 				all->last_status = 1;
 		}
@@ -65,10 +65,14 @@ void	exec_pipe(t_command *cmd_list, t_SHELL *all)
 			fatal_error("pipe", 1);
 		mescouilles.pid = fork();								// fork un enfant pour execute la cmd (chaque cmd du pipe s'exec dans un processus(enfant))
 		if (mescouilles.pid == -1)
-			fatal_error("fork", 1);
+			exit(exec_error("fork", strerror(errno), 1));
 		if (mescouilles.pid == 0)	// ENFANT
+		{
+			signal(SIGINT, SIG_DFL);	// remettre les signaux par défaut avant fork pour que la cmd fasse comme bash
+    		signal(SIGQUIT, SIG_DFL);	// et le parent recup le retour(waitpid) $? est mis à jour (130 ou 131)
 			pipe_child(cmd_list, mescouilles.prev_fd, mescouilles.pipefd);
-		else			// PARENT
+		}
+		else	// PARENT
 			pipe_parent(&mescouilles, cmd_list);
 		cmd_list = cmd_list->next;
 	}

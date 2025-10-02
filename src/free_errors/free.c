@@ -1,5 +1,5 @@
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	free_command(t_command *cmd)
 {
@@ -39,17 +39,17 @@ void	free_env(t_local *env)
 	}
 }
 
-void	fatal_error(const char *msg, int code)
+void	free_split(char **arr)
 {
-	perror(msg);
-	exit(code);
-}
+	int	i;
 
-void	exit_clean_af(t_SHELL *all, t_command *cmd_list, int code)
-{
-	if (cmd_list)
-		free_command(cmd_list);
-	if (all->env)
-		free_env(all->env);
-	exit(code);
+	if (!arr)
+		return;
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }
