@@ -8,7 +8,8 @@
 //         run_command(cmd_list);
 // }
 
-// TO DO:	//faire run le code
+// TO DO:	//corriger le link entre le pars et l'exec
+			//gerer les cas rare
 			//plusieurs fonction de plus de 25 lines
 			//frees
 			//norminette

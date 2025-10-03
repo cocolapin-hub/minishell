@@ -151,7 +151,6 @@ void			free_env(t_shell *all);
 
 
 
-
 /*________________________________LIBFT________________________________*/
 t_command		*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all);
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
