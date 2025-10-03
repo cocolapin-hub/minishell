@@ -8,9 +8,6 @@ t_command	*parsing(char *line, t_SHELL *all)
 	t_command 	*cmd = NULL;
 	char		*cleaned_line;
 
-	(void)cmd;
-	(void)all;
-
 	/*ligne vide*/
 	if (strcmp(line, "exit") == 0)
 	{
@@ -26,17 +23,17 @@ t_command	*parsing(char *line, t_SHELL *all)
 
 	tokenisation(cleaned_line, &list, &all);
 	error_handling(&all, &list);
-
-	if(!set_command(&cmd, list, all))
-	{
-		free(line);
-		free_tokens(list);
-		end_code(cmd);
-	}
+	set_command(&cmd, list, all);
 
 
+	//FREE EN COMMENTAIRE POUR L'INSTANT
 
-
+	// if(!set_command(&cmd, list, all))
+	// {
+	// 	free(line);
+	// 	free_tokens(list);
+	// 	end_code(cmd);
+	// }
 
 	/* ____PRINT CHECK____*/
 	// while(list)
@@ -45,8 +42,9 @@ t_command	*parsing(char *line, t_SHELL *all)
 	// 	list = list->next;
 	// }
 
-	if(list)
-		free_tokens(list);
-	free(cleaned_line);
+	// if(list)
+	// 	free_tokens(list);
+	// free(cleaned_line);
+	
 	return (cmd);
 }

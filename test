@@ -1,155 +1,133 @@
-#ifndef MINISHELL_H
-# define MINISHELL_H
 
-# define MAX_LINE_LEN 4096
+//main de coo :
 
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "libft/libft.h"
-# include <sys/wait.h>
-# include <signal.h>
-# include <string.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <stddef.h>
-# include <stdio.h>
-# include <fcntl.h>
-# include <errno.h>
 
-extern int		g_in_heredoc;
+#include "minishell.h"
 
-typedef struct s_pipe
+int main(int argc, char **argv, char **envp)
 {
-	int						prev_fd;		// stdin par défaut si pas de pipe avant ( -1 : valeur sentinelle)
-	int						pipefd[2];
-	pid_t					last_pid;		// on garde le dernier enfant (dernier fork qui est la commande la plus à droite du pipe) on doit l'utiliser pour $?
-	pid_t					pid;
-	t_command				*cmd_list;
-}	t_pipe;
+    t_SHELL 	all;
+    t_command 	*cmd_list = NULL;
+    char 		*line;
 
-typedef struct s_local {
-    char            		*key;     		// VAR || $HOME ETC
-    char            		*value;   		// Word or PATH
-    struct s_local   		*next;
-}   t_local;
+    (void)argc;
+    (void)argv;
 
-typedef struct s_SHELL {
-    t_local           		*env;     		// VAR || $HOME ETC
-    int						last_status;   	// Word or PATH
-	int						in_heredoc;		// 0 = non, 1 = oui dans heredoc
-}   t_SHELL;
+	//setup_shell(&all, envp)
+    all.env = init_env(envp);  			//<--initialise shell ici, a ajuster
+    all.last_status = 0;
+    setup_sig();
 
-typedef enum e_quote {
-	Q_NONE,
-	Q_SINGLE,
-	Q_DOUBLE
-}	t_quote;
-
-typedef enum e_type {						//element dans parsing
-	WORD,
-	PIPE,									// |
-    REDIR_IN,      							// <
-    REDIR_OUT,     							// >
-    REDIR_APPEND,  							// >>
-    REDIR_HEREDOC				  			// <<
-}   t_type;
-
-typedef struct s_token {
-    t_type 					type;			// word, opérateur (|), ou redirection
-	t_quote  				amount;			// si le mot est entouré de ' ou "
-	char 					*value;			// contenu textuel (ls, "hello", '*.c' etc)
-    struct s_token 			*next;
-}   t_token;
-
-typedef struct s_command {					//names are differents here too
-	char 					**args;        // tous les arguments, ex: ["ls", "-la", NULL] à passer à execve ou à builtin
-    t_token 				*elem;		   // liste chaînée des redirs (<,>,>>,...)
-	t_SHELL					*all;		   // contient env et last_status
-	struct s_command 		*next;		   // prochaine commande (si pipe)
-}   t_command;
+    while (1)
+    {
+        line = readline("minishell$ ");
+		if (!line)
+		{
+			if (g_in_heredoc == SIGINT)
+			{
+				g_in_heredoc = 0;
+				continue ;
+			}
+			printf("exit\n");
+			exit_clean_af(&all, cmd_list, all.last_status);
+		}
+		if (line[0] != '\0')
+			add_history(line);
 
 
+        cmd_list = parsing(line, &all);
+//      free(line);						// <-------------handle free later
 
+        if (!cmd_list)
+            continue;
 
-/*_______________________________environnement_______________________________*/
-/*PARS*/
-void			setup_shell(t_SHELL **all, char **envp);
+        // Exécution
 
-/*EXEC*/
-t_local			*env_init(char **envp);
+        if (cmd_list->next) // il y a un pipe
+            exec_pipe(cmd_list, &all);
+        else
+            run_command(cmd_list);
 
-/*ENV*/ //--> pour les fonction en rapport avec env
-void    		set_env_value(t_local **env, char *key, char *value);
-void   		 	unset_env_value(t_local **env, char *key);
-char			*get_env_value(t_local *env, char *key);
-char			**env_to_tab(t_local *env);
+        free_command(cmd_list);			// <--------------handle free later
+        cmd_list = NULL;
+    }
+
+ //   clear_history();
+ //   free_env(all.env);
+    return (0);
+}
 
 
 
-/*__________________________________signal__________________________________*/
-/*PARS*/
-void			setup_signal(void);
 
-/*EXEC*/
-void			setup_sig(void);
-void			sigint_handler(int sig);
-void			sigquit_handler(int sig);
-void			sigint_heredoc(int sig);
-void 			setup_heredoc_signals(void);
+//main de omar:
 
+void	free_all(t_SHELL *all)
+{
+    t_local *tmp;
 
+    if (!all)
+        return;
 
-/*_________________________________parsing_________________________________*/
-/*PARS*/
-char			*expansion(t_local *env, int last_status, char *str, int x);
-t_command		*set_command(t_command **cmd, t_token *list, t_SHELL *all);
-t_token			*tokenisation(char *line, t_token **list, t_SHELL **all);
-void 			error_handling(t_SHELL **all, t_token **list);
-t_command		*parsing(char *line, t_SHELL *all);
-char			*check_input(char *line);
+    // Libérer chaque maillon de la liste env
+    while (all->env)
+    {
+        tmp = all->env->next;
+        if (all->env->key)
+            free(all->env->key);
+        if (all->env->value)
+            free(all->env->value);
+        free(all->env);
+        all->env = tmp;
+    }
 
-/*FREE & ERROR*/
-void			print_error(char *line, char *msg);
-void			free_tokens(t_token *list);
-void			end_code(t_command *cmd);
-void			free_args(char **args);
+    // Libérer la structure shell elle-même
+    free(all);
+}
 
+int 	main(int argc, char **argv, char **envp)
+{
+	t_command 	*old_cmd = NULL;
+	t_command	*cmd = NULL;
+	t_SHELL		*all = NULL;
+	char 		*line;
 
+	(void)line;
+	(void)argc;
+	(void)argv;
+	(void)cmd;
 
-/*________________________________executable________________________________*/
-/*EXEC*/
-void			exec_pipe(t_command *cmd_list, t_SHELL *all);
-void			child_process(t_command *cmd, t_local *env);
-char			*find_in_path(char *cmd, t_local *env);
-void			run_command(t_command *cmd);
-/*BUILTINS*/
-int				builtin_export(char **args, t_local *env);
-int				builtin_unset(char **args, t_local *env);
-int				builtin_cd(char **args, t_local *env);
-int				exec_builtin(t_command *cmd);
-int				builtin_echo(char **args);
-int				is_builtin(char *cmd);
-int				builtin_pwd(void);
-int				builtin_env(t_local *env);
+	setup_signal();
+	setup_shell(&all, envp);
 
-/*REDIR*/
-int				apply_redir(t_token *redir, t_SHELL *all);
-int				create_heredoc(char *limiter);
+    while (1)
+    {
+		line = readline("minishell$ ");
+		if (!line)
+			end_code(cmd);
 
-/*ERROR & FREE*/
-void			exit_clean_af(t_SHELL *all, t_command *cmd_list, int code);
-int				exec_error(const char *cmd, const char *msg, int code);
-void			fatal_error(const char *msg, int code);
-int				redir_error(char *file, char *msg);
-void			print_error_exec(char *cmd, char *msg);
-void			free_command(t_command *cmd);
-void			free_split(char **array);
+		/*parsing*/
+		if (*line)
+		{
+			old_cmd = cmd;
+			cmd = parsing(line, all);
+			if(old_cmd)
+				end_code(old_cmd);
+		}
 
+		free(line);
 
-
-/*_________________________________exit_________________________________*/
-void			free_env(t_SHELL *all);
+		/*executable*/
+		// if (strlen(line) != 0 && line != NULL)
+		// 	exec(cmd);
 
 
 
-#endif
+		//printf("You typed: %s\n", line);
+
+    }
+
+	free_all(all);
+//	end_code(cmd);
+    return 0;
+}

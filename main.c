@@ -26,7 +26,7 @@ int main(int argc, char **argv, char **envp)
     (void)argc;
     (void)argv;
 
-    all.env = init_env(envp);  			//<--initialise shell ici, a ajuster
+	setup_shell(&all, envp);
     all.last_status = 0;
     setup_sig();
 
@@ -68,78 +68,3 @@ int main(int argc, char **argv, char **envp)
  //   free_env(all.env);
     return (0);
 }
-
-
-
-
-/*OLD MAIN*/
-
-// void	free_all(t_SHELL *all)
-// {
-//     t_local *tmp;
-
-//     if (!all)
-//         return;
-
-//     // Libérer chaque maillon de la liste env
-//     while (all->env)
-//     {
-//         tmp = all->env->next;
-//         if (all->env->key)
-//             free(all->env->key);
-//         if (all->env->value)
-//             free(all->env->value);
-//         free(all->env);
-//         all->env = tmp;
-//     }
-
-//     // Libérer la structure shell elle-même
-//     free(all);
-// }
-
-// int 	main(int argc, char **argv, char **envp)
-// {
-// 	t_command 	*old_cmd = NULL;
-// 	t_command	*cmd = NULL;
-// 	t_SHELL		*all = NULL;
-// 	char 		*line;
-
-// 	(void)line;
-// 	(void)argc;
-// 	(void)argv;
-// 	(void)cmd;
-
-// 	setup_signal();
-// 	setup_shell(&all, envp);
-
-//     while (1)
-//     {
-// 		line = readline("minishell$ ");
-// 		if (!line)
-// 			end_code(cmd);
-
-// 		/*parsing*/
-// 		if (*line)
-// 		{
-// 			old_cmd = cmd;
-// 			cmd = parsing(line, all);
-// 			if(old_cmd)
-// 				end_code(old_cmd);
-// 		}
-
-// 		free(line);
-
-// 		/*executable*/
-// 		// if (strlen(line) != 0 && line != NULL)
-// 		// 	exec(cmd);
-
-
-
-// 		//printf("You typed: %s\n", line);
-
-//     }
-
-// 	free_all(all);
-// //	end_code(cmd);
-//     return 0;
-// }
