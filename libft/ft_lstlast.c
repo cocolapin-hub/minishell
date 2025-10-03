@@ -1,6 +1,6 @@
-#include "../minishell.h"
+#include "libft.h"
 
-t_command	*ft_lstlast_cmd(t_command *lst)
+t_token	*ft_lstlast(t_token *lst)
 {
 	if (!lst)
 		return (NULL);

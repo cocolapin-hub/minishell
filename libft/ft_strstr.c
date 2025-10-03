@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "libft.h"
 
 int	ft_strstr(const char *big, const char *little)
 {

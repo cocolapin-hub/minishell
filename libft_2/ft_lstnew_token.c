@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "libft.h"
 
 // void	quotes_assignation(char quotes, t_quote *amount)
 // {

@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "libft.h"
 
 t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_SHELL *all)
 {

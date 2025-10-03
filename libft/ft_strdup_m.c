@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "libft.h"
 
 char	*ft_strdup_m(const char *s, int x, int len)
 {

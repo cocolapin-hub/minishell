@@ -1,59 +1,8 @@
 
-#include "../minishell.h"
-
-t_local	*new_env_node(char *key, char *value) // duplique key et value pour éviter de modifier l’original envp.
-{
-	t_local	*node;
-
-	node = malloc(sizeof(t_local));
-	if (!node)
-		return (NULL);
-	node->key = ft_strdup(key);
-	node->value = ft_strdup(value);
-	node->next = NULL;						 // next = NULL car c’est un maillon isolé pour l’instant.
-	return (node);
-}
-
-void	add_env_node(t_local **env, t_local *new_node)
-{
-	t_local	*tmp;
-
-	if (!env || !new_node)
-		return ;
-	if (!*env) 			  // Si la liste est vide
-	{
-		*env = new_node;  // le nouveau devient la tête.
-		return ;
-	}
-	tmp = *env;
-	while (tmp->next)	  // on parcourt jusqu’au dernier
-		tmp = tmp->next;
-	tmp->next = new_node; // et on relie
-}
-
-t_local	*env_init(char **envp)
-{
-	t_local	*env;
-	t_local	*node;
-	int		i;
-	char	*eq;
-
-	env = NULL;
-	i = 0;
-	while (envp[i])
-	{
-		eq = ft_strchr(envp[i], '='); 			  // strchr pointe vers sur '='
-		if (eq)
-		{
-			*eq = '\0'; 						  // coupe la string "PATH=/bin" -> "PATH" et "/bin"
-			node = new_env_node(envp[i], eq + 1); // crée node {key=PATH, value=/bin}
-			*eq = '='; 							  // remet le '=' pour pas casser envp original
-			add_env_node(&env, node);
-		}
-		i++;
-	}
-	return (env);
-}
+MEMO:
+//gerer libfts et nom de variable dans le .h
+//gerer la facon dont tu appelle enf et signal dans le main
+//gerer le makefile
 
 // void executor(t_command *cmd_list, t_SHELL *all)
 // {
@@ -76,7 +25,7 @@ int main(int argc, char **argv, char **envp)
     (void)argc;
     (void)argv;
 
-    all.env = init_env(envp);
+    all.env = init_env(envp);  //<--initialise shell ici, a ajuster
     all.last_status = 0;
     setup_sig();
 
@@ -97,20 +46,21 @@ int main(int argc, char **argv, char **envp)
 			add_history(line);
 
 
-        // ex: cmd_list = parsing(line, &all);		PARSING | TOKENIZING | EXPANSION
+        cmd_list = parsing(line, all);	// <-------------why not pointer for *all? to check.
 
-        free(line);
+        free(line);						// <-------------handle free later
 
         if (!cmd_list)
             continue;
 
-        // Exécution (ta partie)
+        // Exécution
+
         if (cmd_list->next) // il y a un pipe
             exec_pipe(cmd_list, &all);
         else
             run_command(cmd_list);
 
-        free_command(cmd_list);
+        free_command(cmd_list);			// <--------------handle free later
         cmd_list = NULL;
     }
 
@@ -119,60 +69,77 @@ int main(int argc, char **argv, char **envp)
     return (0);
 }
 
-/*
-
-EXEMPLE avec expansion :	echo $HOME > $FILE
-
-PARSING :					cmd->args = {"echo", "/home/claffut", NULL};
-							cmd->elem (redir) = {type=REDIR_OUT, value="out.txt"};
 
 
-CAS PARTICULIERS :
 
-	echo $ et "$"	:	affiche $ (parsing doit check si c'est avec echo ?)
+/*OLD MAIN*/
 
-	echo "$BICHE"	:	affiche "" (chaine vide, pas supprimée car entre quotes) ( " = expans activée | ' = expans désactivée )
+// void	free_all(t_SHELL *all)
+// {
+//     t_local *tmp;
 
-	PATH= "a b c"
-	echo  $PATH		:	 a b c	(3 arguments)
-	echo "$PATH"	:	"a b c"	(1 argument)
+//     if (!all)
+//         return;
 
-	cat << 	EOF
-	$USER			:	affiche claffut
-	EOF
+//     // Libérer chaque maillon de la liste env
+//     while (all->env)
+//     {
+//         tmp = all->env->next;
+//         if (all->env->key)
+//             free(all->env->key);
+//         if (all->env->value)
+//             free(all->env->value);
+//         free(all->env);
+//         all->env = tmp;
+//     }
 
-	cat << 'EOF'
-	$USER			:	affiche $USER
-	EOF
+//     // Libérer la structure shell elle-même
+//     free(all);
+// }
 
-	FILE="out.txt"
-	echo coucou > $FILE		:	écrit dans out.txt
+// int 	main(int argc, char **argv, char **envp)
+// {
+// 	t_command 	*old_cmd = NULL;
+// 	t_command	*cmd = NULL;
+// 	t_SHELL		*all = NULL;
+// 	char 		*line;
 
-	lol > $26CM		:	affiche ->	bash: $26CM: ambigous redirect
+// 	(void)line;
+// 	(void)argc;
+// 	(void)argv;
+// 	(void)cmd;
 
-	/bin/cd			:	bash: /bin/cd: No such file or directory
+// 	setup_signal();
+// 	setup_shell(&all, envp);
 
-	exit lol		:	exit
-						bash: exit: lol: numeric argument required ($? = 2)
-	exit 19			: suivi d'un echo $? donne : last_status = 19
+//     while (1)
+//     {
+// 		line = readline("minishell$ ");
+// 		if (!line)
+// 			end_code(cmd);
 
-	/bin/ls mdr		:	/bin/ls: cannot access 'mdr': No such file or directory ($? = 2)
-	
-	$? / $?			:	0: command not found
+// 		/*parsing*/
+// 		if (*line)
+// 		{
+// 			old_cmd = cmd;
+// 			cmd = parsing(line, all);
+// 			if(old_cmd)
+// 				end_code(old_cmd);
+// 		}
 
-	CTRL-C			:	^C + nouvelle ligne avec nouveau prompt
+// 		free(line);
 
-	CTRL-D			:	apres avoir écrit quelque chose : ne fait rien.		sinon quitte minishell
-
-	cat (sans arg)	
-	ctrl-c			:	interrompt la commande bloquante + ^C 					+ new prompt
-	ctrl-\			:	interrompt la commande bloquante + ^\Quit (core dumped) + new prompt
-	ctrl-d			:	interrompt la commande bloquante + new prompt (sans quitter minishell)
-
-	ls  "src/"		:	marche
-	ls '"src/"'		:	ls: cannot access '"src/"': No such file or directory
-
-	$ cat > | ls	:	bash: syntax error near unexpected token `|' 	(la parsing devrait donner un token REDIR_OUT null : redir->value == NULL)
+// 		/*executable*/
+// 		// if (strlen(line) != 0 && line != NULL)
+// 		// 	exec(cmd);
 
 
-*/
+
+// 		//printf("You typed: %s\n", line);
+
+//     }
+
+// 	free_all(all);
+// //	end_code(cmd);
+//     return 0;
+// }
