@@ -1,30 +1,87 @@
-NAME = minishell
+# **************************************************************************** #
+#                                   CONFIG                                     #
+# **************************************************************************** #
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
 
-SRCS =	src/main.c src/exec.c src/find_path.c src/env_utils.c src/builtins/cd.c src/builtins/echo.c src/builtins/env.c src/builtins/exit.c src/builtins/export.c \
-		src/builtins/pwd.c src/builtins/unset.c src/pipes/pipe.c src/redir/heredoc.c src/redir/redir.c
-OBJS = $(SRCS:.c=.o)
+NAME        = minishell
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror -g -Iminishell/libft -Iminishell
 
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
+OBJ_DIR     = obj
+LIBFT_DIR   = minishell/libft
+LIBFT       = $(LIBFT_DIR)/libft.a
 
-all: $(NAME)
 
-$(NAME) : $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBFT_DIR) -lft -lreadline
+# **************************************************************************** #
+#                                   SOURCES                                    #
+# **************************************************************************** #
+
+
+SRCS = \
+	main.c \
+	env/set_up_shell_exec.c \
+	env/set_up_shell_pars.c \
+	executable/builtins/builtin.c \
+	executable/builtins/cd.c \
+	executable/builtins/echo.c \
+	executable/builtins/env.c \
+	executable/builtins/exit.c \
+	executable/builtins/export.c \
+	executable/builtins/pwd.c \
+	executable/builtins/unset.c \
+	executable/env_and_path/env_to_tab.c \
+	executable/env_and_path/env_utils.c \
+	executable/env_and_path/find_path.c \
+	executable/exec/pipe.c \
+	executable/exec/run_command.c \
+	executable/free_errors/error.c \
+	executable/free_errors/free.c \
+	executable/redir/heredoc.c \
+	executable/redir/redir.c \
+	parsing/check_input.c \
+	parsing/error_handling.c \
+	parsing/expansion.c \
+	parsing/parsing.c \
+	parsing/set_command.c \
+	parsing/tokenisation.c \
+	parsing/free_error_pars/end_code.c \
+	parsing/free_error_pars/free_args.c \
+	parsing/free_error_pars/free_env.c \
+	parsing/free_error_pars/free_tokens.c \
+	parsing/free_error_pars/print_error.c \
+	signal/signal_exec.c \
+	signal/signal_pars.c
+
+OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
+
+
+# **************************************************************************** #
+#                                   RULES                                      #
+# **************************************************************************** #
+
+
+all: $(LIBFT) $(NAME)
+	@echo "Compilation : OK !"
+
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):
-	make -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR) --no-print-directory
+
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $@
 
 clean:
-	rm -f $(OBJS)
-	make -C $(LIBFT_DIR) clean
+	@rm -rf $(OBJ_DIR)
+	@make -C $(LIBFT_DIR) clean --no-print-directory
+	@echo "clean : done !"
 
 fclean: clean
-	rm -f $(NAME)
-	make -C $(LIBFT_DIR) fclean
+	@rm -f $(NAME)
+	@make -C $(LIBFT_DIR) fclean --no-print-directory
+	@echo "fclean : done !"
 
 re: fclean all
 
