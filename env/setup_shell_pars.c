@@ -55,4 +55,5 @@ void	setup_shell(t_shell **all, char **envp)
 		setup_env(&((*all)->env), envp[x], 0, 0);
 		x++;
 	}
+
 }

@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../minishell.h"
 
 void	ft_lstadd_back_cmd(t_command **lst, t_command *new)
 {

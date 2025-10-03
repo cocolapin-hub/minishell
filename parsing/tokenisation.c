@@ -91,7 +91,7 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 int			handles_special_char(char *line, int x, t_token **list)
 {
 	t_token	*new;
-	char	*cmd;
+	char	*cmd = NULL;
 	int		y;
 
 	y = x;

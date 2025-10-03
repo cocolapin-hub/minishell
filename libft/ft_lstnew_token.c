@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../minishell.h"
 
 // void	quotes_assignation(char quotes, t_quote *amount)
 // {
@@ -12,7 +12,7 @@
 // 		*amount = Q_NONE;
 // }
 
-void	type_assignation(char *content, t_element *type)
+void	type_assignation(char *content, t_type *type)
 {
 	if (content[0] ==  '|' && !content[1])
 		*type = PIPE;

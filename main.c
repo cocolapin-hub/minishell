@@ -14,6 +14,7 @@
 			//norminette
 
 
+
 #include "minishell.h"
 
 int main(int argc, char **argv, char **envp)
@@ -24,8 +25,7 @@ int main(int argc, char **argv, char **envp)
 
     (void)argc;
     (void)argv;
-
-	setup_shell(&all, envp);
+	all.env = env_init(envp);
     all.last_status = 0;
     setup_sig();
 

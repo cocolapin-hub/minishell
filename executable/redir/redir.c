@@ -5,7 +5,7 @@ static int	handle_redir_in(t_token *redir)	// < redirige le stdin depuis le fich
 {
 	int	fd;
 
-	if (!redir->value || redir->value[0] == '/0')
+	if (!redir->value || redir->value[0] == 0)
 	{
 		redir_error(redir->value, "ambiguous redirect");
 		return (1);
@@ -30,7 +30,7 @@ static int	handle_redir_out(t_token *redir)	// > envoyer stdout dans un fichier
 {
 	int	fd;
 
-	if (!redir->value || redir->value[0] == '\0')
+	if (!redir->value || redir->value[0] == 0)
 	{
 		redir_error(redir->value, "ambiguous redirect");
 		return (1);
@@ -94,6 +94,7 @@ static int	handle_redir_heredoc(t_token *redir)	// << shell lit tout jusqu'au li
 
 int	apply_redir(t_token *redir, t_shell *all)
 {
+	(void)all;
 	while (redir)
 	{
 		if (!redir->value || redir->value[0] == '\0')	// le parsing renverra une chaine vide "" si une variable $ n'existe pas

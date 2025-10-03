@@ -1,7 +1,7 @@
 
 
 
-#include "libft.h"
+#include "../minishell.h"
 
 int ft_isnumber(const char *str)
 {

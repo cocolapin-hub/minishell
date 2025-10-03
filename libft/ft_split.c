@@ -1,6 +1,6 @@
 
 
-#include "libft.h"
+#include "../minishell.h"
 
 int	count_words(const char *s, char c)
 {

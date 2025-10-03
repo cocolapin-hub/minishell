@@ -1,4 +1,5 @@
-#include "libft.h"
+
+#include "../minishell.h"
 
 static int	get_len(int n)
 {

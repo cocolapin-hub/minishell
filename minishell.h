@@ -5,8 +5,8 @@
 
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft/libft.h"
 # include <sys/wait.h>
+# include <stdint.h>
 # include <signal.h>
 # include <string.h>
 # include <unistd.h>
@@ -17,15 +17,6 @@
 # include <errno.h>
 
 extern int		g_in_heredoc;
-
-typedef struct s_pipe
-{
-	int						prev_fd;		// stdin par défaut si pas de pipe avant ( -1 : valeur sentinelle)
-	int						pipefd[2];
-	pid_t					last_pid;		// on garde le dernier enfant (dernier fork qui est la commande la plus à droite du pipe) on doit l'utiliser pour $?
-	pid_t					pid;
-	t_command				*cmd_list;
-}	t_pipe;
 
 typedef struct s_local {
     char            		*key;     		// VAR || $HOME ETC
@@ -67,12 +58,19 @@ typedef struct s_command {					//names are differents here too
 	struct s_command 		*next;		   // prochaine commande (si pipe)
 }   t_command;
 
-
+typedef struct s_pipe
+{
+	int						prev_fd;		// stdin par défaut si pas de pipe avant ( -1 : valeur sentinelle)
+	int						pipefd[2];
+	pid_t					last_pid;		// on garde le dernier enfant (dernier fork qui est la commande la plus à droite du pipe) on doit l'utiliser pour $?
+	pid_t					pid;
+	t_command				*cmd_list;
+}	t_pipe;
 
 
 /*_______________________________environnement_______________________________*/
 /*PARS*/ //--> on garde celui ci
-void			setup_shell(t_shell **all, char **envp);
+//void			setup_shell(t_shell **all, char **envp);
 
 /*EXEC*/
 t_local			*env_init(char **envp);
@@ -122,6 +120,7 @@ void			child_process(t_command *cmd, t_local *env);
 char			*find_in_path(char *cmd, t_local *env);
 void			run_command(t_command *cmd);
 /*BUILTINS*/
+int 			builtin_exit(char **args, t_shell *all, t_command *cmd_list);
 int				builtin_export(char **args, t_local *env);
 int				builtin_unset(char **args, t_local *env);
 int				builtin_cd(char **args, t_local *env);
@@ -130,6 +129,7 @@ int				builtin_echo(char **args);
 int				is_builtin(char *cmd);
 int				builtin_pwd(void);
 int				builtin_env(t_local *env);
+
 
 /*REDIR*/
 int				apply_redir(t_token *redir, t_shell *all);
@@ -150,6 +150,33 @@ void			free_split(char **array);
 void			free_env(t_shell *all);
 
 
+
+
+/*________________________________LIBFT________________________________*/
+t_command		*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all);
+size_t			ft_strlcpy(char *dst, const char *src, size_t size);
+void			ft_lstadd_back_cmd(t_command **lst, t_command *new);
+void			*ft_memcpy(void *dst, const void *src, size_t n);
+int				ft_strstr(const char *big, const char *little);
+void			ft_lstadd_back(t_token **lst, t_token *new);
+char			*ft_strdup_m(const char *s, int x, int len);
+t_local			*ft_lstnew_env(char *value, char *key);
+void			*ft_calloc(size_t nmemb, size_t size);
+char			*ft_strjoin(char *s1, char const *s2);
+void			*ft_memset(void *s, int c, size_t n);
+char			**ft_split(char const *s, char c);
+char			*ft_strchr(const char *s, int c);
+t_command		*ft_lstlast_cmd(t_command *lst);
+t_token			*ft_lstnew_token(char *content);
+int 			ft_strcmp(char *s1, char *s2);
+void			ft_putstr_fd(char *s, int fd);
+int 			ft_isnumber(const char *str);
+t_token			*ft_lstlast(t_token *lst);
+char			*ft_strdup(const char *s);
+size_t			ft_strlen(const char *s);
+long			ft_atol(const char *str);
+int				ft_lstsize(t_token *lst);
+char			*ft_itoa(int n);
 
 #endif
 

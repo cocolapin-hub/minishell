@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../minishell.h"
 
 t_local	*ft_lstnew_env(char *value, char *key)
 {

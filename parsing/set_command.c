@@ -2,36 +2,9 @@
 #include "../minishell.h"
 
 //proteger les malloc et autre et ajouter les free
-void		fill_args(t_token *list, char ***args)
-{
-	int		skip_next;
-	int 	token_count;
-	int		x;
 
-	/*creates args */
-	creat_args(list, 0, 0, args);
 
-	/*allocate value*/
-	skip_next = 0;
-	x = 0;
-	while (*args && list && list->type != PIPE)
-	{
-		if (list->type == REDIR_IN || list->type == REDIR_OUT
-			|| list->type == REDIR_APPEND || list->type == REDIR_HEREDOC)
-			skip_next = 1;
-		else if (list->type == WORD)
-		{
-			if (skip_next == 1)
-				skip_next = 0;
-			else
-				(*args)[x++] = ft_strdup(list->value);
-				//protection needed here
-		}
-		list = list->next;
-	}
-}
-
-void		creat_args(t_token *list, int token_count, int skip_next, char ***args)
+void		create_args(t_token *list, int token_count, int skip_next, char ***args)
 {
 	t_token	*tmp;
 
@@ -61,6 +34,55 @@ void		creat_args(t_token *list, int token_count, int skip_next, char ***args)
 		(*args)[token_count] = 0;
 }
 
+void		create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
+{
+
+	if ((*tmp)->next && (*tmp)->next->type == WORD)
+	{
+		*new = malloc(sizeof(t_token));
+			//protection needed here
+		(*new)->type = (*tmp)->type;
+		(*new)->value = ft_strdup((*tmp)->next->value);
+			//protection needed here
+		(*new)->next = NULL;
+
+		if (!(*start))
+			*start = *new;
+		else
+			(*end)->next = *new;
+		*end = *new;
+	}
+}
+
+void		fill_args(t_token *list, char ***args)
+{
+	int		skip_next;
+//	int 	token_count;
+	int		x;
+
+	/*creates args */
+	create_args(list, 0, 0, args);
+
+	/*allocate value*/
+	skip_next = 0;
+	x = 0;
+	while (*args && list && list->type != PIPE)
+	{
+		if (list->type == REDIR_IN || list->type == REDIR_OUT
+			|| list->type == REDIR_APPEND || list->type == REDIR_HEREDOC)
+			skip_next = 1;
+		else if (list->type == WORD)
+		{
+			if (skip_next == 1)
+				skip_next = 0;
+			else
+				(*args)[x++] = ft_strdup(list->value);
+				//protection needed here
+		}
+		list = list->next;
+	}
+}
+
 void		fill_elements(t_token **list, t_token **elements)
 {
 	t_token	*tmp = *list;
@@ -80,7 +102,7 @@ void		fill_elements(t_token **list, t_token **elements)
 	{
 		if (tmp->type == REDIR_IN || tmp->type == REDIR_OUT
 			|| tmp->type == REDIR_APPEND || tmp->type == REDIR_HEREDOC)
-			creat_cmd(&tmp, &new, &start, &end);
+			create_cmd(&tmp, &new, &start, &end);
 		tmp = tmp->next;
 	}
 	*elements = start;
@@ -92,25 +114,7 @@ void		fill_elements(t_token **list, t_token **elements)
 		*list = tmp;
 }
 
-void		creat_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
-{
 
-	if ((*tmp)->next && (*tmp)->next->type == WORD)
-	{
-		*new = malloc(sizeof(t_token));
-			//protection needed here
-		(*new)->type = (*tmp)->type;
-		(*new)->value = ft_strdup((*tmp)->next->value);
-			//protection needed here
-		(*new)->next = NULL;
-
-		if (!(*start))
-			*start = *new;
-		else
-			(*end)->next = *new;
-		*end = *new;
-	}
-}
 
 t_command	*set_command(t_command **cmd, t_token *list, t_shell *all)
 {

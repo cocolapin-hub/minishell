@@ -12,7 +12,7 @@ void	exit_clean_af(t_shell *all, t_command *cmd_list, int code)
 	if (cmd_list)
 		free_command(cmd_list);
 	if (all->env)
-		free_env(all->env);
+		free_env(all);
 	//clear_history(); 	??
 	exit(code);
 }

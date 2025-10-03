@@ -47,7 +47,6 @@ static void	run_parent(t_command *cmd, pid_t pid)
 void	run_command(t_command *cmd)
 {
 	pid_t	pid;
-	int		status;
 
 	if (is_builtin(cmd->args[0]))
 	{
@@ -84,5 +83,5 @@ Points techniques importants
 
 	exit(127) et exit(1)
 		Codes standards pour indiquer à l’OS si la commande a échoué ou non.
-		
+
 */

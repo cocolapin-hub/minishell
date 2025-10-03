@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "../minishell.h"
 
 t_command	*ft_lstlast_cmd(t_command *lst)
 {

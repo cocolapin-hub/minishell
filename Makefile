@@ -5,11 +5,9 @@
 
 NAME        = minishell
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g -Iminishell/libft -Iminishell
+CFLAGS      = -Wall -Wextra -Werror -g -Iminishell
 
 OBJ_DIR     = obj
-LIBFT_DIR   = minishell/libft
-LIBFT       = $(LIBFT_DIR)/libft.a
 
 
 # **************************************************************************** #
@@ -20,7 +18,6 @@ LIBFT       = $(LIBFT_DIR)/libft.a
 SRCS = \
 	main.c \
 	env/set_up_shell_exec.c \
-	env/set_up_shell_pars.c \
 	executable/builtins/builtin.c \
 	executable/builtins/cd.c \
 	executable/builtins/echo.c \
@@ -50,7 +47,32 @@ SRCS = \
 	parsing/free_error_pars/free_tokens.c \
 	parsing/free_error_pars/print_error.c \
 	signal/signal_exec.c \
-	signal/signal_pars.c
+	signal/signal_pars.c \
+	libft/ft_atol.c \
+	libft/ft_isnumber.c \
+	libft/ft_itoa.c \
+	libft/ft_lstadd_back_cmd.c \
+	libft/ft_lstadd_back.c \
+	libft/ft_lstlast_cmd.c \
+	libft/ft_lstlast.c \
+	libft/ft_lstnew_cmd.c \
+	libft/ft_lstnew_env.c \
+	libft/ft_lstnew_token.c \
+	libft/ft_lstsize.c \
+	libft/ft_memcpy.c \
+	libft/ft_putstr_fd.c \
+	libft/ft_split.c \
+	libft/ft_strchr.c \
+	libft/ft_strcmp.c \
+	libft/ft_strcpy.c \
+	libft/ft_strdup_m.c \
+	libft/ft_strdup.c \
+	libft/ft_strjoin.c \
+	libft/ft_strlen.c \
+	libft/ft_strstr.c \
+	libft/ft_calloc.c \
+	libft/ft_strlcpy.c \
+	libft/ft_memset.c
 
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
@@ -60,27 +82,22 @@ OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 # **************************************************************************** #
 
 
-all: $(LIBFT) $(NAME)
+all: $(NAME)
 	@echo "Compilation : OK !"
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(LIBFT):
-	@make -C $(LIBFT_DIR) --no-print-directory
-
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $@
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@make -C $(LIBFT_DIR) clean --no-print-directory
 	@echo "clean : done !"
 
 fclean: clean
 	@rm -f $(NAME)
-	@make -C $(LIBFT_DIR) fclean --no-print-directory
 	@echo "fclean : done !"
 
 re: fclean all
