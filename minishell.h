@@ -13,6 +13,10 @@
 # include <fcntl.h>
 # include <string.h>
 # include <errno.h>
+#include <stdlib.h>
+
+
+
 
 extern int		g_in_heredoc;
 
@@ -43,7 +47,7 @@ typedef enum e_quote {
 	Q_DOUBLE
 }	t_quote;
 
-typedef enum e_type {
+typedef enum e_type {						//element dans parsing
 	WORD,
 	PIPE,									// |
     REDIR_IN,      							// <
@@ -56,41 +60,16 @@ typedef struct s_token {
     t_type 					type;			// word, opérateur (|), ou redirection
 	t_quote  				amount;			// si le mot est entouré de ' ou "
 	char 					*value;			// contenu textuel (ls, "hello", '*.c' etc)
-    struct s_token 			*next; 
+    struct s_token 			*next;
 }   t_token;
 
-typedef struct s_command {
+typedef struct s_command {					//names are differents here too
 	char 					**args;        // tous les arguments, ex: ["ls", "-la", NULL] à passer à execve ou à builtin
     t_token 				*elem;		   // liste chaînée des redirs (<,>,>>,...)
 	t_SHELL					*all;		   // contient env et last_status
 	struct s_command 		*next;		   // prochaine commande (si pipe)
 }   t_command;
 
-// t_token → pendant le parsing uniquement.
-// t_command → pendant l’exécution (args + redirections + lien vers t_SHELL).
-// t_SHELL → toujours accessible pour garder l’état global (env, $?).
-// t_local → interne à l’env (manipulation des variables).
-
-/*fonctions*/
-// t_token			*ft_lstnew_token(char *content, char quotes);
-// void			ft_lstadd_back(t_token **lst, t_token *new);
-// char			*ft_strdup(const char *s, int x, int len);
-// t_local			*ft_lstnew_env(char *value, char *key);
-// void			print_error(char *line, char *msg);
-// t_token			*ft_lstlast(t_token *lst);
-// size_t			ft_strlen(const char *s);
-// void			setup_signal(void);
-// char			*ft_itoa(int n);
-
-// /*setup*/
-// void			setup_shell(t_SHELL **all, char **envp);
-// void			setup_signal(void);
-
-// /*parsing*/
-// void			expansion(t_local *env, int last_status, t_token **list);
-// void			tokenisation(char *line, t_token **list);
-// t_command		*parsing(char *line, t_SHELL *all);
-// char			*check_input(char *line);
 
 /*__________executable____________*/
 
@@ -137,6 +116,44 @@ int		exec_error(const char *cmd, const char *msg, int code);
 void	fatal_error(const char *msg, int code);
 void	exit_clean_af(t_SHELL *all, t_command *cmd_list, int code);
 
+
+/*__________parsing____________*/
+t_command		*ft_lstnew_cmd(char **args, t_token *elements, t_SHELL *all);
+void			ft_lstadd_back_cmd(t_command **lst, t_command *new);
+int				ft_strstr(const char *big, const char *little);
+void			ft_lstadd_back(t_token **lst, t_token *new);
+char			*ft_strdup_m(const char *s, int x, int len);
+t_local			*ft_lstnew_env(char *value, char *key);
+char			*ft_strjoin(char *s1, char const *s2);
+void			print_error(char *line, char *msg);
+t_token			*ft_lstnew_token(char *content);
+t_command		*ft_lstlast_cmd(t_command *lst);
+void			free_tokens(t_token *list);
+t_token			*ft_lstlast(t_token *lst);
+char			*ft_strdup(const char *s);
+size_t			ft_strlen(const char *s);
+int				ft_lstsize(t_token *lst);
+void			free_args(char **args);
+void			free_env(t_SHELL *all);
+void			setup_signal(void);
+char			*ft_itoa(int n);
+
+/*free*/
+void			end_code(t_command *cmd);
+//void			free_env(t_SHELL *all);
+
+
+/*setup*/
+void			setup_shell(t_SHELL **all, char **envp);
+void			setup_signal(void);
+
+/*parsing*/
+char			*expansion(t_local *env, int last_status, char *str, int x);
+t_command		*set_command(t_command **cmd, t_token *list, t_SHELL *all);
+t_token			*tokenisation(char *line, t_token **list, t_SHELL **all);
+void 			error_handling(t_SHELL **all, t_token **list);
+t_command		*parsing(char *line, t_SHELL *all);
+char			*check_input(char *line);
 
 #endif
 
