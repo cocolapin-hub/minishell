@@ -1,7 +1,7 @@
 
-MEMO:
+//MEMO:
 //gerer libfts et nom de variable dans le .h
-//gerer la facon dont tu appelle enf et signal dans le main
+//gerer la facon dont tu appelle env et signal dans le main
 //gerer le makefile
 
 // void executor(t_command *cmd_list, t_SHELL *all)
@@ -14,7 +14,8 @@ MEMO:
 //         run_command(cmd_list);
 // }
 
-// int g_in_heredoc = 0; // flag global pour savoir si on est dans un heredoc qu'on integrera a la structure t_SHELL plus tard (sinon = 1 pendant la lecture dans create_heredoc)
+
+#include "minishell.h"
 
 int main(int argc, char **argv, char **envp)
 {
@@ -25,7 +26,7 @@ int main(int argc, char **argv, char **envp)
     (void)argc;
     (void)argv;
 
-    all.env = init_env(envp);  //<--initialise shell ici, a ajuster
+    all.env = init_env(envp);  			//<--initialise shell ici, a ajuster
     all.last_status = 0;
     setup_sig();
 
@@ -46,9 +47,8 @@ int main(int argc, char **argv, char **envp)
 			add_history(line);
 
 
-        cmd_list = parsing(line, all);	// <-------------why not pointer for *all? to check.
-
-        free(line);						// <-------------handle free later
+        cmd_list = parsing(line, &all);
+//        free(line);						// <-------------handle free later
 
         if (!cmd_list)
             continue;
@@ -64,8 +64,8 @@ int main(int argc, char **argv, char **envp)
         cmd_list = NULL;
     }
 
-    clear_history();
-    free_env(all.env);
+ //   clear_history();
+ //   free_env(all.env);
     return (0);
 }
 
