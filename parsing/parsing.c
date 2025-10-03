@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 10:18:14 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/18 12:06:10 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/10/02 10:30:25 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ t_command	*parsing(char *line, t_SHELL *all)
 		end_code(cmd);
 	}
 
+
+
+
+	
 	/* ____PRINT CHECK____*/
 	// while(list)
 	// {

@@ -6,73 +6,122 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 10:41:18 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/09/18 13:41:58 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/10/02 15:48:40 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	fill_args(t_token *list, char ***args)
+//proteger les malloc et autre et ajouter les free
+
+void		fill_args(t_token *list, char ***args)
 {
+	int		skip_next;
 	int 	token_count;
-	t_token	*tmp;
 	int		x;
 
-	token_count = 0;
-	tmp = list;
-	x = 0;
+	/*creates args */
+	creat_args(list, 0, 0, args);
 
-	/*count len with a tmp*/
-	while (tmp && tmp->type == WORD)
+	/*allocate value*/
+	skip_next = 0;
+	x = 0;
+	while (*args && list && list->type != PIPE)
 	{
-		token_count++;
+		if (list->type == REDIR_IN || list->type == REDIR_OUT
+			|| list->type == REDIR_APPEND || list->type == REDIR_HEREDOC)
+			skip_next = 1;
+		else if (list->type == WORD)
+		{
+			if (skip_next == 1)
+				skip_next = 0;
+			else
+				(*args)[x++] = ft_strdup(list->value);
+				//protection needed here
+		}
+		list = list->next;
+	}
+}
+
+void		creat_args(t_token *list, int token_count, int skip_next, char ***args)
+{
+	t_token	*tmp;
+
+	tmp = list;
+
+	/*count len with a tmp == all words but the one right after a redir*/
+	while (tmp && tmp->type != PIPE)
+	{
+		if (tmp->type == REDIR_IN || tmp->type == REDIR_OUT
+			|| tmp->type == REDIR_APPEND || tmp->type == REDIR_HEREDOC)
+			skip_next = 1;
+
+		else if (tmp->type == WORD)
+		{
+			if (skip_next == 1)
+				skip_next = 0;
+			else
+				token_count++;
+		}
 		tmp = tmp->next;
 	}
 
-	/*creates args */
 	*args = malloc(sizeof(char *) * (token_count + 1));
 	if (!(*args))
 		*args = NULL;
 	else
 		(*args)[token_count] = 0;
-
-	/*allocate value*/
-	while (*args && list && list->type == WORD)
-	{
-		(*args)[x++] = ft_strdup(list->value);
-		list = list->next;
-	}
-
-	//lst modifications are constrained here
 }
 
-void	fill_elements(t_token **list, t_token **elements)
+void		fill_elements(t_token **list, t_token **elements)
 {
-	t_token	*start;
-	t_token	*end;
+	t_token	*tmp = *list;
+	t_token	*start = NULL;
+	t_token	*end = NULL;
+	t_token	*new = NULL;
 
+	tmp = *list;
 	if (!(*list) || !list)
 	{
 		*elements = NULL;
 		return ;
 	}
 
-	start = *list;
-	end = *list;
-
-	/*place end*/
-	while(end && end->type != PIPE)
-		end = end->next;
-
-	/*set list & set start*/
-	*elements = start;
-	if (end)
+	/*fill element struct*/
+	while (tmp && tmp->type != PIPE)
 	{
-		*list = end->next;
-		end->next = NULL;
+		if (tmp->type == REDIR_IN || tmp->type == REDIR_OUT
+			|| tmp->type == REDIR_APPEND || tmp->type == REDIR_HEREDOC)
+			creat_cmd(&tmp, &new, &start, &end);
+		tmp = tmp->next;
 	}
+	*elements = start;
+
+	/*move after the pipe for next cmd*/
+	if (tmp && tmp->type == PIPE)
+		*list = tmp->next;
 	else
-		*list = NULL;
+		*list = tmp;
+}
+
+void		creat_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
+{
+
+	if ((*tmp)->next && (*tmp)->next->type == WORD)
+	{
+		*new = malloc(sizeof(t_token));
+			//protection needed here
+		(*new)->type = (*tmp)->type;
+		(*new)->value = ft_strdup((*tmp)->next->value);
+			//protection needed here
+		(*new)->next = NULL;
+
+		if (!(*start))
+			*start = *new;
+		else
+			(*end)->next = *new;
+		*end = *new;
+	}
 }
 
 t_command	*set_command(t_command **cmd, t_token *list, t_SHELL *all)
@@ -85,7 +134,7 @@ t_command	*set_command(t_command **cmd, t_token *list, t_SHELL *all)
 	{
 		fill_args(list, &args);
 		if (!(*args))
-			return (NULL);
+			return (NULL);  // <-- is this the right way?
 
 		fill_elements(&list, &elements);
 		new = ft_lstnew_cmd(args, elements, all);
@@ -100,20 +149,19 @@ t_command	*set_command(t_command **cmd, t_token *list, t_SHELL *all)
 
 
 
-// EXEMPLE:
-// cat -n < in.txt | grep hello > out.txt
 
 
+// EXEMPLE:	cat -n < in.txt | grep hello > out.txt
 
-
-// cmd1:
+//cmd1:
 //  args    = ["cat", "-n", NULL]
-//  element = [cat, -n, <, in.txt]
-//  all	 = all env
+//  element = [type: redir.in, value: in.text, next: null]
+//  all	 	= all env
 //  next    = cmd2
 
-// cmd2:
-//  args    = ["grep", "hello", NULL]
-//  element = [grep, hello, >, out.txt]
-//   all	 = all env
-//  next    = NULL
+
+//cmd1:
+//  args    = ["cat", "-n", NULL]
+//  element = [type: redir.out, value: out.text, next: null]
+//  all	 	= all env
+//  next    = cmd2

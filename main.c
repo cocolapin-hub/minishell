@@ -6,23 +6,16 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/01 14:14:39 by claffut           #+#    #+#             */
-/*   Updated: 2025/09/18 13:52:56 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/10/02 16:25:07 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// EXEC:
-// export VAR=value  						--> add var dans l'env
-// unset VAR								--> delete var de l'env
-// export 									--> printf stock_local
-
-// NOTE:
-// modified ft_strdup
-// modified ft_lstnew
-
+//Priorite: // regroup work
 //TO_DO :	// remove leaks
-			// remettre les quotes dans token
+			// change le parsing cote cmd --> verifier que ca marche
+			// handle quote the new way, discuss it with coco
 			// regroup work
 
 // OPTI	:	//merge both ft_lstadd_back_cmd and ft_lstadd_back
