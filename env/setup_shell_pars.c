@@ -38,12 +38,12 @@ void	setup_env(t_local **env, char *tab, int len, int y)
 	}
 }
 
-void	setup_shell(t_SHELL **all, char **envp)
+void	setup_shell(t_shell **all, char **envp)
 {
 
 	int 	x;
 
-	*all = malloc(sizeof(t_SHELL));
+	*all = malloc(sizeof(t_shell));
 	if (!(*all))
 		exit (1);
 	(*all)->env = NULL;

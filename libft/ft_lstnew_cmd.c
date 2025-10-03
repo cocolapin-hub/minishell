@@ -1,6 +1,6 @@
 #include "libft.h"
 
-t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_SHELL *all)
+t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all)
 {
 	t_command	*node;
 
@@ -12,7 +12,7 @@ t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_SHELL *all)
 	node->args = args;
 
 	/*all nodes withing the cmd*/
-	node->elements = elements;
+	node->elem = elements;
 
 	/*the same env*/
 	node->all = all;

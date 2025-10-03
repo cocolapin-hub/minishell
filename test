@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv, char **envp)
 {
-    t_SHELL 	all;
+    t_shell 	all;
     t_command 	*cmd_list = NULL;
     char 		*line;
 
@@ -39,7 +39,7 @@ int main(int argc, char **argv, char **envp)
 //      free(line);						// <-------------handle free later
 
         if (!cmd_list)
-            continue;
+            continue ;
 
         // Exécution
 
@@ -62,7 +62,7 @@ int main(int argc, char **argv, char **envp)
 
 //main de omar:
 
-void	free_all(t_SHELL *all)
+void	free_all(t_shell *all)
 {
     t_local *tmp;
 
@@ -89,7 +89,7 @@ int 	main(int argc, char **argv, char **envp)
 {
 	t_command 	*old_cmd = NULL;
 	t_command	*cmd = NULL;
-	t_SHELL		*all = NULL;
+	t_shell		*all = NULL;
 	char 		*line;
 
 	(void)line;

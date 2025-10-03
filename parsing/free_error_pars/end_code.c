@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	end_code(t_command *cmd)
 {
@@ -14,8 +14,8 @@ void	end_code(t_command *cmd)
 		if (cmd->args)
 			free_args(cmd->args);
 
-		if (cmd->elements)
-			free_tokens(cmd->elements);
+		if (cmd->elem)
+			free_tokens(cmd->elem);
 
 		free(cmd);
 		cmd = tmp;

@@ -5,7 +5,7 @@
 # include "../minishell.h"
 
 /*___________LIBFT___________*/
-t_command		*ft_lstnew_cmd(char **args, t_token *elements, t_SHELL *all);
+t_command		*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all);
 void			ft_lstadd_back_cmd(t_command **lst, t_command *new);
 void			*ft_memcpy(void *dst, const void *src, size_t n);
 int				ft_strstr(const char *big, const char *little);

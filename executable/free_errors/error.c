@@ -7,7 +7,7 @@ void	fatal_error(const char *msg, int code)	// cas où le shell  ne peut pas con
 	exit(code);
 }
 
-void	exit_clean_af(t_SHELL *all, t_command *cmd_list, int code)
+void	exit_clean_af(t_shell *all, t_command *cmd_list, int code)
 {
 	if (cmd_list)
 		free_command(cmd_list);

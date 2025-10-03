@@ -1,7 +1,7 @@
 
 #include "../minishell.h"
 
-t_token 	*check_unknown_char(t_token *list, t_SHELL **all)
+t_token 	*check_unknown_char(t_token *list, t_shell **all)
 {
 	/*if it is && or ||*/
 	if ((strcmp(list->value, "||") == 0 || strcmp(list->value, "&&") == 0))
@@ -13,7 +13,7 @@ t_token 	*check_unknown_char(t_token *list, t_SHELL **all)
 	return (list);
 }
 
-t_token 	*check_pipe_and_redir(t_token *list, t_SHELL **all)
+t_token 	*check_pipe_and_redir(t_token *list, t_shell **all)
 {
 	const char	*token[] = {"|", "<", ">", ">>", "<<"};
 
@@ -32,7 +32,7 @@ t_token 	*check_pipe_and_redir(t_token *list, t_SHELL **all)
 }
 
 
-void 	error_handling(t_SHELL **all, t_token **list)
+void 	error_handling(t_shell **all, t_token **list)
 {
 	t_token *lst2 	= *list;
 

@@ -1,13 +1,12 @@
 
 #include "../minishell.h"
 
-char		*between_quotes(char *line, char *quote, int *x, t_SHELL **all)
+char	*between_quotes(char *line, char *quote, int *x, t_shell **all)
 {
-	char 	*tmp;
+	char	*tmp;
 	int		y;
 
 	y = *x + 1;
-
 	/*Assign quote*/
 	*quote = line[*x];
 	while (line[y] && line[y] != *quote)
@@ -16,49 +15,48 @@ char		*between_quotes(char *line, char *quote, int *x, t_SHELL **all)
 	{
 		write(2, "syntax error: unclosed quotes\n", 30);
 		(*all)->last_status = 258;
-		return NULL;
+		return (NULL);
 	}
 	else if (line[y] == *quote)
 		y++;
-
 	/*saves the cmd*/
 	tmp = ft_strdup_m(line, *x + 1, y - *x - 2);
 	if (*quote != 39)
 		tmp = expansion((*all)->env, (*all)->last_status, tmp, 0);
 	*x = y;
-	return tmp;
+	return (tmp);
 }
 
-char		*outside_quotes(char *line, int *x, int *y, t_SHELL **all)
+char	*outside_quotes(char *line, int *x, int *y, t_shell **all)
 {
 	char	*tmp;
 
-	while (line[*y] && line[*y] != 34 && line[*y] != 39 && line[*y] != 32 && line[*y] != 9
-	&& line[*y] != 60 && line[*y] != 62 && line[*y] != 124)
+	while (line[*y] && line[*y] != 34 && line[*y] != 39 && line[*y] != 32
+		&& line[*y] != 9 && line[*y] != 60 && line[*y] != 62 && line[*y] != 124)
 		(*y)++;
-
 	tmp = ft_strdup_m(line, *x, *y - *x);
 	tmp = expansion((*all)->env, (*all)->last_status, tmp, 0);
 	*x = *y;
-
-	return tmp;
+	return (tmp);
 }
 
-int			handles_command(char *line, int x, t_token **list, t_SHELL **all)
+int	handles_command(char *line, int x, t_token **list, t_shell **all)
 {
 	t_token	*new;
 	char	*cmd;
 	char	*tmp;
-	char	quote = 0;
+	char	quote;
 	int		y;
 
-	y = x;
 	cmd = ft_strdup("");
-	while(line[x])
+	quote = 0;
+	y = x;
+	while (line[x])
 	{
 		/*condition de fin*/
-		if (line[x] == 32 || line[x] == 9 || line[x] == 124 || line[x] == 60 || line[x] == 62)
-			break;
+		if (line[x] == 32 || line[x] == 9 || line[x] == 124 || line[x] == 60
+			|| line[x] == 62)
+			break ;
 
 		/*attrape entre guillemet*/
 		if (line[x] == 39 || line [x] == 34)
@@ -77,17 +75,17 @@ int			handles_command(char *line, int x, t_token **list, t_SHELL **all)
 		free(tmp);
 	}
 
-		/*creats the 1st list element*/
-		new = ft_lstnew_token(cmd);
-		if (!*list)
-			*list = new;
+	/*creats the 1st list element*/
+	new = ft_lstnew_token(cmd);
+	if (!*list)
+		*list = new;
 
-		/*creats others list element*/
-		else
-			ft_lstadd_back(list, new);
+	/*creats others list element*/
+	else
+		ft_lstadd_back(list, new);
 
-		//free(cmd);
-		return (x);
+	//free(cmd);
+	return (x);
 }
 
 int			handles_special_char(char *line, int x, t_token **list)
@@ -126,25 +124,24 @@ int			handles_special_char(char *line, int x, t_token **list)
 	return (y + 1);
 }
 
-t_token		*tokenisation(char *line, t_token **list, t_SHELL **all)
+t_token	*tokenisation(char *line, t_token **list, t_shell **all)
 {
-	int 	x = 0;
+	int	x;
 
-	while(line[x])
+	x = 0;
+	while (line[x])
 	{
 		while (line[x] == 32 || line[x] == 9)
 			x++;
-
 		if (line[x] == '|' || line[x] == '<' || line[x] == '>')
 			x = handles_special_char(line, x, list);
-
 		else
 		{
 			x = handles_command(line, x, list, all);
 			if ((*all)->last_status == 258 || x == -1)
 			{
 				free_tokens(*list);
-				return NULL;
+				return (NULL);
 			}
 		}
 	}

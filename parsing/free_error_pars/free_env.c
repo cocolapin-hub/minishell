@@ -1,6 +1,6 @@
-#include "../minishell.h"
+#include "../../minishell.h"
 
-void	free_env(t_SHELL *all)
+void	free_env(t_shell *all)
 {
 	t_local *tmp1;
 	t_local	*tmp2;

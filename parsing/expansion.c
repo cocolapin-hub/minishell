@@ -54,7 +54,7 @@ char		*expansion(t_local *env, int last_status, char *str, int x)
 			str = split_for_expansion(str, "$?", x, status);
 			free(status);
 			x = 0;
-			continue;
+			continue ;
 		}
 		else
 		{
@@ -64,7 +64,7 @@ char		*expansion(t_local *env, int last_status, char *str, int x)
 				str = split_for_expansion(str, env2->key, start, env2->value);
 				x = start + strlen(env2->value);
 				env2 = env;
-				continue;
+				continue ;
 			}
 			env2= env2->next;
 		}

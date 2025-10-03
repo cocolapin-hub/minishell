@@ -33,10 +33,10 @@ typedef struct s_local {
     struct s_local   		*next;
 }   t_local;
 
-typedef struct s_SHELL {
+typedef struct s_shell {
     t_local           		*env;     		// VAR || $HOME ETC
     int						last_status;   	// Word or PATH
-}   t_SHELL;
+}   t_shell;
 
 typedef enum e_quote {
 	Q_NONE,
@@ -63,7 +63,7 @@ typedef struct s_token {
 typedef struct s_command {					//names are differents here too
 	char 					**args;        // tous les arguments, ex: ["ls", "-la", NULL] à passer à execve ou à builtin
     t_token 				*elem;		   // liste chaînée des redirs (<,>,>>,...)
-	t_SHELL					*all;		   // contient env et last_status
+	t_shell					*all;		   // contient env et last_status
 	struct s_command 		*next;		   // prochaine commande (si pipe)
 }   t_command;
 
@@ -72,7 +72,7 @@ typedef struct s_command {					//names are differents here too
 
 /*_______________________________environnement_______________________________*/
 /*PARS*/ //--> on garde celui ci
-void			setup_shell(t_SHELL **all, char **envp);
+void			setup_shell(t_shell **all, char **envp);
 
 /*EXEC*/
 t_local			*env_init(char **envp);
@@ -101,10 +101,10 @@ void 			setup_heredoc_signals(void);
 /*_________________________________parsing_________________________________*/
 /*PARS*/
 char			*expansion(t_local *env, int last_status, char *str, int x);
-t_command		*set_command(t_command **cmd, t_token *list, t_SHELL *all);
-t_token			*tokenisation(char *line, t_token **list, t_SHELL **all);
-void 			error_handling(t_SHELL **all, t_token **list);
-t_command		*parsing(char *line, t_SHELL *all);
+t_command		*set_command(t_command **cmd, t_token *list, t_shell *all);
+t_token			*tokenisation(char *line, t_token **list, t_shell **all);
+void 			error_handling(t_shell **all, t_token **list);
+t_command		*parsing(char *line, t_shell *all);
 char			*check_input(char *line);
 
 /*FREE & ERROR*/
@@ -117,7 +117,7 @@ void			free_args(char **args);
 
 /*________________________________executable________________________________*/
 /*EXEC*/
-void			exec_pipe(t_command *cmd_list, t_SHELL *all);
+void			exec_pipe(t_command *cmd_list, t_shell *all);
 void			child_process(t_command *cmd, t_local *env);
 char			*find_in_path(char *cmd, t_local *env);
 void			run_command(t_command *cmd);
@@ -132,11 +132,11 @@ int				builtin_pwd(void);
 int				builtin_env(t_local *env);
 
 /*REDIR*/
-int				apply_redir(t_token *redir, t_SHELL *all);
+int				apply_redir(t_token *redir, t_shell *all);
 int				create_heredoc(char *limiter);
 
 /*ERROR & FREE*/
-void			exit_clean_af(t_SHELL *all, t_command *cmd_list, int code);
+void			exit_clean_af(t_shell *all, t_command *cmd_list, int code);
 int				exec_error(const char *cmd, const char *msg, int code);
 void			fatal_error(const char *msg, int code);
 int				redir_error(char *file, char *msg);
@@ -147,7 +147,7 @@ void			free_split(char **array);
 
 
 /*_________________________________exit_________________________________*/
-void			free_env(t_SHELL *all);
+void			free_env(t_shell *all);
 
 
 

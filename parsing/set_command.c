@@ -2,7 +2,6 @@
 #include "../minishell.h"
 
 //proteger les malloc et autre et ajouter les free
-
 void		fill_args(t_token *list, char ***args)
 {
 	int		skip_next;
@@ -113,7 +112,7 @@ void		creat_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
 	}
 }
 
-t_command	*set_command(t_command **cmd, t_token *list, t_SHELL *all)
+t_command	*set_command(t_command **cmd, t_token *list, t_shell *all)
 {
 	t_command	*new;
 	t_token		*elements;

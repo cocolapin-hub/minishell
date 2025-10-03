@@ -2,7 +2,7 @@
 #include "../minishell.h"
 
 
-t_command	*parsing(char *line, t_SHELL *all)
+t_command	*parsing(char *line, t_shell *all)
 {
 	t_token 	*list = NULL;
 	t_command 	*cmd = NULL;
@@ -45,6 +45,6 @@ t_command	*parsing(char *line, t_SHELL *all)
 	// if(list)
 	// 	free_tokens(list);
 	// free(cleaned_line);
-	
+
 	return (cmd);
 }

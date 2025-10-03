@@ -1,6 +1,6 @@
 #include "../../minishell.h"
 
-int builtin_exit(char **args, t_SHELL *all, t_command *cmd_list)
+int builtin_exit(char **args, t_shell *all, t_command *cmd_list)
 {
 	long code;
 

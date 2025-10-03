@@ -72,7 +72,7 @@ static int	handle_redir_append(t_token *redir)	// >> ajoute a la fin d'un fichie
 	return (0);
 }
 
-static int	handle_redir_heredoc(t_token *redir)	// << shell lit tout jusqu'au limiter et ecrit directement dans le write-end d'un pipe 
+static int	handle_redir_heredoc(t_token *redir)	// << shell lit tout jusqu'au limiter et ecrit directement dans le write-end d'un pipe
 {
 	int fd;
 
@@ -92,7 +92,7 @@ static int	handle_redir_heredoc(t_token *redir)	// << shell lit tout jusqu'au li
 	return (0);
 }
 
-int	apply_redir(t_token *redir, t_SHELL *all)
+int	apply_redir(t_token *redir, t_shell *all)
 {
 	while (redir)
 	{
@@ -118,7 +118,7 @@ int	apply_redir(t_token *redir, t_SHELL *all)
 	- si "newfd" etait déjà ouvert, il est fermé d'abord puis remplacé par une copie de "oldfd"
 
 Exemple avec un pipe : "ls | grep txt"
-		
+
 			Tu crées un pipe :
 				int fd[2];
 				pipe(fd);   // fd[0] = lecture, fd[1] = écriture

@@ -1,9 +1,3 @@
-
-//MEMO:
-//gerer libfts et nom de variable dans le .h
-//gerer la facon dont tu appelle env et signal dans le main
-//gerer le makefile
-
 // void executor(t_command *cmd_list, t_SHELL *all)
 // {
 //     if (!cmd_list)
@@ -14,12 +8,17 @@
 //         run_command(cmd_list);
 // }
 
+// TO DO:	//faire run le code
+			//plusieurs fonction de plus de 25 lines
+			//frees
+			//norminette
+
 
 #include "minishell.h"
 
 int main(int argc, char **argv, char **envp)
 {
-    t_SHELL 	all;
+    t_shell 	all;
     t_command 	*cmd_list = NULL;
     char 		*line;
 
@@ -51,7 +50,7 @@ int main(int argc, char **argv, char **envp)
 //        free(line);						// <-------------handle free later
 
         if (!cmd_list)
-            continue;
+            continue ;
 
         // Exécution
 

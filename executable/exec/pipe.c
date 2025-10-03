@@ -12,14 +12,14 @@ static void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
 		close(pipefd[0]);	// close lecture inutile de l'enfant
 		dup2(pipefd[1], STDOUT_FILENO);		// dup2 #2 : dup la sortie vers pipefd[1]
 		close(pipefd[1]);	// ferme pipefd[1] car dup2 a fait la copie
-	}						// IMPORTANT  : ces deux dup2 positionnent stdin/out par défaut pour la cmd 
+	}						// IMPORTANT  : ces deux dup2 positionnent stdin/out par défaut pour la cmd
 							//			(apply_redir peut ensuite appeler d'autrs dup2 pour écraser ces réglages avec un redir > ou <)
 	if (apply_redir(cmd->elem, cmd->all) != 0)		// applique les redir propre a la cmd, viennent apres la config du pipe (dernier dup2 wins)
 		fatal_error("redir", 1);
 	if (is_builtin(cmd->args[0]))			// dans un pipe meme le builtin s'execute dans l'enfant, on va gérer plus haut pour les commandes uniques dans exec_command()
 		exit(exec_builtin(cmd));			// on exit en appelant exec_builtin pour que l'enfant finisse avec le bon code de sortie ET leurs modifications d’environnement ne doivent pas affecter le shell parent (c’est le comportement standard)
 	else
-		child_process(cmd, cmd->all->env);	// fait execve et ne revient pas	
+		child_process(cmd, cmd->all->env);	// fait execve et ne revient pas
 }
 
 static void	pipe_parent(t_pipe *mescouilles, t_command *cmd)
@@ -34,7 +34,7 @@ static void	pipe_parent(t_pipe *mescouilles, t_command *cmd)
 	}
 }
 
-static void	wait_pipeline(t_SHELL *all, pid_t last_pid)
+static void	wait_pipeline(t_shell *all, pid_t last_pid)
 {
 	int		status;
 	pid_t	wpid;
@@ -53,7 +53,7 @@ static void	wait_pipeline(t_SHELL *all, pid_t last_pid)
 	}
 }
 
-void	exec_pipe(t_command *cmd_list, t_SHELL *all)
+void	exec_pipe(t_command *cmd_list, t_shell *all)
 {
 	t_pipe	mescouilles;
 
@@ -105,6 +105,6 @@ Pour chaque commande :
 			parent :
 				close(prev_fd) si != -1.
 				if cmd->next : close(pipefd[1]); prev_fd = pipefd[0]; else prev_fd = -1.
-		ensuite attendre tous les enfants et stocker le dernier statut dans all->last_status 
+		ensuite attendre tous les enfants et stocker le dernier statut dans all->last_status
 
 */
