@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-t_local	*new_env_node(char *key, char *value) // duplique key et value pour éviter de modifier l’original envp.
+t_local	*new_env_node(char *key, char *value) 		// duplique key et value pour éviter de modifier l’original envp.
 {
 	t_local	*node;
 
@@ -9,7 +9,7 @@ t_local	*new_env_node(char *key, char *value) // duplique key et value pour évi
 		return (NULL);
 	node->key = ft_strdup(key);
 	node->value = ft_strdup(value);
-	node->next = NULL;						 // next = NULL car c’est un maillon isolé pour l’instant.
+	node->next = NULL;						 		// next = NULL car c’est un maillon isolé pour l’instant.
 	return (node);
 }
 
@@ -19,15 +19,15 @@ void	add_env_node(t_local **env, t_local *new_node)
 
 	if (!env || !new_node)
 		return ;
-	if (!*env) 			  // Si la liste est vide
+	if (!*env) 			  							// Si la liste est vide
 	{
-		*env = new_node;  // le nouveau devient la tête.
+		*env = new_node;  							// le nouveau devient la tête.
 		return ;
 	}
 	tmp = *env;
-	while (tmp->next)	  // on parcourt jusqu’au dernier
+	while (tmp->next)	  							// on parcourt jusqu’au dernier
 		tmp = tmp->next;
-	tmp->next = new_node; // et on relie
+	tmp->next = new_node; 							// et on relie
 }
 
 t_local	*env_init(char **envp)

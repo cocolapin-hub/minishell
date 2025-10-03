@@ -71,7 +71,7 @@ typedef struct s_command {					//names are differents here too
 
 
 /*_______________________________environnement_______________________________*/
-/*PARS*/
+/*PARS*/ //--> on garde celui ci
 void			setup_shell(t_SHELL **all, char **envp);
 
 /*EXEC*/
@@ -89,7 +89,7 @@ char			**env_to_tab(t_local *env);
 /*PARS*/
 void			setup_signal(void);
 
-/*EXEC*/
+/*EXEC*/ //--> on garde celui ci
 void			setup_sig(void);
 void			sigint_handler(int sig);
 void			sigquit_handler(int sig);
