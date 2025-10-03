@@ -1,9 +1,0 @@
-*.o
-*.a
-*.out
-minishell
-.DS_Store
-*.swp
-*~
-.vscode/
-.idea/
