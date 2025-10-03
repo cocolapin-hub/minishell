@@ -34,7 +34,7 @@ void	free_env(t_local *env)
 		tmp = env->next;
 		free(env->key);
 		free(env->value);
-		fee(env);
+		free(env);
 		env = tmp;
 	}
 }
