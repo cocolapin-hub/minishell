@@ -21,7 +21,9 @@ int main(int argc, char **argv, char **envp)
 
     (void)argc;
     (void)argv;
-	all.env = env_init(envp);
+
+	setup_shell(&all, envp);
+
     all.last_status = 0;
     setup_sig();
 

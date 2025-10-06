@@ -17,7 +17,7 @@ OBJ_DIR     = obj
 
 SRCS = \
 	main.c \
-	env/set_up_shell_exec.c \
+	env/setup_shell_pars.c \
 	executable/builtins/builtin.c \
 	executable/builtins/cd.c \
 	executable/builtins/echo.c \

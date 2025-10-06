@@ -15,7 +15,7 @@ x	echo  $PATH		:	 a b c	(3 arguments)
 x	echo "$PATH"	:	"a b c"	(1 argument)
 
 V	cat << 	EOF
-X	$USER			:	affiche claffut
+V	$USER			:	affiche claffut
 	EOF
 
 V	cat << 'EOF'

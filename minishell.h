@@ -70,10 +70,10 @@ typedef struct s_pipe
 
 /*_______________________________environnement_______________________________*/
 /*PARS*/ //--> on garde celui ci
-//void			setup_shell(t_shell **all, char **envp);
+void			setup_shell(t_shell *all, char **envp);
 
 /*EXEC*/
-t_local			*env_init(char **envp);
+//t_local			*env_init(char **envp);
 
 /*ENV*/ //--> pour les fonction en rapport avec env
 void    		set_env_value(t_local **env, char *key, char *value);

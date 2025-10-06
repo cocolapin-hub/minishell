@@ -43,11 +43,14 @@ char		*expansion(t_local *env, int last_status, char *str, int x)
 	char		*status;
 	t_local 	*env2;
 	int			start;
+	int			found;
 
 	env2 = env;
 	start = 0;
+	found = 0;
 	while(str[x])
 	{
+
 		if (str[x] == '$' && str[x + 1] == '?')
 		{
 			status = ft_itoa(last_status);
@@ -64,12 +67,26 @@ char		*expansion(t_local *env, int last_status, char *str, int x)
 				str = split_for_expansion(str, env2->key, start, env2->value);
 				x = start + strlen(env2->value);
 				env2 = env;
+				found = 1;
 				continue ;
 			}
-			env2= env2->next;
+			env2 = env2->next;
+			if (!env2)
+			{
+				x++;
+				continue ;
+			}
 		}
 		x++;
 	}
+
+	// If no variable was found but a $ exists
+	if (!found && str && strchr(str, '$'))
+	{
+		free(str);
+		str = ft_strdup("");
+	}
+
 	return str;
 }
 

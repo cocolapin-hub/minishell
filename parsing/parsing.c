@@ -128,12 +128,12 @@ t_command	*parsing(char *line, t_shell *all)
 	// 	end_code(cmd);
 	// }
 
-	/* ____PRINT CHECK____*/
-	// while(list)
-	// {
-	// 	printf("**args: %s\ncmd: %s\n\n", list->type,  list->value);
-	//  	list = list->next;
-	// }
+	// /* ____PRINT CHECK____*/
+	// // while(list)
+	// // {
+	// // 	printf("**args: %s\ncmd: %s\n\n", list->type,  list->value);
+	// //  	list = list->next;
+	// // }
 
 	// print_pipeline(cmd);      // <-- to print result
 
