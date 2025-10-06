@@ -79,9 +79,9 @@ void			setup_shell(t_shell *all, char **envp);
 /*ENV*/ //--> pour les fonction en rapport avec env
 void    		set_env_value(t_local **env, char *key, char *value);
 void   		 	unset_env_value(t_local **env, char *key);
-void			sort_env_tab(t_local **envcopy, int size);
 char			*get_env_value(t_local *env, char *key);
 char			**env_to_tab(t_local *env);
+void			sort_env_tab(char **tab);
 
 
 

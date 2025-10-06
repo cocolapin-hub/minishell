@@ -19,23 +19,23 @@ static int	is_valid_identifier(const char *key)
 	return (1);
 }
 
-static void	print_env_line(t_local *env)
-{
-	if (env->value)
-	{
-		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(env->key, 1);
-		ft_putstr_fd("=\"", 1);
-		ft_putstr_fd(env->value, 1);
-		ft_putstr_fd("\"\n", 1);
-	}
-	else
-	{
-		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(env->key, 1);
-		ft_putstr_fd("\n", 1);
-	}
-}
+// static void	print_env_line(t_local *env)
+// {
+// 	if (env->value)
+// 	{
+// 		ft_putstr_fd("declare -x ", 1);
+// 		ft_putstr_fd(env->key, 1);
+// 		ft_putstr_fd("=\"", 1);
+// 		ft_putstr_fd(env->value, 1);
+// 		ft_putstr_fd("\"\n", 1);
+// 	}
+// 	else
+// 	{
+// 		ft_putstr_fd("declare -x ", 1);
+// 		ft_putstr_fd(env->key, 1);
+// 		ft_putstr_fd("\n", 1);
+// 	}
+// }
 
 static void	print_sorted_env(t_local *env)
 {
@@ -45,7 +45,7 @@ static void	print_sorted_env(t_local *env)
 	tab = env_to_tab(env);
 	if (!tab)
 		return ;
-	ft_sort_str_tab(tab);
+	sort_env_tab(tab);
 	i = 0;
 	while (tab[i])
 	{
@@ -95,7 +95,7 @@ int	builtin_export(char **args, t_local *env)
 	i = 1;
 	while (args[i])
 	{
-		handle_export_arg(args[i], env);
+		handle_export_arg(args[i], &env);
 		i++;
 	}
 	return (0);
