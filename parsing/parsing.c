@@ -3,78 +3,95 @@
 
 #include <stdio.h>
 
-// const char *redir_type_to_str(t_type type)
-// {
-//     if (type == REDIR_IN) return "redir.in";
-//     if (type == REDIR_OUT) return "redir.out";
-//     if (type == REDIR_APPEND) return "redir.append";
-//     if (type == REDIR_HEREDOC) return "redir.heredoc";
-//     if (type == PIPE) return "pipe";
-//     if (type == WORD) return "word";
-//     return "unknown";
-// }
+const char *redir_type_to_str(t_type type)
+{
+    if (type == REDIR_IN) return "redir.in";
+    if (type == REDIR_OUT) return "redir.out";
+    if (type == REDIR_APPEND) return "redir.append";
+    if (type == REDIR_HEREDOC) return "redir.heredoc";
+    if (type == PIPE) return "pipe";
+    if (type == WORD) return "word";
+    return "unknown";
+}
 
-// void    print_command(t_command *cmd, int index)
-// {
-//     int     i;
-//     t_token *elem;
+void print_command(t_command *cmd, int index)
+{
+    int i;
+    t_token *elem;
 
-//     printf("//cmd%d:\n", index);
+    if (!cmd)
+    {
+        printf("//cmd%d: NULL command pointer\n\n", index);
+        return;
+    }
 
-//     // print args
-//     printf("//  args    = [");
-//     if (cmd->args)
-//     {
-//         for (i = 0; cmd->args[i]; i++)
-//         {
-//             printf("\"%s\"", cmd->args[i]);
-//             if (cmd->args[i + 1])
-//                 printf(", ");
-//         }
-//     }
-//     printf(", NULL]\n");
+    printf("//cmd%d:\n", index);
 
-//     // print elements (redirs)
-//     printf("//  element = ");
-//     if (!cmd->elem)
-//         printf("NULL\n");
-//     else
-//     {
-//         elem = cmd->elem;
-//         printf("[");
-//         while (elem)
-//         {
-//             printf("type: %s, value: %s", redir_type_to_str(elem->type), elem->value);
-//             if (elem->next)
-//                 printf(", next: ");
-//             elem = elem->next;
-//         }
-//         printf("]\n");
-//     }
+    // print args safely
+    printf("//  args    = [");
+    if (cmd->args)
+    {
+        for (i = 0; cmd->args[i]; i++)
+        {
+            printf("\"%s\"", cmd->args[i] ? cmd->args[i] : "(null)");
+            if (cmd->args[i + 1])
+                printf(", ");
+        }
+    }
+    else
+        printf("NULL");
+    printf("]\n");
 
-//     // show env placeholder
-//     printf("//  all     = all env\n");
+    // print redirection elements safely
+    printf("//  element = ");
+    if (!cmd->elem)
+        printf("NULL\n");
+    else
+    {
+        elem = cmd->elem;
+        printf("[");
+        while (elem)
+        {
+            printf("type: %s, value: %s",
+                   redir_type_to_str(elem->type),
+                   elem->value ? elem->value : "(null)");
+            elem = elem->next;
+            if (elem)
+                printf(" | ");
+        }
+        printf("]\n");
+    }
 
-//     // show next
-//     if (cmd->next)
-//         printf("//  next    = cmd%d\n", index + 1);
-//     else
-//         printf("//  next    = NULL\n");
+    // show environment placeholder
+    printf("//  all     = all env\n");
 
-//     printf("\n");
-// }
+    // show next command
+    if (cmd->next)
+        printf("//  next    = cmd%d\n", index + 1);
+    else
+        printf("//  next    = NULL\n");
 
-// void    print_pipeline(t_command *cmd)
-// {
-//     int index = 1;
+    printf("\n");
+}
 
-//     while (cmd)
-//     {
-//         print_command(cmd, index);
-//         cmd = cmd->next;
-//         index++;
-//     }
-// }
+void print_pipeline(t_command *cmd)
+{
+    int index = 1;
+
+    while (cmd)
+    {
+        // debug pointers to catch invalid memory
+        printf("DEBUG: cmd=%p next=%p args=%p elem=%p\n",
+               (void*)cmd, (void*)cmd->next,
+               (void*)cmd->args, (void*)cmd->elem);
+
+        print_command(cmd, index);
+        cmd = cmd->next;
+        index++;
+    }
+}
+
+
 
 
 t_command	*parsing(char *line, t_shell *all)
@@ -87,7 +104,8 @@ t_command	*parsing(char *line, t_shell *all)
 	if (strcmp(line, "exit") == 0)
 	{
 		free(line);
-		end_code(cmd);
+		exit (1);
+	//	end_code(cmd);
 	}
 
 	/*Etapes de mon parsing*/
@@ -117,7 +135,7 @@ t_command	*parsing(char *line, t_shell *all)
 	//  	list = list->next;
 	// }
 
-	print_pipeline(cmd);      // <-- to print result
+	// print_pipeline(cmd);      // <-- to print result
 
 	// if(list)
 	// 	free_tokens(list);

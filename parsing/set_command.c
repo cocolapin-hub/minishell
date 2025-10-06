@@ -3,7 +3,6 @@
 
 //proteger les malloc et autre et ajouter les free
 
-
 void		create_args(t_token *list, int token_count, int skip_next, char ***args)
 {
 	t_token	*tmp;
@@ -19,7 +18,7 @@ void		create_args(t_token *list, int token_count, int skip_next, char ***args)
 
 		else if (tmp->type == WORD)
 		{
-			if (skip_next == 1)
+			if (skip_next)
 				skip_next = 0;
 			else
 				token_count++;
@@ -27,7 +26,7 @@ void		create_args(t_token *list, int token_count, int skip_next, char ***args)
 		tmp = tmp->next;
 	}
 
-	*args = malloc(sizeof(char *) * (token_count + 1));
+	*args = ft_calloc(token_count + 1, sizeof(char *));
 	if (!(*args))
 		*args = NULL;
 	else
@@ -37,21 +36,26 @@ void		create_args(t_token *list, int token_count, int skip_next, char ***args)
 void		create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
 {
 
-	if ((*tmp)->next && (*tmp)->next->type == WORD)
-	{
-		*new = malloc(sizeof(t_token));
-			//protection needed here
-		(*new)->type = (*tmp)->type;
-		(*new)->value = ft_strdup((*tmp)->next->value);
-			//protection needed here
-		(*new)->next = NULL;
+    // Only take a WORD that is NOT an option (-*) as the redirection target
+    t_token *target = (*tmp)->next;
+    while (target && target->type == WORD && target->value[0] == '-')
+        target = target->next;  // skip option-like words
 
-		if (!(*start))
-			*start = *new;
-		else
-			(*end)->next = *new;
-		*end = *new;
-	}
+    if (target && target->type == WORD)
+    {
+        *new = malloc(sizeof(t_token));
+        (*new)->type = (*tmp)->type;
+        (*new)->value = ft_strdup(target->value);
+        (*new)->next = NULL;
+
+        if (!(*start))
+            *start = *new;
+        else
+            (*end)->next = *new;
+        *end = *new;
+
+        *tmp = target; // consume only the actual filename
+    }
 }
 
 void		fill_args(t_token *list, char ***args)
@@ -64,23 +68,23 @@ void		fill_args(t_token *list, char ***args)
 	create_args(list, 0, 0, args);
 
 	/*allocate value*/
-	skip_next = 0;
-	x = 0;
+    skip_next = 0;
+    x = 0;
 	while (*args && list && list->type != PIPE)
-	{
-		if (list->type == REDIR_IN || list->type == REDIR_OUT
-			|| list->type == REDIR_APPEND || list->type == REDIR_HEREDOC)
-			skip_next = 1;
-		else if (list->type == WORD)
-		{
-			if (skip_next == 1)
+    {
+        if (list->type == REDIR_IN || list->type == REDIR_OUT
+            || list->type == REDIR_APPEND || list->type == REDIR_HEREDOC)
+            skip_next = 1;
+        else if (list->type == WORD)
+        {
+			if (skip_next == 1 && ft_strcmp(list->value, "-n"))
 				skip_next = 0;
-			else
-				(*args)[x++] = ft_strdup(list->value);
+            else
+                (*args)[x++] = ft_strdup(list->value);
 				//protection needed here
-		}
-		list = list->next;
-	}
+        }
+        list = list->next;
+    }
 }
 
 void		fill_elements(t_token **list, t_token **elements)
@@ -122,20 +126,28 @@ t_command	*set_command(t_command **cmd, t_token *list, t_shell *all)
 	t_token		*elements;
 	char 		**args;
 
-	while(list)
-	{
-		fill_args(list, &args);
-		if (!(*args))
-			return (NULL);  // <-- is this the right way?
+	while (list)
+    {
+    	args = NULL;
+        fill_args(list, &args);
+        if (!args)
+        {
+            list = list->next;
+            continue;
+        }
 
-		fill_elements(&list, &elements);
-		new = ft_lstnew_cmd(args, elements, all);
-		if (!*cmd)
-			*cmd = new;
-		else
-			ft_lstadd_back_cmd(cmd, new);
-	}
-	free_args(args);
+        fill_elements(&list, &elements);
+
+        new = ft_lstnew_cmd(args, elements, all);
+        if (!new)
+            return NULL;
+
+        if (!*cmd)
+            *cmd = new;
+        else
+            ft_lstadd_back_cmd(cmd, new);
+    }
+	//free_args(args); not here perhaps
 	return (*cmd);
 }
 

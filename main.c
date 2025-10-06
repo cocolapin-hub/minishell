@@ -1,14 +1,5 @@
-// void executor(t_command *cmd_list, t_SHELL *all)
-// {
-//     if (!cmd_list)
-//         return;
-//     if (cmd_list->next)
-//         exec_pipe(cmd_list, all);
-//     else
-//         run_command(cmd_list);
-// }
-
 // TO DO:	//corriger le link entre le pars et l'exec
+			//gerer end code
 			//gerer les cas rare
 			//plusieurs fonction de plus de 25 lines
 			//frees
@@ -48,7 +39,7 @@ int main(int argc, char **argv, char **envp)
 
 
         cmd_list = parsing(line, &all);
-//        free(line);						// <-------------handle free later
+       //free(line);						// <-------------handle free later
 
         if (!cmd_list)
             continue ;
@@ -60,7 +51,7 @@ int main(int argc, char **argv, char **envp)
         else
             run_command(cmd_list);
 
-        free_command(cmd_list);			// <--------------handle free later
+        //free_command(cmd_list);			// <--------------handle free later
         cmd_list = NULL;
     }
 

@@ -131,3 +131,19 @@ int 	main(int argc, char **argv, char **envp)
 //	end_code(cmd);
     return 0;
 }
+
+
+
+
+
+
+
+// void executor(t_command *cmd_list, t_SHELL *all)
+// {
+//     if (!cmd_list)
+//         return;
+//     if (cmd_list->next)
+//         exec_pipe(cmd_list, all);
+//     else
+//         run_command(cmd_list);
+// }
