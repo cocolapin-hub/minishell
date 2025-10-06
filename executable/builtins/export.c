@@ -60,8 +60,7 @@ cas de figure :
 	minishell$ echo $TEST
 	hello
 
-3)minishell$ export FOO
-	minishell$ echo $FOO
+3)minishell$ export FOO	→ minishell$ echo $FOO	→	(rien, retour a la ligne)
 
 	minishell$ export 123ABC=bad
 	minishell: export: `123ABC=bad': not a valid identifier
