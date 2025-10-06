@@ -5,6 +5,7 @@
 
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/ioctl.h>
 # include <sys/wait.h>
 # include <stdint.h>
 # include <signal.h>
@@ -88,11 +89,16 @@ char			**env_to_tab(t_local *env);
 void			setup_signal(void);
 
 /*EXEC*/ //--> on garde celui ci
+void			setup_heredoc_signals(void);
+void			ctrl_c_handler(int signo);
 void			setup_sig(void);
-void			sigint_handler(int sig);
-void			sigquit_handler(int sig);
-void			sigint_heredoc(int sig);
-void 			setup_heredoc_signals(void);
+
+
+
+// void			sigint_handler(int sig);
+// void			sigquit_handler(int sig);
+// void			sigint_heredoc(int sig);
+// void 			setup_heredoc_signals(void);
 
 
 

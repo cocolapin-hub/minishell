@@ -34,49 +34,70 @@ static void	pipe_parent(t_pipe *mescouilles, t_command *cmd)
 	}
 }
 
-static void	wait_pipeline(t_shell *all, pid_t last_pid)
+static void wait_pipeline(t_shell *all, pid_t last_pid)
 {
-	int		status;
-	pid_t	wpid;
+    int status;
+    pid_t wpid;
 
-	while ((wpid = wait(&status)) > 0)		// attendre tous les enfants + récup statut du dernier
-	{
-		if (wpid == last_pid)				// uniquement le dernier process
-		{
-			if (WIFEXITED(status))			// mettre a jour $? WIFEXITED et WEXITSTATUS récup le code de retour si le process s'est terminé normalement
-				all->last_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))	// WIFSIGNALED et WTERMSIG si process tué par un signal (Ctrl-C)
-				all->last_status = 128 + WTERMSIG(status);	// quand une commande est interromp		CTRL-C: $? = 130 | CTRL-\: $? = 131
-			else
-				all->last_status = 1;
-		}
-	}
+    while ((wpid = wait(&status)) > 0)
+    {
+        if (wpid == last_pid)
+        {
+            if (WIFEXITED(status))
+                all->last_status = WEXITSTATUS(status);
+            else if (WIFSIGNALED(status))
+            {
+                int sig = WTERMSIG(status);
+                all->last_status = 128 + sig;
+
+                // *** modification est ici ***
+                if (sig == SIGINT)
+                    write(STDOUT_FILENO, "\n", 1);
+                else if (sig == SIGQUIT)
+                    write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+            }
+            else
+                all->last_status = 1;
+        }
+    }
 }
 
-void	exec_pipe(t_command *cmd_list, t_shell *all)
+void exec_pipe(t_command *cmd_list, t_shell *all)    //<-- modified
 {
-	t_pipe	mescouilles;
+    t_pipe mescouilles;
 
-	mescouilles.prev_fd = -1;
-	mescouilles.last_pid = -1;
-	while (cmd_list)
-	{
-		if (cmd_list->next && pipe(mescouilles.pipefd) == -1)	// si next existe, on connecte cette cmd à la suivante: crée un pipe, pipefd[0] = lecture, pipefd[1] = écriture.
-			fatal_error("pipe", 1);
-		mescouilles.pid = fork();								// fork un enfant pour execute la cmd (chaque cmd du pipe s'exec dans un processus(enfant))
-		if (mescouilles.pid == -1)
-			exit(exec_error("fork", strerror(errno), 1));
-		if (mescouilles.pid == 0)	// ENFANT
-		{
-			signal(SIGINT, SIG_DFL);	// remettre les signaux par défaut avant fork pour que la cmd fasse comme bash
-    		signal(SIGQUIT, SIG_DFL);	// et le parent recup le retour(waitpid) $? est mis à jour (130 ou 131)
-			pipe_child(cmd_list, mescouilles.prev_fd, mescouilles.pipefd);
-		}
-		else	// PARENT
-			pipe_parent(&mescouilles, cmd_list);
-		cmd_list = cmd_list->next;
-	}
-	wait_pipeline(all, mescouilles.last_pid);
+    mescouilles.prev_fd = -1;
+    mescouilles.last_pid = -1;
+
+    // *** modification est ici ***
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
+
+    while (cmd_list)
+    {
+        if (cmd_list->next && pipe(mescouilles.pipefd) == -1)
+            fatal_error("pipe", 1);
+
+        mescouilles.pid = fork();
+        if (mescouilles.pid == -1)
+            exit(exec_error("fork", strerror(errno), 1));
+
+        if (mescouilles.pid == 0)  // ENFANT
+        {
+            signal(SIGINT, SIG_DFL);
+            signal(SIGQUIT, SIG_DFL);
+            pipe_child(cmd_list, mescouilles.prev_fd, mescouilles.pipefd);
+        }
+        else  // PARENT
+            pipe_parent(&mescouilles, cmd_list);
+
+        cmd_list = cmd_list->next;
+    }
+
+    wait_pipeline(all, mescouilles.last_pid);
+
+    // *** modification est ici ***
+    setup_sig();  // Restaurer les signaux du shell
 }
 /*
 

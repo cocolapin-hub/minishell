@@ -31,38 +31,59 @@ static void	run_child(t_command *cmd)
 		child_process(cmd, cmd->all->env);				 // création processus enfant
 }
 
-static void	run_parent(t_command *cmd, pid_t pid)
+static void run_parent(t_command *cmd, pid_t pid)
 {
-	int	status;
+    int status;
 
-	waitpid(pid, &status, 0);							// parent attend fin de l'enfant + maj last_status en dessous
-	if (WIFEXITED(status))
-		cmd->all->last_status = WEXITSTATUS(status);	// succes normal
-	else if (WIFSIGNALED(status))
-		cmd->all->last_status = 128 + WTERMSIG(status);	// si process tué par un sig : last_status =
-	else
-		cmd->all->last_status = 1;					 	// si signal ou plantage
+    waitpid(pid, &status, 0);
+
+    if (WIFEXITED(status))
+        cmd->all->last_status = WEXITSTATUS(status);
+    else if (WIFSIGNALED(status))
+    {
+        int sig = WTERMSIG(status);
+        cmd->all->last_status = 128 + sig;
+
+        // *** MODIFICATION ICI ***
+        if (sig == SIGINT)
+            write(STDOUT_FILENO, "\n", 1);
+        else if (sig == SIGQUIT)
+            write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+    }
+    else
+        cmd->all->last_status = 1;
 }
 
-void	run_command(t_command *cmd)
+void run_command(t_command *cmd)
 {
-	pid_t	pid;
+    pid_t pid;
 
-	if (is_builtin(cmd->args[0]))
-	{
-		cmd->all->last_status = exec_builtin(cmd);		 // pas besoin de fork
-		return ;
-	}
-	pid = fork();
-	if (pid == -1)
-	{
-		print_error(cmd->args[0], "fork failed");
-		return ;
-	}
-	if (pid == 0)
-		run_child(cmd);
-	else
-		run_parent(cmd, pid);
+    if (is_builtin(cmd->args[0]))
+    {
+        cmd->all->last_status = exec_builtin(cmd);
+        return ;
+    }
+
+    pid = fork();
+    if (pid == -1)
+    {
+        print_error(cmd->args[0], "fork failed");
+        return ;
+    }
+
+    if (pid == 0)
+        run_child(cmd);
+    else
+    {
+        // *** MODIFICATION ICI ***
+        signal(SIGINT, SIG_IGN);
+        signal(SIGQUIT, SIG_IGN);
+
+        run_parent(cmd, pid);
+
+        // *** MODIFICATION ICI ***
+        setup_sig();  // Restaurer les signaux du shell
+    }
 }
 
 

@@ -3,14 +3,14 @@
 
 int	g_in_heredoc = 0;						// a mettre dans le main ?
 
-void	sigint_handler(int sig)				// handler de SIGINT (CTRL-C)
+void sigint_handler(int sig)
 {
-	(void)sig;
-	g_in_heredoc = SIGINT;
-	write(1, "^C\n", 3);
-	rl_replace_line("", 0);					// vide la ligne courante
-	rl_on_new_line();						// prépare readline à afficher un nouveau prompt
-	rl_redisplay();							// réafiiche le prompt
+    (void)sig;
+    g_in_heredoc = SIGINT;
+    write(STDOUT_FILENO, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();  // <- CHANGER rl_done = 1 par rl_redisplay()
 }
 
 void	sigquit_handler(int sig)
@@ -18,6 +18,7 @@ void	sigquit_handler(int sig)
 	(void)sig;
 	g_in_heredoc = SIGQUIT;
 	write(STDOUT_FILENO, "^\\Quit (core dumped)\n", 21); // 22 avec le 2eme backslash
+
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
@@ -37,10 +38,15 @@ void setup_heredoc_signals(void)
     signal(SIGQUIT, SIG_IGN);       		// Ctrl-\ ignoré
 }
 
-void	setup_sig(void)						// installe des signaux pour le parent qui attend (minishell)
+void setup_sig(void)
 {
-	signal(SIGINT, sigint_handler);			// SIGINT  (ctrl-c)
-	signal(SIGQUIT, SIG_IGN);				// ignore sigquit
+    struct sigaction sa;
+
+    sa.sa_handler = sigint_handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;  // PAS de SA_RESTART - important!
+    sigaction(SIGINT, &sa, NULL);
+    signal(SIGQUIT, SIG_IGN);
 }
 
 // on n’affiche pas ^\Quit dans le parent. Ça doit seulement se faire quand un enfant est tué par SIGQUIT.
