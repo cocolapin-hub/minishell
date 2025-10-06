@@ -8,7 +8,7 @@ char		*split_for_expansion(char *str, char *key, int start, char *key_value)
 	char 	*split3 = NULL;
 	char 	*tmp;
 	size_t 	key_len;
-	size_t	str_len ;
+	size_t	str_len;
 
 	if (strcmp(key, "$?") != 0)
 		key_len = strlen(key) + 1;

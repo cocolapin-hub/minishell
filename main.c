@@ -1,6 +1,10 @@
-// TO DO:	//corriger le link entre le pars et l'exec
-			//gerer end code
+// TO DO:	// omar : env + expansion
+			// coco : signaux
+
+			//gerer end code / ctr D etc..
 			//gerer les cas rare
+
+
 			//plusieurs fonction de plus de 25 lines
 			//frees
 			//norminette

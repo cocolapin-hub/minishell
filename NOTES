@@ -6,53 +6,52 @@ PARSING :					cmd->args = {"echo", "/home/claffut", NULL};
 
 CAS PARTICULIERS :
 
-	echo $ et "$"	:	affiche $ (parsing doit check si c'est avec echo ?)
+V	echo $ et "$"	:	affiche $ (parsing doit check si c'est avec echo ?)
 
-	echo "$BICHE"	:	affiche "" (chaine vide, pas supprimée car entre quotes) ( " = expans activée | ' = expans désactivée )
+X	echo "$BICHE"	:	affiche "" (chaine vide, pas supprimée car entre quotes) ( " = expans activée | ' = expans désactivée )
 
-	PATH= "a b c"
-	echo  $PATH		:	 a b c	(3 arguments)
-	echo "$PATH"	:	"a b c"	(1 argument)
+X	PATH= "a b c"
+x	echo  $PATH		:	 a b c	(3 arguments)
+x	echo "$PATH"	:	"a b c"	(1 argument)
 
-	cat << 	EOF
-	$USER			:	affiche claffut
+V	cat << 	EOF
+X	$USER			:	affiche claffut
 	EOF
 
-	cat << 'EOF'
-	$USER			:	affiche $USER
-	EOF
+V	cat << 'EOF'
+x	$USER			:	affiche $USER
+v	EOF
 
-	FILE="out.txt"
-	echo coucou > $FILE		:	écrit dans out.txt
+x	FILE="out.txt"
+x	echo coucou > $FILE		:	écrit dans out.txt
 
-	lol > $26CM		:	affiche ->	bash: $26CM: ambigous redirect
+x	lol > $26CM		:	affiche ->	bash: $26CM: ambigous redirect
 
-	/bin/cd			:	bash: /bin/cd: No such file or directory
+X	/bin/cd			:	bash: /bin/cd: No such file or directory
 
-	exit lol		:	exit
+X	exit lol		:	exit
 						bash: exit: lol: numeric argument required ($? = 2)
-	exit 19			: suivi d'un echo $? donne : last_status = 19
+x	exit 19			: suivi d'un echo $? donne : last_status = 19
 
-	/bin/ls mdr		:	/bin/ls: cannot access 'mdr': No such file or directory ($? = 2)
+x	/bin/ls mdr		:	/bin/ls: cannot access 'mdr': No such file or directory ($? = 2)
 
-	$? / $?			:	0: command not found
+V	$? / $?			:	0: command not found
 
-	CTRL-C			:	^C + nouvelle ligne avec nouveau prompt
+x	CTRL-C			:	^C + nouvelle ligne avec nouveau prompt
 
-	CTRL-D			:	apres avoir écrit quelque chose : ne fait rien.		sinon quitte minishell
+V	CTRL-D			:	apres avoir écrit quelque chose : ne fait rien.		sinon quitte minishell
 
 	cat (sans arg)
-	ctrl-c			:	interrompt la commande bloquante + ^C 					+ new prompt
-	ctrl-\			:	interrompt la commande bloquante + ^\Quit (core dumped) + new prompt
-	ctrl-d			:	interrompt la commande bloquante + new prompt (sans quitter minishell)
+X	ctrl-c			:	interrompt la commande bloquante + ^C 					+ new prompt
+V	ctrl-\			:	interrompt la commande bloquante + ^\Quit (core dumped) + new prompt
+V	ctrl-d			:	interrompt la commande bloquante + new prompt (sans quitter minishell)
 
-	ls  "src/"		:	marche
-	ls '"src/"'		:	ls: cannot access '"src/"': No such file or directory
+V	ls  "src/"		:	marche
+v	ls '"src/"'		:	ls: cannot access '"src/"': No such file or directory
 
-	$ cat > | ls	:	bash: syntax error near unexpected token `|' 	(la parsing devrait donner un token REDIR_OUT null : redir->value == NULL)
+X	$ cat > | ls	:	bash: syntax error near unexpected token `|' 	(la parsing devrait donner un token REDIR_OUT null : redir->value == NULL)
+X	$ cat >			: 	syntax error near unexpected token `newline'
 
-
-	pwd				: minishell$ pwd -----> syntax error :start with pipe or redir (i messed with the error message)
 
 
 
