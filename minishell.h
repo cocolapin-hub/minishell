@@ -79,6 +79,7 @@ void			setup_shell(t_shell *all, char **envp);
 /*ENV*/ //--> pour les fonction en rapport avec env
 void    		set_env_value(t_local **env, char *key, char *value);
 void   		 	unset_env_value(t_local **env, char *key);
+void			sort_env_tab(t_local **envcopy, int size);
 char			*get_env_value(t_local *env, char *key);
 char			**env_to_tab(t_local *env);
 
@@ -144,6 +145,7 @@ int				redir_error(char *file, char *msg);
 void			print_error_exec(char *cmd, char *msg);
 void			free_command(t_command *cmd);
 void			free_split(char **array);
+void			print_invalid_identifier(char *arg);
 
 
 
@@ -154,6 +156,7 @@ void			free_env(t_shell *all);
 
 /*________________________________LIBFT________________________________*/
 t_command		*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all);
+char			*ft_substr(char const *s, unsigned int start, size_t len);
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 void			ft_lstadd_back_cmd(t_command **lst, t_command *new);
 void			*ft_memcpy(void *dst, const void *src, size_t n);
@@ -168,6 +171,7 @@ char			**ft_split(char const *s, char c);
 char			*ft_strchr(const char *s, int c);
 t_command		*ft_lstlast_cmd(t_command *lst);
 t_token			*ft_lstnew_token(char *content);
+void			ft_putendl_fd(char *s, int fd);
 int 			ft_strcmp(char *s1, char *s2);
 void			ft_putstr_fd(char *s, int fd);
 int 			ft_isnumber(const char *str);
@@ -176,6 +180,9 @@ char			*ft_strdup(const char *s);
 size_t			ft_strlen(const char *s);
 long			ft_atol(const char *str);
 int				ft_lstsize(t_token *lst);
+int				ft_isalnum(int c);
+int				ft_isalpha(int c);
+int				ft_isdigit(int c);
 char			*ft_itoa(int n);
 
 #endif

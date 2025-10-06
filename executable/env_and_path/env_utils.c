@@ -61,3 +61,26 @@ void    unset_env_value(t_local **env, char *key)
     }
 }
 
+void	sort_env_tab(t_local **envcopy, int size)
+{
+	int		i;
+	int		j;
+	t_local	*tmp;
+
+	i = 0;
+	while (i < size - 1)
+	{
+		j = i + 1;
+		while (j < size)
+		{
+			if (ft_strcmp(envcopy[i]->key, envcopy[j]->key) > 0)
+			{
+				tmp = envcopy[i];
+				envcopy[i] = envcopy[j];
+				envcopy[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+}

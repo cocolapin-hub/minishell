@@ -1,16 +1,163 @@
 
 #include "../../minishell.h"
 
-// static void	export_error(char *arg) // affiche les messages d'erreurs
-// {
-// 	write(2, "minishell: export: '", 21);
-// 	write(2, arg, ft_strlen(arg));
-// 	write(2, "': not a valid identifier\n", 26);
-// }
-// static int	is_valid_identifier(char *key) // verif si la variable commence par une lettre ou un '_' puis "lettres/chiffres/_"
-// static void	print_env_export(char **env) // affiche toutes les variables comme bash
-// static void	export_assign(char *arg, char ***env)
+static int	is_valid_identifier(const char *key)
+{
+	int	i;
 
+	if (!key)
+		return (0);
+	if (!ft_isalpha(key[0]) && key[0] != '_')
+		return (0);
+	i = 1;
+	while (key[i])
+	{
+		if (!ft_isalnum(key[i]) && key[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static void	print_env_line(t_local *env)
+{
+	if (env->value)
+	{
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(env->key, 1);
+		ft_putstr_fd("=\"", 1);
+		ft_putstr_fd(env->value, 1);
+		ft_putstr_fd("\"\n", 1);
+	}
+	else
+	{
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(env->key, 1);
+		ft_putstr_fd("\n", 1);
+	}
+}
+
+static void	print_sorted_env(t_local *env)
+{
+	char	**tab;
+	int		i;
+
+	tab = env_to_tab(env);
+	if (!tab)
+		return ;
+	ft_sort_str_tab(tab);
+	i = 0;
+	while (tab[i])
+	{
+		ft_putstr_fd("declare -x ", 1);
+		ft_putendl_fd(tab[i], 1);
+		i++;
+	}
+	free_split(tab);
+}
+
+static void	handle_export_arg(char *arg, t_local **env)
+{
+	char	*equal;
+	char	*key;
+	char	*value;
+
+	equal = ft_strchr(arg, '=');
+	if (equal)
+	{
+		key = ft_substr(arg, 0, equal - arg);
+		value = equal + 1;
+	}
+	else
+	{
+		key = ft_strdup(arg);
+		value = NULL;
+	}
+	if (!key)
+		return ;
+	if (!is_valid_identifier(key))
+		print_invalid_identifier(arg);
+	else if (ft_strcmp(key, "_") != 0)
+		set_env_value(env, key, value);
+	free(key);
+}
+
+
+int	builtin_export(char **args, t_local *env)
+{
+	int	i;
+
+	if (!args[1])
+	{
+		print_sorted_env(env);
+		return (0);
+	}
+	i = 1;
+	while (args[i])
+	{
+		handle_export_arg(args[i], env);
+		i++;
+	}
+	return (0);
+}
+
+/*
+__________________________________________________________________________________________________________________________________________________
+
+
+
+static int	is_valid_identifier(char *arg)
+{
+	int i;
+
+	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
+		return (0);
+	i = 1;
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!isalnum(arg[i]) && arg[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static void	print_sorted_env(t_local *env)
+{
+	t_local	**envcopy;
+	t_local	*tmp;
+	int		size;
+	int		i;
+
+	size = 0;
+	tmp = env;
+	while (tmp)
+	{
+		size++;
+		tmp = tmp->next;
+	}
+	envcopy = malloc(sizeof(t_local *) * size);
+	if (!envcopy)
+		return ;
+	i = 0;
+	tmp = env;
+	while (tmp)
+	{
+		envcopy[i++] = tmp;
+		tmp = tmp->next;
+	}	
+	sort_env_tab(envcopy, size);
+	i = 0;
+	while (i < size)
+	{
+		if (envcopy[i]->value)
+			printf("declare -x %s=\"%s\"\n", envcopy[i]->key, envcopy[i]->value);
+		else
+			printf("declare -x %s\n", envcopy[i]->key);
+		i++;
+	}
+	free(envcopy);
+}
 
 int	builtin_export(char **args, t_local *env)
 {
@@ -19,9 +166,17 @@ int	builtin_export(char **args, t_local *env)
 	char	*key;
 	char	*value;
 
+	if (!args[1])
+		return (print_sorted_env(env), 0);
 	i = 1; 								 // args[0] = "export"
 	while (args[i])
 	{
+		if (!is_valid_identifier(args[i]))
+		{
+			printf("bash: export: '%s': not a valid identifier\n", args[i]);
+			i++;
+			continue ;
+		}
 		equal = ft_strchr(args[i], '='); // pointe sur le '=' dans la chaîne
 		if (!equal)						 // si pas de =, on ignore et on passe à args suivant
 		{
@@ -38,7 +193,7 @@ int	builtin_export(char **args, t_local *env)
 	return (0);
 }
 
-/*
+
 
 	Objectif
 		Si la variable existe déjà → mettre à jour sa valeur.
@@ -64,5 +219,10 @@ cas de figure :
 
 	minishell$ export 123ABC=bad
 	minishell: export: `123ABC=bad': not a valid identifier
+
+
+ export $=mdr
+bash: export: `$=mdr': not a valid identifier
+
 
 */

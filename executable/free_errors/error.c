@@ -51,3 +51,10 @@ int	exec_error(const char *cmd, const char *msg, int code)
 	write(2, "\n", 1);
 	return (code);
 }
+
+void	print_invalid_identifier(char *arg)
+{
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putendl_fd("': not a valid identifier", 2);
+}
