@@ -19,7 +19,7 @@ V	$USER			:	affiche claffut
 	EOF
 
 V	cat << 'EOF'
-x	$USER			:	affiche $USER
+V	$USER			:	affiche $USER
 v	EOF
 
 x	FILE="out.txt"
@@ -49,8 +49,8 @@ V	ctrl-d			:	interrompt la commande bloquante + new prompt (sans quitter minishe
 V	ls  "src/"		:	marche
 v	ls '"src/"'		:	ls: cannot access '"src/"': No such file or directory
 
-X	$ cat > | ls	:	bash: syntax error near unexpected token `|' 	(la parsing devrait donner un token REDIR_OUT null : redir->value == NULL)
-X	$ cat >			: 	syntax error near unexpected token `newline'
+V	$ cat > | ls	:	bash: syntax error near unexpected token `|' 	(la parsing devrait donner un token REDIR_OUT null : redir->value == NULL)
+V	$ cat >			: 	syntax error near unexpected token `newline'
 
 X	minishell$ cat -e << eof
 		> asdfasdf

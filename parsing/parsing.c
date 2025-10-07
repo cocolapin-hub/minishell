@@ -1,7 +1,6 @@
 
 #include "../minishell.h"
 
-#include <stdio.h>
 
 const char *redir_type_to_str(t_type type)
 {
@@ -92,28 +91,22 @@ void print_pipeline(t_command *cmd)
 }
 
 
-
-
 t_command	*parsing(char *line, t_shell *all)
 {
 	t_token 	*list = NULL;
 	t_command 	*cmd = NULL;
 	char		*cleaned_line;
 
-	/*ligne vide*/
-	if (strcmp(line, "exit") == 0)
-	{
-		free(line);
-		exit (1);
-	//	end_code(cmd);
-	}
+	/*exit*/
+	line = exit_handling(line);
+
 
 	/*Etapes de mon parsing*/
 	cleaned_line = check_input(line);
-
 	if (!cleaned_line)
 		return NULL;
 
+	/*Creation de la commande*/
 	tokenisation(cleaned_line, &list, &all);
 	error_handling(&all, &list);
 	set_command(&cmd, list, all);

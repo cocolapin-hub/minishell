@@ -37,6 +37,7 @@ SRCS = \
 	executable/redir/redir.c \
 	parsing/check_input.c \
 	parsing/error_handling.c \
+	parsing/exit_handling.c \
 	parsing/expansion.c \
 	parsing/parsing.c \
 	parsing/set_command.c \
@@ -65,6 +66,7 @@ SRCS = \
 	libft/ft_memcpy.c \
 	libft/ft_putstr_fd.c \
 	libft/ft_putendl_fd.c \
+	libft/ft_count_strings.c \
 	libft/ft_split.c \
 	libft/ft_strchr.c \
 	libft/ft_strcmp.c \

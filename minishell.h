@@ -105,6 +105,7 @@ t_command		*set_command(t_command **cmd, t_token *list, t_shell *all);
 t_token			*tokenisation(char *line, t_token **list, t_shell **all);
 void 			error_handling(t_shell **all, t_token **list);
 t_command		*parsing(char *line, t_shell *all);
+char			*exit_handling(char *line);
 char			*check_input(char *line);
 
 /*FREE & ERROR*/
@@ -175,6 +176,7 @@ void			ft_putendl_fd(char *s, int fd);
 int 			ft_strcmp(char *s1, char *s2);
 void			ft_putstr_fd(char *s, int fd);
 int 			ft_isnumber(const char *str);
+int 			ft_count_strings(char **arr);
 t_token			*ft_lstlast(t_token *lst);
 char			*ft_strdup(const char *s);
 size_t			ft_strlen(const char *s);

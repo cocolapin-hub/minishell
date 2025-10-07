@@ -88,7 +88,7 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 	return (x);
 }
 
-int			handles_special_char(char *line, int x, t_token **list)
+int		handles_special_char(char *line, int x, t_token **list)
 {
 	t_token	*new;
 	char	*cmd = NULL;
