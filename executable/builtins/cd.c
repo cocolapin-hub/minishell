@@ -13,13 +13,13 @@ static void	update_pwd(t_local *env)
 		set_env_value(&env, "PWD", cwd);
 }
 
-int	builtin_cd(char **args, t_local *env)
+int	builtin_cd(char **args, t_local **env)
 {
 	char *path;
 
 	if (!args[1]) 							   // no arg -> HOME
 	{
-		path = get_env_value(env, "HOME");
+		path = get_env_value(*env, "HOME");
 		if (!path)
 		{
 			write(2, "minishell: cd: HOME not set\n", 28);
@@ -33,7 +33,7 @@ int	builtin_cd(char **args, t_local *env)
 		perror("minishell: cd");
 		return (1);
 	}
-	update_pwd(env);						   // maj de pwd et oldpwd
+	update_pwd(*env);						   // maj de pwd et oldpwd
 	return (0);
 }
 /*
@@ -51,5 +51,8 @@ Si aucun argument est fourni → se référer à HOME (comme bash).
 
 Après un changement de dossier réussi :
 		mettre à jour les variables d’environnement PWD et OLDPWD.
+
+
+cd .. fonctionne mais ne met pas a jour PWD ni OLDPWD, mais c'est pas demandé dans l'énoncé.
 
 */

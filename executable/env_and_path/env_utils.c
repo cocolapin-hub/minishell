@@ -11,31 +11,33 @@ char    *get_env_value(t_local *env, char *key)
     }
     return (NULL);
 }
-// pointeur vers le pointeur tete, peut lire la list via *env ET modifier la tete (*env = new_node)
-void    set_env_value(t_local **env, char *key, char *value)
-{
-    t_local   *node;
 
-    node = *env;
-    while (node)
-    {
-        if (ft_strcmp(node->key, key) == 0)
-        {
-            free(node->value);
-            node->value = ft_strdup(value);
-            return ;
-        }
-        node = node->next;
-    } // si pas trouvé, on crée un nouveau maillon
-    node = malloc(sizeof(t_local));
-    if (!node)
-        return ;
-    node->key = ft_strdup(key);
-    node->value = ft_strdup(value);
-    node->next = *env;
-    *env = node;
-}
+// pointeur vers le pointeur tete, peut lire la list via *env ET modifier la tete (*env = new_node)
+// void    set_env_value(t_local **env, char *key, char *value)
+// {
+//     t_local   *node;
+
+//     node = *env;
+//     while (node)
+//     {
+//         if (ft_strcmp(node->key, key) == 0)
+//         {
+//             free(node->value);
+//             node->value = ft_strdup(value);
+//             return ;
+//         }
+//         node = node->next;
+//     } // si pas trouvé, on crée un nouveau maillon
+//     node = malloc(sizeof(t_local));
+//     if (!node)
+//         return ;
+//     node->key = ft_strdup(key);
+//     node->value = ft_strdup(value);
+//     node->next = *env;
+//     *env = node;
+// }
 // *env : lecture seule ou modif d'un noeud existant | **env : possibilité de changer la tete ou changer env elle meme
+
 void    unset_env_value(t_local **env, char *key)
 {
     t_local   *prev;

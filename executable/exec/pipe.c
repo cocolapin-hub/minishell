@@ -17,7 +17,7 @@ static void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
 	if (apply_redir(cmd->elem, cmd->all) != 0)		// applique les redir propre a la cmd, viennent apres la config du pipe (dernier dup2 wins)
 		fatal_error("redir", 1);
 	if (is_builtin(cmd->args[0]))			// dans un pipe meme le builtin s'execute dans l'enfant, on va gérer plus haut pour les commandes uniques dans exec_command()
-		exit(exec_builtin(cmd));			// on exit en appelant exec_builtin pour que l'enfant finisse avec le bon code de sortie ET leurs modifications d’environnement ne doivent pas affecter le shell parent (c’est le comportement standard)
+		exit(exec_builtin(cmd, cmd->all));			// on exit en appelant exec_builtin pour que l'enfant finisse avec le bon code de sortie ET leurs modifications d’environnement ne doivent pas affecter le shell parent (c’est le comportement standard)
 	else
 		child_process(cmd, cmd->all->env);	// fait execve et ne revient pas
 }

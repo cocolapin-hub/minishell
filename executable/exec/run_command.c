@@ -60,7 +60,7 @@ void run_command(t_command *cmd)
 
     if (is_builtin(cmd->args[0]))
     {
-        cmd->all->last_status = exec_builtin(cmd);
+        cmd->all->last_status = exec_builtin(cmd, cmd->all);
         return ;
     }
 

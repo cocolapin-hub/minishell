@@ -29,6 +29,7 @@ SRCS = \
 	executable/env_and_path/env_to_tab.c \
 	executable/env_and_path/env_utils.c \
 	executable/env_and_path/find_path.c \
+	executable/env_and_path/set_env_value.c \
 	executable/exec/pipe.c \
 	executable/exec/run_command.c \
 	executable/free_errors/error.c \

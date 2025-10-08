@@ -1,13 +1,13 @@
 #include "../../minishell.h"
 
-int	builtin_unset(char **args, t_local *env)
+int	builtin_unset(char **args, t_local **env)
 {
 	int	i;
 
 	i = 1;
 	while (args[i])
 	{
-		unset_env_value(&env, args[i]);
+		unset_env_value(env, args[i]);
 		i++;
 	}
 	return (0);

@@ -22,7 +22,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int exec_builtin(t_command *cmd) // *cmd = pointeur sur la variable locale utilisée par la fonction pour acceder a la structure entière
+int exec_builtin(t_command *cmd, t_shell *all) // *cmd = pointeur sur la variable locale utilisée par la fonction pour acceder a la structure entière
 {
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
@@ -31,14 +31,14 @@ int exec_builtin(t_command *cmd) // *cmd = pointeur sur la variable locale utili
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		return (builtin_echo(cmd->args));
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
-		return (builtin_cd(cmd->args, cmd->all->env));
+		return (builtin_cd(cmd->args, &all->env));
 	if (ft_strcmp(cmd->args[0], "export") == 0)
-		return (builtin_export(cmd->args, cmd->all->env));
+		return (builtin_export(cmd->args, &all->env));
 	if (ft_strcmp(cmd->args[0], "unset") == 0)
-		return (builtin_unset(cmd->args, cmd->all->env));
+		return (builtin_unset(cmd->args, &all->env));
 	if (ft_strcmp(cmd->args[0], "env") == 0)
-		return (builtin_env(cmd->all->env));
+		return (builtin_env(all->env));
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return (builtin_exit(cmd->args, cmd->all, cmd));
+		return (builtin_exit(cmd->args, all, cmd));
 	return (1);
 }

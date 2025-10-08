@@ -19,23 +19,16 @@ static int	is_valid_identifier(const char *key)
 	return (1);
 }
 
-// static void	print_env_line(t_local *env)
-// {
-// 	if (env->value)
-// 	{
-// 		ft_putstr_fd("declare -x ", 1);
-// 		ft_putstr_fd(env->key, 1);
-// 		ft_putstr_fd("=\"", 1);
-// 		ft_putstr_fd(env->value, 1);
-// 		ft_putstr_fd("\"\n", 1);
-// 	}
-// 	else
-// 	{
-// 		ft_putstr_fd("declare -x ", 1);
-// 		ft_putstr_fd(env->key, 1);
-// 		ft_putstr_fd("\n", 1);
-// 	}
-// }
+static int	is_invalid_key(char *key, char *arg)
+{
+	if (!key || !is_valid_identifier(key))
+	{
+		print_invalid_identifier(arg);
+		free(key);
+		return (1);
+	}
+	return (0);
+}
 
 static void	print_sorted_env(t_local *env)
 {
@@ -63,39 +56,36 @@ static void	handle_export_arg(char *arg, t_local **env)
 	char	*value;
 
 	equal = ft_strchr(arg, '=');
-	if (equal)
+	if (!equal)
 	{
-		key = ft_substr(arg, 0, equal - arg);
-		value = equal + 1;
-	}
-	else
-	{
-		key = ft_strdup(arg);
-		value = NULL;
-	}
-	if (!key)
+		if (is_valid_identifier(arg))
+			set_env_value(env, arg, NULL);
+		else
+			print_invalid_identifier(arg);
 		return ;
-	if (!is_valid_identifier(key))
-		print_invalid_identifier(arg);
-	else if (ft_strcmp(key, "_") != 0)
+	}
+	*equal = '\0';
+	key = ft_strdup(arg);
+	value = ft_strdup(equal + 1);
+	*equal = '=';
+	if (is_invalid_key(key, arg))
+		return (free(value), (void)0);
+	if (ft_strcmp(key, "_") != 0)
 		set_env_value(env, key, value);
 	free(key);
+	free(value);
 }
 
-
-int	builtin_export(char **args, t_local *env)
+int	builtin_export(char **args, t_local **env)
 {
 	int	i;
 
 	if (!args[1])
-	{
-		print_sorted_env(env);
-		return (0);
-	}
+		return (print_sorted_env(*env), 0);
 	i = 1;
 	while (args[i])
 	{
-		handle_export_arg(args[i], &env);
+		handle_export_arg(args[i], env);
 		i++;
 	}
 	return (0);

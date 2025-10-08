@@ -124,10 +124,10 @@ char			*find_in_path(char *cmd, t_local *env);
 void			run_command(t_command *cmd);
 /*BUILTINS*/
 int 			builtin_exit(char **args, t_shell *all, t_command *cmd_list);
-int				builtin_export(char **args, t_local *env);
-int				builtin_unset(char **args, t_local *env);
-int				builtin_cd(char **args, t_local *env);
-int				exec_builtin(t_command *cmd);
+int				exec_builtin(t_command *cmd, t_shell *all);
+int				builtin_export(char **args, t_local **env);
+int				builtin_unset(char **args, t_local **env);
+int				builtin_cd(char **args, t_local **env);
 int				builtin_echo(char **args);
 int				is_builtin(char *cmd);
 int				builtin_pwd(void);
