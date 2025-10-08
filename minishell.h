@@ -120,6 +120,7 @@ void			free_args(char **args);
 void			exec_pipe(t_command *cmd_list, t_shell *all);
 void			child_process(t_command *cmd, t_local *env);
 char			*find_in_path(char *cmd, t_local *env);
+int				is_valid_identifier(const char *key);
 void			run_command(t_command *cmd);
 /*BUILTINS*/
 int 			builtin_exit(char **args, t_shell *all, t_command *cmd_list);

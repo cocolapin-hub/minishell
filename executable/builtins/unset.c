@@ -1,5 +1,24 @@
 #include "../../minishell.h"
 
+static void	print_unset_error(char *arg)	// a uniformiser avec les autres erreurs
+{
+	write(2, "minishell: unset: `", 19);
+	write(2, arg, ft_strlen(arg));
+	write(2, "': not a valid identifier\n", 26);
+}
+
+static void	handle_unset_arg(char *arg, t_local **env)
+{
+	if (!is_valid_identifier(arg))
+	{
+		print_unset_error(arg);
+		return ;
+	}
+	if (ft_strcmp(arg, "_") == 0)
+		return ;
+	unset_env_value(env, arg);
+}
+
 int	builtin_unset(char **args, t_local **env)
 {
 	int	i;
@@ -7,11 +26,12 @@ int	builtin_unset(char **args, t_local **env)
 	i = 1;
 	while (args[i])
 	{
-		unset_env_value(env, args[i]);
+		handle_unset_arg(args[i], env);
 		i++;
 	}
 	return (0);
 }
+
 
 /*
 Parcours la liste chaînée.
