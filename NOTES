@@ -10,9 +10,9 @@ V	echo $ et "$"	:	affiche $ (parsing doit check si c'est avec echo ?)
 
 V	echo "$BICHE"	:	affiche "" (chaine vide, pas supprimée car entre quotes) ( " = expans activée | ' = expans désactivée )
 
-X	PATH= "a b c"
-x	echo  $PATH		:	 a b c	(3 arguments)
-x	echo "$PATH"	:	"a b c"	(1 argument)
+V	PATH= "a b c"
+V	echo  $PATH		:	 a b c	(3 arguments)
+V	echo "$PATH"	:	"a b c"	(1 argument)
 
 V	cat << 	EOF
 V	$USER			:	affiche claffut
