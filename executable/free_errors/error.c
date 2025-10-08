@@ -9,11 +9,14 @@ void	fatal_error(const char *msg, int code)	// cas où le shell  ne peut pas con
 
 void	exit_clean_af(t_shell *all, t_command *cmd_list, int code)
 {
-	if (cmd_list)
-		free_command(cmd_list);
-	if (all->env)
-		free_env(all);
-	//clear_history(); 	??
+	(void)all;
+	(void)cmd_list;
+	
+	// if (cmd_list)
+	// 	free_command(cmd_list);
+	// if (all->env)
+	// 	free_env(all);
+	clear_history();
 	exit(code);
 }
 
