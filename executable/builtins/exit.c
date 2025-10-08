@@ -2,14 +2,15 @@
 
 int builtin_exit(char **args, t_shell *all, t_command *cmd_list)
 {
-	long code;
+	//long code;
 
 	write(1, "exit\n", 5);
 	if (!args[1])				// aucun argument
 		exit_clean_af(all, cmd_list, all->last_status);
-	else if (!ft_isnumber(args[1]))	// non numérique
+	else if (!ft_isnumber(args[1]) || !ft_atoi(args[1]))	// non numérique
 	{
-		print_error_exec("exit", "numeric argument required");
+		write(2, "exit: ", 6);
+		print_error_exec(args[1], "numeric argument required");
 		exit_clean_af(all, cmd_list, 2);
 	}
 	else if (args[2])				// trop d'arguments
@@ -17,8 +18,7 @@ int builtin_exit(char **args, t_shell *all, t_command *cmd_list)
 		print_error_exec("exit", "too many arguments");
 		return (1);				// NE PAS quitter
 	}
-	code = ft_atol(args[1]);	// conversion en long
-	exit_clean_af(all, cmd_list, (unsigned char)code);
+	exit_clean_af(all, cmd_list, 2);
 	return (0);
 }
 

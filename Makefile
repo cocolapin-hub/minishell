@@ -64,6 +64,7 @@ SRCS = \
 	libft/ft_lstnew_token.c \
 	libft/ft_lstsize.c \
 	libft/ft_memcpy.c \
+	libft/ft_atoi.c \
 	libft/ft_putstr_fd.c \
 	libft/ft_putendl_fd.c \
 	libft/ft_count_strings.c \

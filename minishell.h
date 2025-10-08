@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <limits.h>
 
 extern int		g_in_heredoc;
 
@@ -177,6 +178,7 @@ int 			ft_strcmp(char *s1, char *s2);
 void			ft_putstr_fd(char *s, int fd);
 int 			ft_isnumber(const char *str);
 int 			ft_count_strings(char **arr);
+int				ft_atoi(const char *nptr);
 t_token			*ft_lstlast(t_token *lst);
 char			*ft_strdup(const char *s);
 size_t			ft_strlen(const char *s);

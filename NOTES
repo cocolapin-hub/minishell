@@ -32,7 +32,7 @@ X	/bin/cd			:	bash: /bin/cd: No such file or directory
 V	exit lol		:	exit
 						bash: exit: lol: numeric argument required ($? = 2)
 V	exit 19			: 	suivi d'un echo $? donne : last_status = 19
-X	exit long		:	bash: exit: 55555555555555555555555555555555555555555555555555555555: numeric argument required
+V	exit long		:	bash: exit: 55555555555555555555555555555555555555555555555555555555: numeric argument required
 
 
 x	/bin/ls mdr		:	/bin/ls: cannot access 'mdr': No such file or directory ($? = 2)
@@ -62,7 +62,7 @@ X	minishell$ cat -e << eof
 					:	redirection: Bad file descriptor
 					:	add echo $? 130 instead of 1
 
-
+x	Message d erreur qui commence par bash: (exit ou > sans rien)
 
 
 // //TO_DO :	// remove leaks
