@@ -96,15 +96,13 @@ int	apply_redir(t_token *redir, t_shell *all)
 {
 	(void)all;
 
-	printf("ici");
+	// write(1, "ici\n", 4);
+	// if (redir->type == REDIR_IN) write(1, "redir.in\n", 9);
+	// if (redir->type == REDIR_OUT) write(1, "redir.out\n", 10);
+
+	
 	while (redir)
-	{
-		// if (redir->type == REDIR_IN) printf("redir.in");
-		// if (redir->type == REDIR_OUT) printf("redir.out");
-		// if (redir->type == REDIR_APPEND) printf("redir.append");
-		// if (redir->type == REDIR_HEREDOC) printf("redir.heredoc");
-
-
+	{		
 		if (!redir->value || redir->value[0] == '\0')	// le parsing renverra une chaine vide "" si une variable $ n'existe pas
 			return (redir_error(redir->value, "ambiguous redirect"));
 		if (redir->type == REDIR_IN && handle_redir_in(redir))

@@ -6,7 +6,9 @@ void child_process(t_command *cmd, t_local *env)
 	char	*path;
 	char	**envp;
 
-
+	
+	// apply_redir(cmd->elem, cmd->all);
+	//write(1, "la bas\n", 7);
 	if (apply_redir(cmd->elem, cmd->all) != 0)					// appliquer les redirs avant execve
         fatal_error("redirection", 1);							// erreur ouverture fichier, on exit
 	envp = env_to_tab(env);										// convertit liste chainée en char **
@@ -27,15 +29,17 @@ void child_process(t_command *cmd, t_local *env)
 
 static void	run_child(t_command *cmd)
 {
-		signal(SIGINT, SIG_DFL);								// mettre les signaux par défaut,
-		signal(SIGQUIT, SIG_DFL);								// pour que CTRL-C ou -\ tuent la commande enfant et pas minishell + le parent capture le retour avec waitpid $? est mis à jour (130 ou 131)
-		child_process(cmd, cmd->all->env);						// création processus enfant
+	//printf("run child\n");
+	signal(SIGINT, SIG_DFL);								 // mettre les signaux par défaut,
+	signal(SIGQUIT, SIG_DFL);								 // pour que CTRL-C ou -\ tuent la commande enfant et pas minishell + le parent capture le retour avec waitpid $? est mis à jour (130 ou 131)
+	child_process(cmd, cmd->all->env);						 // création processus enfant
 }
 
 static void run_parent(t_command *cmd, pid_t pid)
 {
     int status;
 
+	//printf("run parent\n");
     waitpid(pid, &status, 0);
 
     if (WIFEXITED(status))

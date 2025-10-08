@@ -130,9 +130,9 @@ int				builtin_export(char **args, t_local **env);
 int				builtin_unset(char **args, t_local **env);
 int				builtin_cd(char **args, t_local **env);
 int				builtin_echo(char **args);
+int				builtin_env(t_local *env);
 int				is_builtin(char *cmd);
 int				builtin_pwd(void);
-int				builtin_env(t_local *env);
 
 
 /*REDIR*/
