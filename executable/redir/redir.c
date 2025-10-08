@@ -72,51 +72,59 @@ static int	handle_redir_append(t_token *redir)	// >> ajoute a la fin d'un fichie
 	return (0);
 }
 
-static int	handle_redir_heredoc(t_token *redir)	// << shell lit tout jusqu'au limiter et ecrit directement dans le write-end d'un pipe
+static int	handle_redir_heredoc(t_token *redir, t_shell *all)	// << shell lit tout jusqu'au EOF et ecrit directement dans le write-end d'un pipe
 {
-	int fd;
+	int	fd;
 
 	if (!redir->value || redir->value[0] == '\0')
-	{
-		redir_error(redir->value, "ambiguous redirect");
-		return (1);
-	}
+		return (redir_error(redir->value, "ambiguous redirect"));
 	fd = create_heredoc(redir->value);	// crée le pipe et return pipefd[0] : lecture
-	if (fd < 0)
+	if (fd == -2)
 	{
-		redir_error("heredoc", "failed");
-		return (1);
+		all->last_status = 130;  // SIGINT
+		return (-2);             // on signale une interruption
 	}
-	dup2(fd, STDIN_FILENO);				// branche l'entrée standard sur le pipe : la cmd lit ca comme son entrée standard
+	if (fd < 0)
+		return (redir_error("heredoc", "failed"));
+	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		close(fd);
+		return (redir_error("heredoc", strerror(errno)));
+	}
 	close(fd);
 	return (0);
 }
 
+
 int	apply_redir(t_token *redir, t_shell *all)
 {
-	(void)all;
+	int	ret;
 
 	// write(1, "ici\n", 4);
 	// if (redir->type == REDIR_IN) write(1, "redir.in\n", 9);
 	// if (redir->type == REDIR_OUT) write(1, "redir.out\n", 10);
-
-	
 	while (redir)
-	{		
-		if (!redir->value || redir->value[0] == '\0')	// le parsing renverra une chaine vide "" si une variable $ n'existe pas
+	{
+		if (!redir->value || redir->value[0] == '\0')
 			return (redir_error(redir->value, "ambiguous redirect"));
-		if (redir->type == REDIR_IN && handle_redir_in(redir))
-			return (1);
-		if (redir->type == REDIR_OUT && handle_redir_out(redir))
-			return (1);
-		if (redir->type == REDIR_APPEND && handle_redir_append(redir))
-			return (1);
-		if (redir->type == REDIR_HEREDOC && handle_redir_heredoc(redir))
-			return (1);
+		ret = 0;
+		if (redir->type == REDIR_IN)
+			ret = handle_redir_in(redir);
+		else if (redir->type == REDIR_OUT)
+			ret = handle_redir_out(redir);
+		else if (redir->type == REDIR_APPEND)
+			ret = handle_redir_append(redir);
+		else if (redir->type == REDIR_HEREDOC)
+			ret = handle_redir_heredoc(redir, all);
+		if (ret == -2) 		// heredoc interrompu par ctrl-C
+			return (-2);
+		if (ret != 0)
+			return (1);		// erreur réelle
 		redir = redir->next;
-    }
-    return (0);
+	}
+	return (0);
 }
+
 
 
 /*

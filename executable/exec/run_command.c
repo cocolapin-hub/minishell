@@ -23,17 +23,18 @@ void child_process(t_command *cmd, t_local *env)
 	if (execve(path, cmd->args, envp) == -1)
 	{
 		free_split(envp);
+		free(path);
 		exit(exec_error(cmd->args[0], strerror(errno), 126));	// verif le code d'erreur de bash car je suis pas sur
 	}
 }
 
-static void	run_child(t_command *cmd)
-{
-	//printf("run child\n");
-	signal(SIGINT, SIG_DFL);								 // mettre les signaux par défaut,
-	signal(SIGQUIT, SIG_DFL);								 // pour que CTRL-C ou -\ tuent la commande enfant et pas minishell + le parent capture le retour avec waitpid $? est mis à jour (130 ou 131)
-	child_process(cmd, cmd->all->env);						 // création processus enfant
-}
+// static void	run_child(t_command *cmd)
+// {
+// 	//printf("run child\n");
+// 	signal(SIGINT, SIG_DFL);								 // mettre les signaux par défaut,
+// 	signal(SIGQUIT, SIG_DFL);								 // pour que CTRL-C ou -\ tuent la commande enfant et pas minishell + le parent capture le retour avec waitpid $? est mis à jour (130 ou 131)
+// 	child_process(cmd, cmd->all->env);						 // création processus enfant
+// }
 
 static void run_parent(t_command *cmd, pid_t pid)
 {
@@ -59,37 +60,125 @@ static void run_parent(t_command *cmd, pid_t pid)
         cmd->all->last_status = 1;
 }
 
-void run_command(t_command *cmd)
+// int	run_builtin_command(t_command *cmd)		// builtin executé dans le process parent !! donc faut restaurer les FDs après
+// {
+// 	int	saved_stdin;
+// 	int	saved_stdout;
+// 	int	status;
+
+// 	saved_stdin = dup(STDIN_FILENO);
+// 	saved_stdout = dup(STDOUT_FILENO);
+// 	if (saved_stdin == -1 || saved_stdout == -1)
+// 		return (print_error(cmd->args[0], "dup failed"), 1);
+
+// 	if (apply_redir(cmd->elem, cmd->all) == 0)
+// 		status = exec_builtin(cmd, cmd->all);
+// 	else
+// 		status = 1;
+// 	dup2(saved_stdin, STDIN_FILENO);
+// 	dup2(saved_stdout, STDOUT_FILENO);
+// 	close(saved_stdin);
+// 	close(saved_stdout);
+// 	return (status);
+// }
+
+// void	run_command(t_command *cmd)
+// {
+// 	pid_t	pid;
+// 	int		ret;
+
+// 	if (is_builtin(cmd->args[0]))
+// 	{
+// 		ret = apply_redir(cmd->elem, cmd->all);
+// 		if (ret == -2)
+// 			return ; // interrompu par Ctrl-C
+// 		if (ret != 0)
+// 			return ; // autre erreur de redirection
+// 		cmd->all->last_status = run_builtin_command(cmd);
+// 		return ;
+// 	}
+// 	pid = fork();
+// 	if (pid == -1)
+// 		return (print_error(cmd->args[0], "fork failed"), (void)0);
+// 	if (pid == 0)
+// 		run_child(cmd);
+// 	else
+// 	{
+// 		signal(SIGINT, SIG_IGN);
+// 		signal(SIGQUIT, SIG_IGN);
+// 		run_parent(cmd, pid);
+// 		setup_sig();
+// 	}
+// }
+
+static void	restore_std(int saved_stdin, int saved_stdout)
 {
-    pid_t pid;
-
-    if (is_builtin(cmd->args[0]))
-    {
-        cmd->all->last_status = exec_builtin(cmd, cmd->all);
-        return ;
-    }
-
-    pid = fork();
-    if (pid == -1)
-    {
-        print_error(cmd->args[0], "fork failed");
-        return ;
-    }
-
-    if (pid == 0)
-        run_child(cmd);
-    else
-    {
-        // *** MODIFICATION ICI ***
-        signal(SIGINT, SIG_IGN);
-        signal(SIGQUIT, SIG_IGN);
-
-        run_parent(cmd, pid);
-
-        // *** MODIFICATION ICI ***
-        setup_sig();  // Restaurer les signaux du shell
-    }
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
 }
+
+static int	run_builtin_command(t_command *cmd)
+{
+	int	saved_stdin;
+	int	saved_stdout;
+	int	ret;
+	int	redir_status;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	if (saved_stdin == -1 || saved_stdout == -1)
+		return (print_error("dup", strerror(errno)), 1);
+
+	redir_status = apply_redir(cmd->elem, cmd->all);
+	if (redir_status == -2)
+	{
+		cmd->all->last_status = 130;
+		restore_std(saved_stdin, saved_stdout);
+		return (130);
+	}
+	if (redir_status != 0)
+	{
+		restore_std(saved_stdin, saved_stdout);
+		return (1);
+	}
+
+	ret = exec_builtin(cmd, cmd->all);
+	restore_std(saved_stdin, saved_stdout);
+	return (ret);
+}
+
+void	run_command(t_command *cmd)
+{
+	pid_t	pid;
+
+	if (is_builtin(cmd->args[0]))
+	{
+		cmd->all->last_status = run_builtin_command(cmd);
+		return ;
+	}
+	pid = fork();
+	if (pid == -1)
+		 return (print_error(cmd->args[0], "fork failed"), (void)0);
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		child_process(cmd, cmd->all->env);
+	}
+	else
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+		run_parent(cmd, pid);
+		setup_sig(); // restaure le handler readline
+	}
+}
+
+
+
+
 
 
 /*

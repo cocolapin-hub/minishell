@@ -22,7 +22,7 @@ void	exit_clean_af(t_shell *all, t_command *cmd_list, int code)
 
 void	print_error_exec(char *cmd, char *msg)	// cas où commande inconnue / execve fail mais shell continue (bash ne quitte pas sur un ls raté par ex)
 {
-	//write(2, "minishell: ", 11); zsh ??
+	//write(2, "minishell: ", 11);
 	write(2, cmd, ft_strlen(cmd));
 	write(2, ": ", 2);
 	write(2, msg, ft_strlen(msg));

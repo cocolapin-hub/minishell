@@ -33,19 +33,16 @@ int	create_heredoc(char *limiter)
 	setup_heredoc_signals();// Ctrl-C annule heredoc, Ctrl-\ ignoré
 	while (1)
 	{
-		g_in_heredoc = 0;
 		line = readline("> ");
 		if (g_in_heredoc == SIGINT) // CTRL-C
 			return (close_and_free(line, pipefd[0], pipefd[1], -2));
 		if (!line || ft_strcmp(line, limiter) == 0)
-		{
-			free(line);
 			break ;
-		}
 		write(pipefd[1], line, ft_strlen(line));
 		write(pipefd[1], "\n", 1);
 		free(line);
 	}
+	free(line);
 	close(pipefd[1]);		// ferme le coté écriture
 	setup_sig();			// rétablir signaux du parent
 	return (pipefd[0]);

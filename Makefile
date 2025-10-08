@@ -95,10 +95,10 @@ all: $(NAME)
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $@
+	@$(CC) $(CFLAGS) $(OBJS) -lreadline -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)

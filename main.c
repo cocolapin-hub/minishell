@@ -44,13 +44,13 @@ int main(int argc, char **argv, char **envp)
 		}
 
 		// Vérifier si c'était un SIGINT
-		// if (g_in_heredoc == SIGINT)
-		// {
-		// 	g_in_heredoc = 0;  // Reset le flag
-		// 	all.last_status = 130;  // exit status pour SIGINT
-		// 	free(line);
-		// 	continue;
-		// }
+		if (g_in_heredoc == SIGINT)
+		{
+			g_in_heredoc = 0;  // Reset le flag
+			all.last_status = 130;  // exit status pour SIGINT
+			free(line);
+			continue;
+		}
 
 		// Ignore empty lines
 		if (line[0] == '\0')
