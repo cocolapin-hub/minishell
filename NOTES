@@ -32,6 +32,8 @@ X	/bin/cd			:	bash: /bin/cd: No such file or directory
 V	exit lol		:	exit
 						bash: exit: lol: numeric argument required ($? = 2)
 V	exit 19			: 	suivi d'un echo $? donne : last_status = 19
+X	exit long		:	bash: exit: 55555555555555555555555555555555555555555555555555555555: numeric argument required
+
 
 x	/bin/ls mdr		:	/bin/ls: cannot access 'mdr': No such file or directory ($? = 2)
 
@@ -58,10 +60,11 @@ X	minishell$ cat -e << eof
 		> ^C
 					:	minishell: heredoc: failed
 					:	redirection: Bad file descriptor
+					:	add echo $? 130 instead of 1
 
 
 
-// //Priorite: // regroup work
+
 // //TO_DO :	// remove leaks
 // 			// change le parsing cote cmd --> verifier que ca marche
 // 			// handle quote the new way, discuss it with coco

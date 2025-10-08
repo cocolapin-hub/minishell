@@ -115,7 +115,7 @@ void 	error_handling(t_shell **all, t_token **list)
 		lst2 = lst2->next;
 	}
 
-	*list = lst2;
+	//*list = lst2;
 }
 
 //also add case scenarios for () ; &

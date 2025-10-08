@@ -98,7 +98,7 @@ t_command	*parsing(char *line, t_shell *all)
 	char		*cleaned_line;
 
 	/*exit*/
-	line = exit_handling(line);
+//	line = exit_handling(line);
 
 
 	/*Etapes de mon parsing*/
