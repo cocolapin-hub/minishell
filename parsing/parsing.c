@@ -91,11 +91,12 @@ void print_pipeline(t_command *cmd)
 }
 
 
-t_command	*parsing(char *line, t_shell *all)
+void	parsing(char *line, t_shell *all, t_command **cmd)
 {
+//  t_command 	*cmd = NULL;
 	t_token 	*list = NULL;
-	t_command 	*cmd = NULL;
 	char		*cleaned_line;
+
 
 	/*exit*/
 //	line = exit_handling(line);
@@ -104,12 +105,12 @@ t_command	*parsing(char *line, t_shell *all)
 	/*Etapes de mon parsing*/
 	cleaned_line = check_input(line);
 	if (!cleaned_line)
-		return NULL;
+		cmd = NULL;
 
 	/*Creation de la commande*/
 	tokenisation(cleaned_line, &list, &all);
 	error_handling(&all, &list);
-	set_command(&cmd, list, all);
+	set_command(cmd, list, all);
 
 
 	//FREE EN COMMENTAIRE POUR L'INSTANT
@@ -134,5 +135,5 @@ t_command	*parsing(char *line, t_shell *all)
 	// 	free_tokens(list);
 	// free(cleaned_line);
 
-	return (cmd);
+//	return (cmd);
 }

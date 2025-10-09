@@ -6,11 +6,11 @@ int	g_in_heredoc = 0;						// a mettre dans le main ?
 void sigint_handler(int sig)
 {
     (void)sig;
-    g_in_heredoc = SIGINT;
     write(STDOUT_FILENO, "\n", 1);
     rl_on_new_line();
     rl_replace_line("", 0);
     rl_redisplay();  // <- CHANGER rl_done = 1 par rl_redisplay()
+    g_in_heredoc = 0; //0 a la place de SIGINT;
 }
 
 void	sigquit_handler(int sig)

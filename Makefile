@@ -30,7 +30,7 @@ SRCS = \
 	executable/env_and_path/env_utils.c \
 	executable/env_and_path/find_path.c \
 	executable/env_and_path/set_env_value.c \
-	executable/exec/pipe.c \
+	executable/exec/exec_pipe.c \
 	executable/exec/run_command.c \
 	executable/free_errors/error.c \
 	executable/free_errors/free.c \
@@ -48,7 +48,8 @@ SRCS = \
 	parsing/free_error_pars/free_tokens.c \
 	parsing/free_error_pars/print_error.c \
 	signal/signal_exec.c \
-	signal/signal_pars.c \
+	signal/ctrl_c.c\
+	signal/ctrl_d.c\
 	libft/ft_atol.c \
 	libft/ft_isnumber.c \
 	libft/ft_isalpha.c \

@@ -1,32 +1,6 @@
 
 #include "../../minishell.h"
 
-void child_process(t_command *cmd, t_local *env)
-{
-	char	*path;
-	char	**envp;
-
-	
-	// apply_redir(cmd->elem, cmd->all);
-	//write(1, "la bas\n", 7);
-	if (apply_redir(cmd->elem, cmd->all) != 0)					// appliquer les redirs avant execve
-        fatal_error("redirection", 1);							// erreur ouverture fichier, on exit
-	envp = env_to_tab(env);										// convertit liste chainée en char **
-	if (!envp)
-		fatal_error("malloc", 1);
-	path = find_in_path(cmd->args[0], env);
-	if (!path)
-	{
-		free_split(envp);
-		exit(exec_error(cmd->args[0], "command not found", 127));
-	}
-	if (execve(path, cmd->args, envp) == -1)
-	{
-		free_split(envp);
-		free(path);
-		exit(exec_error(cmd->args[0], strerror(errno), 126));	// verif le code d'erreur de bash car je suis pas sur
-	}
-}
 
 // static void	run_child(t_command *cmd)
 // {
@@ -35,30 +9,6 @@ void child_process(t_command *cmd, t_local *env)
 // 	signal(SIGQUIT, SIG_DFL);								 // pour que CTRL-C ou -\ tuent la commande enfant et pas minishell + le parent capture le retour avec waitpid $? est mis à jour (130 ou 131)
 // 	child_process(cmd, cmd->all->env);						 // création processus enfant
 // }
-
-static void run_parent(t_command *cmd, pid_t pid)
-{
-    int status;
-
-	//printf("run parent\n");
-    waitpid(pid, &status, 0);
-
-    if (WIFEXITED(status))
-        cmd->all->last_status = WEXITSTATUS(status);
-    else if (WIFSIGNALED(status))
-    {
-        int sig = WTERMSIG(status);
-        cmd->all->last_status = 128 + sig;
-
-        // *** MODIFICATION ICI ***
-        if (sig == SIGINT)
-            write(STDOUT_FILENO, "\n", 1);
-        else if (sig == SIGQUIT)
-            write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
-    }
-    else
-        cmd->all->last_status = 1;
-}
 
 // int	run_builtin_command(t_command *cmd)		// builtin executé dans le process parent !! donc faut restaurer les FDs après
 // {
@@ -110,6 +60,65 @@ static void run_parent(t_command *cmd, pid_t pid)
 // 		setup_sig();
 // 	}
 // }
+
+
+void child_process(t_command *cmd, t_local *env)
+{
+	char	*path;
+	char	**envp;
+	int		redir_status;
+
+	redir_status = apply_redir(cmd->elem, cmd->all);
+	if (redir_status == -2)
+	{
+		g_in_heredoc = SIGINT;
+		exit(130); 												// simplest solution with right pid to parent
+	}
+
+	if (redir_status != 0)										// appliquer les redirs avant execve
+		fatal_error("redirection", 1);							// erreur ouverture fichier, on exit
+
+	envp = env_to_tab(env);										// convertit liste chainée en char **
+	if (!envp)
+		fatal_error("malloc", 1);
+	path = find_in_path(cmd->args[0], env);
+	if (!path)
+	{
+		free_split(envp);
+		exit(exec_error(cmd->args[0], "command not found", 127));
+	}
+	if (execve(path, cmd->args, envp) == -1)
+	{
+		free_split(envp);
+		free(path);
+		exit(exec_error(cmd->args[0], strerror(errno), 126));	// verif le code d'erreur de bash car je suis pas sur
+	}
+}
+
+static void run_parent(t_command *cmd, pid_t pid)
+{
+    int status;
+
+
+    waitpid(pid, &status, 0);									// waiting for child to finish
+
+	setup_sig();
+    if (WIFEXITED(status))
+        cmd->all->last_status = WEXITSTATUS(status);
+    else if (WIFSIGNALED(status))
+    {
+        int sig = WTERMSIG(status);
+        cmd->all->last_status = 128 + sig;
+
+        // *** MODIFICATION ICI ***
+        if (sig == SIGINT)
+            write(STDOUT_FILENO, "\n", 1);
+        else if (sig == SIGQUIT)
+            write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+    }
+    else
+        cmd->all->last_status = 1;
+}
 
 static void	restore_std(int saved_stdin, int saved_stdout)
 {
@@ -163,12 +172,14 @@ void	run_command(t_command *cmd)
 		 return (print_error(cmd->args[0], "fork failed"), (void)0);
 	if (pid == 0)
 	{
+	//	write(1, "entered here\n", 13);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		child_process(cmd, cmd->all->env);
 	}
 	else
 	{
+	//	write(1, "entered there\n", 14);
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
 		run_parent(cmd, pid);

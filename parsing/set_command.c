@@ -119,7 +119,6 @@ void		fill_elements(t_token **list, t_token **elements)
 }
 
 
-
 t_command	*set_command(t_command **cmd, t_token *list, t_shell *all)
 {
 	t_command	*new;

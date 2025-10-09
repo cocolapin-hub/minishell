@@ -1,24 +1,17 @@
-// TO DO:	// omar : signaux
-			// coco : export
 
+//RO DO:	//gerer les cas rare
 			//gerer end code / ctr D etc..
-			//gerer les cas rare
-
 
 			//plusieurs fonction de plus de 25 lines
 			//frees
 			//norminette
 
-//TO CHANGE:	//set up signal							--> DONE
-				//$ cat > | ls error message
-				//tokenisation 25 lines
-
 #include "minishell.h"
 
 int main(int argc, char **argv, char **envp)
 {
-    t_shell    all;
     t_command  *cmd_list = NULL;
+    t_shell    all;
     char       *line;
 
     (void)argc;
@@ -36,51 +29,33 @@ int main(int argc, char **argv, char **envp)
         // Read input
         line = readline("minishell$ ");
 
-		if (!line)
-		{
-			// Ctrl-D pressed
-			printf("exit\n");
-			exit_clean_af(&all, cmd_list, all.last_status);
-		}
+		handles_ctrl_d(line, all, cmd_list);
 
-		// Vérifier si c'était un SIGINT
-		if (g_in_heredoc == SIGINT)
-		{
-			g_in_heredoc = 0;  // Reset le flag
-			all.last_status = 130;  // exit status pour SIGINT
-			free(line);
-			continue;
-		}
-
-		// Ignore empty lines
-		if (line[0] == '\0')
+		if (handles_ctrl_c(all, line) || line[0] == '\0')
 		{
 			free(line);
-			continue;
+			continue ;
 		}
 
-        // Add non-empty lines to history
         add_history(line);
-
-        // Parse line into commands
-        cmd_list = parsing(line, &all);
-        free(line); // now we can free it safely
+		parsing(line, &all, &cmd_list);
+        free(line); 					// now we can free it safely
 
         if (!cmd_list)
             continue;
 
         // Execute commands
-        if (cmd_list->next) // pipe exists
+        if (cmd_list->next) 			//cmd avec pipe
             exec_pipe(cmd_list, &all);
         else
-            run_command(cmd_list);
+            run_command(cmd_list);		//cmd sans pipe
 
         // Free command list
         free_command(cmd_list);
         cmd_list = NULL;
     }
 
-    return 0;
+    return (0);
 }
 
 

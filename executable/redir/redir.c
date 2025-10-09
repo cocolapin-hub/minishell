@@ -82,7 +82,7 @@ static int	handle_redir_heredoc(t_token *redir, t_shell *all)	// << shell lit to
 	if (fd == -2)
 	{
 		all->last_status = 130;  // SIGINT
-		return (-2);             // on signale une interruption
+		return (-2);             // on signale une interruption (ctrlc par exemple)
 	}
 	if (fd < 0)
 		return (redir_error("heredoc", "failed"));
@@ -119,7 +119,7 @@ int	apply_redir(t_token *redir, t_shell *all)
 		if (ret == -2) 		// heredoc interrompu par ctrl-C
 			return (-2);
 		if (ret != 0)
-			return (1);		// erreur réelle
+			return (1);		// erreur réelle (si ret == 0 alors aucune erreur)
 		redir = redir->next;
 	}
 	return (0);

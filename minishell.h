@@ -72,122 +72,121 @@ typedef struct s_pipe
 
 /*_______________________________environnement_______________________________*/
 /*PARS*/ //--> on garde celui ci
-void			setup_shell(t_shell *all, char **envp);
+void		setup_shell(t_shell *all, char **envp);
 
 /*EXEC*/
 //t_local			*env_init(char **envp);
 
 /*ENV*/ //--> pour les fonction en rapport avec env
-void    		set_env_value(t_local **env, char *key, char *value);
-void   		 	unset_env_value(t_local **env, char *key);
-char			*get_env_value(t_local *env, char *key);
-char			**env_to_tab(t_local *env);
-void			sort_env_tab(char **tab);
+void    	set_env_value(t_local **env, char *key, char *value);
+void   		unset_env_value(t_local **env, char *key);
+char		*get_env_value(t_local *env, char *key);
+char		**env_to_tab(t_local *env);
+void		sort_env_tab(char **tab);
 
 
 
 /*__________________________________signal__________________________________*/
-/*PARS*/
-void			setup_signal(void);
+void		handles_ctrl_d(char *line, t_shell all, t_command *cmd_list);
+int 		handles_ctrl_c(t_shell all, char *line);
+void 		setup_heredoc_signals(void);
+void		sigquit_handler(int sig);
+void		sigint_handler(int sig);
+void		sigint_heredoc(int sig);
 
-/*EXEC*/ //--> on garde celui ci
-void 			setup_heredoc_signals(void);
-void			sigquit_handler(int sig);
-void			sigint_handler(int sig);
-void			sigint_heredoc(int sig);
-void			setup_sig(void);
+void		setup_sig(void);
 
 
 
 /*_________________________________parsing_________________________________*/
 /*PARS*/
-char			*expansion(t_local *env, int last_status, char *str, int x);
-t_command		*set_command(t_command **cmd, t_token *list, t_shell *all);
-t_token			*tokenisation(char *line, t_token **list, t_shell **all);
-void 			error_handling(t_shell **all, t_token **list);
-t_command		*parsing(char *line, t_shell *all);
-char			*check_input(char *line);
+char		*expansion(t_local *env, int last_status, char *str, int x);
+t_command	*set_command(t_command **cmd, t_token *list, t_shell *all);
+t_token		*tokenisation(char *line, t_token **list, t_shell **all);
+void		parsing(char *line, t_shell *all, t_command **cmd);
+void 		error_handling(t_shell **all, t_token **list);
+char		*check_input(char *line);
 
 /*FREE & ERROR*/
-void			print_error(char *line, char *msg);
-void			free_tokens(t_token *list);
-void			end_code(t_command *cmd);
-void			free_args(char **args);
+void		print_error(char *line, char *msg);
+void		free_tokens(t_token *list);
+void		end_code(t_command *cmd);
+void		free_args(char **args);
 
 
 
 /*________________________________executable________________________________*/
 /*EXEC*/
-void			exec_pipe(t_command *cmd_list, t_shell *all);
-void			child_process(t_command *cmd, t_local *env);
-char			*find_in_path(char *cmd, t_local *env);
-int				is_valid_identifier(const char *key);
-void			run_command(t_command *cmd);
+void		exec_pipe(t_command *cmd_list, t_shell *all);
+void		child_process(t_command *cmd, t_local *env);
+char		*find_in_path(char *cmd, t_local *env);
+int			is_valid_identifier(const char *key);
+void		run_command(t_command *cmd);
 /*BUILTINS*/
-int 			builtin_exit(char **args, t_shell *all, t_command *cmd_list);
-int				exec_builtin(t_command *cmd, t_shell *all);
-int				builtin_export(char **args, t_local **env);
-int				builtin_unset(char **args, t_local **env);
-int				builtin_cd(char **args, t_local **env);
-int				builtin_echo(char **args);
-int				builtin_env(t_local *env);
-int				is_builtin(char *cmd);
-int				builtin_pwd(void);
+int 		builtin_exit(char **args, t_shell *all, t_command *cmd_list);
+int			exec_builtin(t_command *cmd, t_shell *all);
+int			builtin_export(char **args, t_local **env);
+int			builtin_unset(char **args, t_local **env);
+int			builtin_cd(char **args, t_local **env);
+int			builtin_echo(char **args);
+int			builtin_env(t_local *env);
+int			is_builtin(char *cmd);
+int			builtin_pwd(void);
 
 
 /*REDIR*/
-int				apply_redir(t_token *redir, t_shell *all);
-int				create_heredoc(char *limiter);
+int			apply_redir(t_token *redir, t_shell *all);
+int			create_heredoc(char *limiter);
 
 /*ERROR & FREE*/
-void			exit_clean_af(t_shell *all, t_command *cmd_list, int code);
-int				exec_error(const char *cmd, const char *msg, int code);
-void			fatal_error(const char *msg, int code);
-int				redir_error(char *file, char *msg);
-void			print_error_exec(char *cmd, char *msg);
-void			free_command(t_command *cmd);
-void			free_split(char **array);
-void			print_invalid_identifier(char *arg);
+void		exit_clean_af(t_shell *all, t_command *cmd_list, int code);
+int			exec_error(const char *cmd, const char *msg, int code);
+void		fatal_error(const char *msg, int code);
+void		print_error_exec(char *cmd, char *msg);
+void		print_invalid_identifier(char *arg);
+int			redir_error(char *file, char *msg);
+void		free_command(t_command *cmd);
+void		free_split(char **array);
 
 
 
 /*_________________________________exit_________________________________*/
-void			free_env(t_shell *all);
+void		free_env(t_shell *all);
 
 
 
 /*________________________________LIBFT________________________________*/
-t_command		*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all);
-char			*ft_substr(char const *s, unsigned int start, size_t len);
-size_t			ft_strlcpy(char *dst, const char *src, size_t size);
-void			ft_lstadd_back_cmd(t_command **lst, t_command *new);
-void			*ft_memcpy(void *dst, const void *src, size_t n);
-int				ft_strstr(const char *big, const char *little);
-void			ft_lstadd_back(t_token **lst, t_token *new);
-char			*ft_strdup_m(const char *s, int x, int len);
-t_local			*ft_lstnew_env(char *value, char *key);
-void			*ft_calloc(size_t nmemb, size_t size);
-char			*ft_strjoin(char *s1, char const *s2);
-void			*ft_memset(void *s, int c, size_t n);
-char			**ft_split(char const *s, char c);
-char			*ft_strchr(const char *s, int c);
-t_command		*ft_lstlast_cmd(t_command *lst);
-t_token			*ft_lstnew_token(char *content);
-void			ft_putendl_fd(char *s, int fd);
-int 			ft_strcmp(char *s1, char *s2);
-void			ft_putstr_fd(char *s, int fd);
-int 			ft_isnumber(const char *str);
-int 			ft_count_strings(char **arr);
-int				ft_atoi(const char *nptr);
-t_token			*ft_lstlast(t_token *lst);
-char			*ft_strdup(const char *s);
-size_t			ft_strlen(const char *s);
-long			ft_atol(const char *str);
-int				ft_lstsize(t_token *lst);
-int				ft_isalnum(int c);
-int				ft_isalpha(int c);
-int				ft_isdigit(int c);
-char			*ft_itoa(int n);
+t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
+size_t		ft_strlcpy(char *dst, const char *src, size_t size);
+void		ft_lstadd_back_cmd(t_command **lst, t_command *new);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
+int			ft_strstr(const char *big, const char *little);
+void		ft_lstadd_back(t_token **lst, t_token *new);
+char		*ft_strdup_m(const char *s, int x, int len);
+t_local		*ft_lstnew_env(char *value, char *key);
+void		*ft_calloc(size_t nmemb, size_t size);
+char		*ft_strjoin(char *s1, char const *s2);
+void		*ft_memset(void *s, int c, size_t n);
+char		**ft_split(char const *s, char c);
+char		*ft_strchr(const char *s, int c);
+t_command	*ft_lstlast_cmd(t_command *lst);
+t_token		*ft_lstnew_token(char *content);
+void		ft_putendl_fd(char *s, int fd);
+int 		ft_strcmp(char *s1, char *s2);
+void		ft_putstr_fd(char *s, int fd);
+int 		ft_isnumber(const char *str);
+int 		ft_count_strings(char **arr);
+int			ft_atoi(const char *nptr);
+t_token		*ft_lstlast(t_token *lst);
+char		*ft_strdup(const char *s);
+size_t		ft_strlen(const char *s);
+long		ft_atol(const char *str);
+int			ft_lstsize(t_token *lst);
+int			ft_isalnum(int c);
+int			ft_isalpha(int c);
+int			ft_isdigit(int c);
+char		*ft_itoa(int n);
 
 #endif
 
