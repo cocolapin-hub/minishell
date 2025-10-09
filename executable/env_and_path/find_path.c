@@ -32,9 +32,6 @@ char	*find_in_path(char *cmd, t_local *env)
 	char	*full;
 	int		i;
 
-	// if: ca commence par / c est un path donc verifie ca validite
-
-	// else
 	path_line = get_path_line(env);
 	if (!path_line)
 		return (NULL);

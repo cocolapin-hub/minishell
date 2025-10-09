@@ -27,8 +27,8 @@ x	echo coucou > $FILE		:	écrit dans out.txt
 
 x	lol > $26CM		:	affiche ->	bash: $26CM: ambigous redirect
 
-X	/bin/cd			:	bash: /bin/cd: No such file or directory
-x	/bin/ls mdr		:	/bin/ls: cannot access 'mdr': No such file or directory ($? = 2)
+V	/bin/cd			:	bash: /bin/cd: No such file or directory
+V	/bin/ls mdr		:	/bin/ls: cannot access 'mdr': No such file or directory ($? = 2)
 
 
 

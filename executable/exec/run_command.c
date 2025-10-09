@@ -82,7 +82,7 @@ void child_process(t_command *cmd, t_local *env)
 	if (!envp)
 		fatal_error("malloc", 1);
 
-	//=== Gerer un input qui est juste un path ===//
+	//=== Gerer un input qui est juste un path ===//			// a deplacer dans une fonction a part (ligne 85 a 98)
 	if (ft_strchr(cmd->args[0], '/'))
 	{
 		path = ft_strdup(cmd->args[0]);
@@ -93,9 +93,9 @@ void child_process(t_command *cmd, t_local *env)
 		}
 	}
 	//============================================//
+
 	else
 		path = find_in_path(cmd->args[0], env);
-
 
 	if (!path)
 	{
