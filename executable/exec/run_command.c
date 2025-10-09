@@ -81,7 +81,22 @@ void child_process(t_command *cmd, t_local *env)
 	envp = env_to_tab(env);										// convertit liste chainée en char **
 	if (!envp)
 		fatal_error("malloc", 1);
-	path = find_in_path(cmd->args[0], env);
+
+	//=== Gerer un input qui est juste un path ===//
+	if (ft_strchr(cmd->args[0], '/'))
+	{
+		path = ft_strdup(cmd->args[0]);
+		if (!path || access(path, X_OK) != 0)
+		{
+			free(path);
+			exit(exec_error(cmd->args[0], "No such file or directory", 127));
+		}
+	}
+	//============================================//
+	else
+		path = find_in_path(cmd->args[0], env);
+
+
 	if (!path)
 	{
 		free_split(envp);
