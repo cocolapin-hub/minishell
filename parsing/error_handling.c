@@ -7,7 +7,20 @@ t_token 	*check_unknown_char(t_token *list, t_shell **all)
 	if ((strcmp(list->value, "||") == 0 || strcmp(list->value, "&&") == 0))
 	{
 		write(2, "syntax error: unknown character\n", 32);
-		(*all)->last_status = 258;
+		(*all)->last_status = 2;
+		return NULL;
+	}
+
+	/*if it is ! , :, space*/
+	else if(strcmp(list->value, ":") == 0 || strcmp(list->value, " ") == 0)
+	{
+		(*all)->last_status = 0;
+		return NULL;
+	}
+
+	else if (strcmp(list->value, "!") == 0)
+	{
+		(*all)->last_status = 1;
 		return NULL;
 	}
 	return (list);
@@ -18,16 +31,16 @@ t_token 	*check_pipe(t_token *list, t_shell **all)
 	//pipe at the end
 	if (list->type == PIPE && list->next == NULL)
 	{
-		write(2, "syntax error near unexpected token 'newline'\n", 45);
-		(*all)->last_status = 258;
+		write(2, "syntax error near unexpected token `newline'\n", 45);
+		(*all)->last_status = 2;
 		return NULL;
 	}
 
 	//pipe followed by pipe or redir
 	if (list->type == PIPE && (list->next->type != WORD || list->next->type != 0))
 	{
-		write(2, "syntax error near unexpected token '|'\n", 39);
-		(*all)->last_status = 258;
+		write(2, "syntax error near unexpected token `|'\n", 39);
+		(*all)->last_status = 2;
 		return NULL;
 	}
 
@@ -41,8 +54,8 @@ t_token 	*check_redir(t_token *list, t_shell **all)
 	//redirection without file
 	if ((list->type == REDIR_IN || list->type == REDIR_OUT || list->type == REDIR_APPEND || list->type == REDIR_HEREDOC) && (list->next == NULL))
 	{
-		write(2, "syntax error near unexpected token 'newline'\n", 45);
-		(*all)->last_status = 258;
+		write(2, "syntax error near unexpected token `newline'\n", 45);
+		(*all)->last_status = 2;
 		return NULL;
 	}
 
@@ -50,18 +63,18 @@ t_token 	*check_redir(t_token *list, t_shell **all)
 	if ((list->type != PIPE && list->type != WORD)
 	&& (list->next != NULL && list->next->type != WORD && list->next->type != PIPE))
 	{
-		write(2, "syntax error near unexpected token '", 36);
+		write(2, "syntax error near unexpected token `", 36);
 		write(2, token[list->type - 1], ft_strlen(token[list->type - 1]));
 		write(2, "'\n", 2);
-		(*all)->last_status = 258;
+		(*all)->last_status = 2;
 		return NULL;
 	}
 
 	//redir followed by pipe
 	if ((list->type != PIPE && list->type != WORD) && (list->next->type == PIPE))
 	{
-		write(2, "syntax error near unexpected token '|'\n", 39);
-		(*all)->last_status = 258;
+		write(2, "syntax error near unexpected token `|'\n", 39);
+		(*all)->last_status = 2;
 		return NULL;
 	}
 
@@ -70,10 +83,10 @@ t_token 	*check_redir(t_token *list, t_shell **all)
 	{
 		if ((strcmp(list->next->value, ";") == 0 || strcmp(list->next->value, "&") == 0))
 		{
-			write(2, "syntax error near unexpected token '", 36);
+			write(2, "syntax error near unexpected token `", 36);
 			write(2, list->next->value, 1);
 			write(2, "'\n", 2);
-			(*all)->last_status = 258;
+			(*all)->last_status = 2;
 			return NULL;
 		}
 	}
@@ -88,8 +101,8 @@ void 	error_handling(t_shell **all, t_token **list)
 	/*checks the first one*/
 	if (lst2 && lst2->type == PIPE)
 	{
-		write(2, "syntax error near unexpected token '|'\n", 39);
-		(*all)->last_status = 258;
+		write(2, "syntax error near unexpected token `|'\n", 39);
+		(*all)->last_status = 2;
 		free_tokens(*list);
 		return ;
 	}
@@ -118,4 +131,4 @@ void 	error_handling(t_shell **all, t_token **list)
 	//*list = lst2;
 }
 
-//also add case scenarios for () ; &
+//  !

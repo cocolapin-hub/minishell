@@ -76,3 +76,52 @@ V	minishell$ cat -e << eof
 // // leaks:	//free cmd dans tokenisation?
 // 			//leaks dans expansion corrige?
 
+
+
+
+
+NEW:
+				: que des espaces
+				: !
+				: :
+				: <> new line
+				: / - ////////// - /././. - /.
+				: syntax error -----> $?
+				: & -- &&&&&&& --
+				: $> echo      \n hola - \\ \\ - \\\\\\\\\\\
+				: ""''echo hola""'''' que""'' tal""''
+				: echo \$HOME
+				: echo $UID
+				: $> echo $HOME9 OK ---->  echo $9HOME / $0HOME /
+				: $> echo $USER$var\$USER$USER\$USERtest$USER
+				: echo $hola*
+				: echo $""
+				: echo $''HOME
+				: $> echo "$HO"ME      --> pk je quitte minishell
+				: echo ""$HOME - echo ''$HOME
+				: echo "" $HOME - echo '' $HOME
+				: echo $"HO""ME"
+				: echo $ - echo $$ - echo $$$ - echo $$$$
+				: $> echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
+				: echo ''hola''
+				: echo "'"h'o'la"'" -->quitte minishell
+				: "" echo "" hola"""""""""""" ""
+				: echo ""hola -->ferme le terminal
+				: echo hola""bonjour
+				: "e"'c'ho 'b'"o"nj"o"'u'r
+				: ""e"'c'ho 'b'"o"nj"o"'u'r"
+				: $> echo "$DONTEXIST"Makefile
+				: $HOME
+				: $HOMEdskjhfkdshfsd
+				: "$HOMEdskjhfkdshfsd"
+				: $DONTEXIST
+				: $LESS$VAR
+--> ligne 211
+
+
+
+
+
+
+
+
