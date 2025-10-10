@@ -1,28 +1,40 @@
 
 #include "../minishell.h"
 
-t_token 	*check_unknown_char(t_token *list, t_shell **all)
+t_token 	*check_char(t_token *list, t_shell **all)
 {
-	/*if it is && or ||*/
-	if ((strcmp(list->value, "||") == 0 || strcmp(list->value, "&&") == 0))
+	char c = list->value[0];
+
+	/*if it is one ; et &*/
+	if (strcmp(list->value, ";") == 0 || strcmp(list->value, "&") == 0)
 	{
-		write(2, "syntax error: unknown character\n", 32);
+		write(2, "syntax error near unexpected token `", 36);
+		write(2, list->value, 1);
+		write(2, "'\n", 2);
 		(*all)->last_status = 2;
-		return NULL;
+		return (NULL);
 	}
 
-	/*if it is ! , :, space*/
-	else if(strcmp(list->value, ":") == 0 || strcmp(list->value, " ") == 0)
+	/*if it is many ; et &*/
+	if (c == ';' || c == '&')
 	{
-		(*all)->last_status = 0;
-		return NULL;
+		if (list->value[0] == c && list->value[1] == c)
+		{
+			write(2, "syntax error near unexpected token `", 36);
+			write(2, list->value, 2);
+			write(2, "'\n", 2);
+			(*all)->last_status = 2;
+			return (NULL);
+		}
 	}
 
-	else if (strcmp(list->value, "!") == 0)
-	{
-		(*all)->last_status = 1;
-		return NULL;
-	}
+	/* potentiellement gerer le cas ou  /../../.. */
+
+	//que des / et des points
+		// un maximum de / c'est ok
+		// pas plus de 2 . d'affille
+		// pas uniquement des .
+
 	return (list);
 }
 
@@ -59,6 +71,14 @@ t_token 	*check_redir(t_token *list, t_shell **all)
 		return NULL;
 	}
 
+	// le cas ou: <>
+	if (list->type == REDIR_IN && list->next->type == REDIR_OUT)
+	{
+		write(2, "syntax error near unexpected token `newline'\n", 45);
+		(*all)->last_status = 2;
+		return NULL;
+	}
+
 	//redir followed by a redir
 	if ((list->type != PIPE && list->type != WORD)
 	&& (list->next != NULL && list->next->type != WORD && list->next->type != PIPE))
@@ -78,7 +98,7 @@ t_token 	*check_redir(t_token *list, t_shell **all)
 		return NULL;
 	}
 
-	// ; & after redir
+	// ; & after redir    --> aussi gerer &&
 	if ((list->type != PIPE && list->type != WORD) && (list->next->type == WORD))
 	{
 		if ((strcmp(list->next->value, ";") == 0 || strcmp(list->next->value, "&") == 0))
@@ -107,13 +127,25 @@ void 	error_handling(t_shell **all, t_token **list)
 		return ;
 	}
 
+	/*check the first ;s or &s*/
+	else if (lst2 && lst2->type == WORD)
+	{
+		lst2 = check_char(lst2, all);
+		if (!lst2)
+		{
+			free_tokens(*list);
+			*list = NULL;
+			return;
+		}
+	}
+
 	/*check other syntax*/
 	while (lst2)
 	{
-		if (lst2->type == WORD)
-			lst2 = check_unknown_char(lst2, all);
+		// if (lst2->type == WORD)
+		// 	lst2 = check_unknown_char(lst2, all);
 
-		else if (lst2->type == PIPE)
+		if (lst2->type == PIPE)
 			lst2 = check_pipe(lst2, all);
 
 		else if (lst2->type != WORD && lst2->type != PIPE)
@@ -123,6 +155,7 @@ void 	error_handling(t_shell **all, t_token **list)
 		if (!lst2)
 		{
 			free_tokens(*list);
+			*list = NULL;
 			return;
 		}
 		lst2 = lst2->next;
@@ -130,5 +163,3 @@ void 	error_handling(t_shell **all, t_token **list)
 
 	//*list = lst2;
 }
-
-//  !

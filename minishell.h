@@ -105,7 +105,7 @@ t_command	*set_command(t_command **cmd, t_token *list, t_shell *all);
 t_token		*tokenisation(char *line, t_token **list, t_shell **all);
 void		parsing(char *line, t_shell *all, t_command **cmd);
 void 		error_handling(t_shell **all, t_token **list);
-char		*check_input(char *line);
+char		*check_input(char *line, t_shell **all);
 
 /*FREE & ERROR*/
 void		print_error(char *line, char *msg);

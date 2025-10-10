@@ -98,19 +98,25 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 	char		*cleaned_line;
 
 
-	/*exit*/
-//	line = exit_handling(line);
-
 
 	/*Etapes de mon parsing*/
-	cleaned_line = check_input(line);
+	cleaned_line = check_input(line, &all);
+
+
+
 	if (!cleaned_line)
-		cmd = NULL;
+	{
+		*cmd = NULL;
+		return ;
+	}
 
 	/*Creation de la commande*/
 	tokenisation(cleaned_line, &list, &all);
 	error_handling(&all, &list);
-	set_command(cmd, list, all);
+	if (!list)
+		*cmd = NULL;
+	else
+		set_command(cmd, list, all);
 
 
 	//FREE EN COMMENTAIRE POUR L'INSTANT

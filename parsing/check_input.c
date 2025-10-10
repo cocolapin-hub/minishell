@@ -18,7 +18,6 @@ char		*clean_line(char *line)
 	x = 0;
 	while(line[x])
 	{
-
 		/*handles double spacing/tabs  between quotes*/
 		if (line[x] == 34 || line[x] == 39)
 		{
@@ -44,9 +43,20 @@ char		*clean_line(char *line)
 	return (new_line);
 }
 
-char		*check_input(char *line)
+char		*check_input(char *line, t_shell **all)
 {
+	char 	*new_line;
 	int 	x = 0;
+
+	/*pour point virgule*/
+	if (line[0] == 59 || (line[0] == 59 && line[1] == 59))
+	{
+		if (line[0] == 59 && line[1] == 59)
+			new_line = ft_strdup(";;");
+		else
+			new_line = ft_strdup(";");
+		return(new_line);
+	}
 
 	/*caractères spéciaux*/
 	while(line[x])
@@ -59,6 +69,36 @@ char		*check_input(char *line)
 	/*longueur excessive*/
 	if (x >= MAX_LINE_LEN)
 		return (NULL);
+
+	/*pour :*/
+	if (strcmp(line, ":") == 1)
+	{
+		(*all)->last_status = 0;
+		return (NULL);
+	}
+
+	/*line complete d'espace et de !*/
+	x = 0;
+	if (line[0] == '!' || line[0] == ' ')
+	{
+		char c = line[0];
+		while (line[x])
+		{
+			if (line[x] != c)
+				break;
+			x++;
+		}
+		if (line[x] == '\0')
+		{
+			if (c == ' ')
+				(*all)->last_status = 0;
+			else
+				(*all)->last_status = 1;
+			return (NULL);
+		}
+	}
+
+
 
 	/*espaces et tabulations*/
 	return (clean_line(line));

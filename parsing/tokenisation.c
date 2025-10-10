@@ -32,7 +32,8 @@ char	*outside_quotes(char *line, int *x, int *y, t_shell **all)
 	char	*tmp;
 
 	while (line[*y] && line[*y] != 34 && line[*y] != 39 && line[*y] != 32
-		&& line[*y] != 9 && line[*y] != 60 && line[*y] != 62 && line[*y] != 124)
+		&& line[*y] != 9 && line[*y] != 60 && line[*y] != 62
+		&& line[*y] != 124)
 		(*y)++;
 	tmp = ft_strdup_m(line, *x, *y - *x);
 	tmp = expansion((*all)->env, (*all)->last_status, tmp, 0);
@@ -55,7 +56,7 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 	{
 		/*condition de fin*/
 		if (line[x] == 32 || line[x] == 9 || line[x] == 124 || line[x] == 60
-			|| line[x] == 62)
+			|| line[x] == 62 )
 			break ;
 
 		/*attrape entre guillemet*/

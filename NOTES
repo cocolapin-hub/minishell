@@ -81,13 +81,15 @@ V	minishell$ cat -e << eof
 
 
 NEW:
-				: que des espaces
-				: !
-				: :
-				: <> new line
+			V	: que des espaces
+			V	: !
+			V	: :
+			V	: <> new line syntax error near unexpected token `newline'
+			V	: & - &&&&&   syntax error near unexpected token `&' or `&&'
+			V	: ; - ;;;;    syntax error near unexpected token `;' or `;;'
+
 				: / - ////////// - /././. - /.
 				: syntax error -----> $?
-				: & -- &&&&&&& --
 				: $> echo      \n hola - \\ \\ - \\\\\\\\\\\
 				: ""''echo hola""'''' que""'' tal""''
 				: echo \$HOME
