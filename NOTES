@@ -91,17 +91,6 @@ RESUME : \ ; & ! () {} [] * ? :	❌ Non
 Affiche “syntax error” ou “command not found”
 
 
-minishell$ !	“bash: !: event not found”										 → 		juste une erreur simple : minishell: syntax error
-minishell$ :	fait rien (builtin : de bash, pas à gérer)						 → 		“minishell: command not found: :”
-minishell$ &	lance en background (pas demandé)								 →		 “minishell: syntax error”
-minishell$ ;	sépare deux commandes											 →		“minishell: syntax error”
-minishell$ echo \n		interprète \ comme échappement ❌ tu n’as pas à gérer \	→		donc laisse “\n” tel quel
-minishell$ echo lol && echo ok 				exécution conditionnelle			 → 		“minishell: syntax error”
-
-RESUME : \ ; & ! () {} [] * ? :	❌ Non
-Affiche “syntax error” ou “command not found”
-
-
 NEW:
 			V	: que des espaces
 			V	: !
