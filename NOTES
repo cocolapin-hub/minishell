@@ -88,7 +88,7 @@ NEW:
 			V	: & - &&&&&   syntax error near unexpected token `&' or `&&'
 			V	: ; - ;;;;    syntax error near unexpected token `;' or `;;'
 
-				: / - ////////// - /././. - /.
+			V	: / - ////////// - /././. - /.
 				: syntax error -----> $?
 				: $> echo      \n hola - \\ \\ - \\\\\\\\\\\
 				: ""''echo hola""'''' que""'' tal""''
