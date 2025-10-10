@@ -87,6 +87,8 @@ NEW:
 			V	: <> new line syntax error near unexpected token `newline'
 			V	: & - &&&&&   syntax error near unexpected token `&' or `&&'
 			V	: ; - ;;;;    syntax error near unexpected token `;' or `;;'
+				: () [] {}
+
 
 			V	: / - ////////// - /././. - /.
 				: syntax error -----> $?
