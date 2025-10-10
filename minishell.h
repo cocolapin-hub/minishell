@@ -6,6 +6,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/ioctl.h>
+# include <sys/stat.h>
 # include <sys/wait.h>
 # include <stdint.h>
 # include <signal.h>
