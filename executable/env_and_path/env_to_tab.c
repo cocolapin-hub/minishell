@@ -38,22 +38,30 @@ static int	env_size(t_local *env)
 char	**env_to_tab(t_local *env)
 {
 	char	**tab;
-	t_local	*tmp;
 	int		i;
 
 	tab = malloc(sizeof(char *) * (env_size(env) + 1));
 	if (!tab)
 		return (NULL);
 	i = 0;
-	tmp = env;
-	while (tmp)
+	while (env)
 	{
-		tab[i] = ft_strjoin3(tmp->key, "=", tmp->value);
-		if (!tab[i])
-			return (free_split(tab), NULL);
+		if (env->value)
+		{
+			tab[i] = ft_strjoin3(env->key, "=", env->value);
+			if (!tab[i])
+				return (free_split(tab), NULL);
+		}
+		else
+		{
+			tab[i] = ft_strdup(env->key);
+			if (!tab[i])
+				return (free_split(tab), NULL);
+		}
 		i++;
-		tmp = tmp->next;
+		env = env->next;
 	}
 	tab[i] = NULL;
 	return (tab);
 }
+

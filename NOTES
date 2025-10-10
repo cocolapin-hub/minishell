@@ -80,6 +80,28 @@ V	minishell$ cat -e << eof
 
 
 
+minishell$ !	“bash: !: event not found”										 → 		juste une erreur simple : minishell: syntax error
+minishell$ :	fait rien (builtin : de bash, pas à gérer)						 → 		“minishell: command not found: :”
+minishell$ &	lance en background (pas demandé)								 →		 “minishell: syntax error”
+minishell$ ;	sépare deux commandes											 →		“minishell: syntax error”
+minishell$ echo \n		interprète \ comme échappement ❌ tu n’as pas à gérer \	→		donc laisse “\n” tel quel
+minishell$ echo lol && echo ok 				exécution conditionnelle			 → 		“minishell: syntax error”
+
+RESUME : \ ; & ! () {} [] * ? :	❌ Non
+Affiche “syntax error” ou “command not found”
+
+
+minishell$ !	“bash: !: event not found”										 → 		juste une erreur simple : minishell: syntax error
+minishell$ :	fait rien (builtin : de bash, pas à gérer)						 → 		“minishell: command not found: :”
+minishell$ &	lance en background (pas demandé)								 →		 “minishell: syntax error”
+minishell$ ;	sépare deux commandes											 →		“minishell: syntax error”
+minishell$ echo \n		interprète \ comme échappement ❌ tu n’as pas à gérer \	→		donc laisse “\n” tel quel
+minishell$ echo lol && echo ok 				exécution conditionnelle			 → 		“minishell: syntax error”
+
+RESUME : \ ; & ! () {} [] * ? :	❌ Non
+Affiche “syntax error” ou “command not found”
+
+
 NEW:
 			V	: que des espaces
 			V	: !
@@ -92,7 +114,8 @@ NEW:
 
 			V	: / - ////////// - /././. - /.
 				: syntax error -----> $?
-				: $> echo      \n hola - \\ \\ - \\\\\\\\\\\
+				: & -- &&&&&&& --
+				: $> echo      \n hola - \\ \\ - \\\\\\\\\\\	Attention : dans les heredocs non-quoted, Bash désactive linterprétation de \
 				: ""''echo hola""'''' que""'' tal""''
 				: echo \$HOME
 				: echo $UID
@@ -121,9 +144,12 @@ NEW:
 				: $DONTEXIST
 				: $LESS$VAR
 --> ligne 211
-
-
-
+				: cat | rev (ctrl-C apres quelques enter)
+				: CTRL-Z (sans rien) ???? suspended
+--> ligne 231
+				: export $OMG (variable inexistante)
+				: export ho!la=looooooool
+				: export ZOZO+=mdr
 
 
 

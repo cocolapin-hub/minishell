@@ -34,6 +34,7 @@ static void	print_sorted_env(t_local *env)
 {
 	char	**tab;
 	int		i;
+	char	*equal;
 
 	tab = env_to_tab(env);
 	if (!tab)
@@ -43,11 +44,66 @@ static void	print_sorted_env(t_local *env)
 	while (tab[i])
 	{
 		ft_putstr_fd("declare -x ", 1);
-		ft_putendl_fd(tab[i], 1);
+		equal = ft_strchr(tab[i], '=');
+		if (equal)
+		{
+			*equal = '\0';
+			ft_putstr_fd(tab[i], 1);
+			ft_putstr_fd("=\"", 1);
+			ft_putstr_fd(equal + 1, 1);
+			ft_putendl_fd("\"", 1);
+			*equal = '=';
+		}
+		else
+			ft_putendl_fd(tab[i], 1);
 		i++;
 	}
 	free_split(tab);
 }
+
+// void	print_sorted_env(t_local *env)
+// {
+// 	t_local	*cur;
+
+// 	cur = env;
+// 	while (cur)
+// 	{
+// 		if (cur->value == NULL)
+// 			printf("declare -x %s\n", cur->key);
+// 		else if (cur->value[0] == '\0')
+// 			printf("declare -x %s=\"\"\n", cur->key);
+// 		else
+// 			printf("declare -x %s=\"%s\"\n", cur->key, cur->value);
+// 		cur = cur->next;
+// 	}
+// }
+
+// static void	handle_export_arg(char *arg, t_local **env)
+// {
+// 	char	*equal;
+// 	char	*key;
+// 	char	*value;
+
+// 	equal = ft_strchr(arg, '=');
+// 	if (!equal)
+// 	{
+// 		if (!is_valid_identifier(arg))
+// 			return (print_invalid_identifier(arg));
+// 		if (!get_env_value(*env, arg))
+// 			set_env_value(env, arg, NULL);
+// 		return ;
+// 	}
+// 	*equal = '\0';
+// 	key = ft_strdup(arg);
+// 	value = ft_strdup(equal + 1);
+// 	*equal = '=';
+// 	if (!key || !is_valid_identifier(key))
+// 		return (print_invalid_identifier(arg), free(key), free(value), (void)0);
+// 	set_env_value(env, key, value);
+// 	free(key);
+// 	free(value);
+// }
+
 
 static void	handle_export_arg(char *arg, t_local **env)
 {
