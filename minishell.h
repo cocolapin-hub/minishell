@@ -114,6 +114,8 @@ void		free_tokens(t_token *list);
 void		end_code(t_command *cmd);
 void		free_args(char **args);
 
+char	*outside_quotes(char *line, int *x, int *y, t_shell **all);
+char	*between_quotes(char *line, char *quote, int *x, t_shell **all);
 
 
 /*________________________________executable________________________________*/

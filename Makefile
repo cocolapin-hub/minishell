@@ -42,6 +42,8 @@ SRCS = \
 	parsing/parsing.c \
 	parsing/set_command.c \
 	parsing/tokenisation.c \
+	parsing/outside_quotes.c \
+	parsing/between_quotes.c \
 	parsing/free_error_pars/end_code.c \
 	parsing/free_error_pars/free_args.c \
 	parsing/free_error_pars/free_env.c \

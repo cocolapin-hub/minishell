@@ -1,47 +1,9 @@
 
 #include "../minishell.h"
 
-char	*between_quotes(char *line, char *quote, int *x, t_shell **all)
-{
-	char	*tmp;
-	int		y;
+//retirer les espaces inutile apres expansion
+//expansion avec une command ? faut il refaire une tokenisation ou alors pas complete mais direct apres l expansion gerer ce cas
 
-	y = *x + 1;
-
-	/*Assign quote*/
-	*quote = line[*x];
-
-	while (line[y] && line[y] != *quote)
-		y++;
-	if (line[y] == '\0')
-	{
-		write(2, "syntax error: unclosed quotes\n", 30);
-		(*all)->last_status = 258;
-		return (NULL);
-	}
-	else if (line[y] == *quote)
-		y++;
-	/*saves the cmd*/
-	tmp = ft_strdup_m(line, *x + 1, y - *x - 2);
-	if (*quote != 39)
-		tmp = expansion((*all)->env, (*all)->last_status, tmp, 0);
-	*x = y;
-	return (tmp);
-}
-
-char	*outside_quotes(char *line, int *x, int *y, t_shell **all)
-{
-	char	*tmp;
-
-	while (line[*y] && line[*y] != 34 && line[*y] != 39 && line[*y] != 32
-		&& line[*y] != 9 && line[*y] != 60 && line[*y] != 62
-		&& line[*y] != 124)
-		(*y)++;
-	tmp = ft_strdup_m(line, *x, *y - *x);
-	tmp = expansion((*all)->env, (*all)->last_status, tmp, 0);
-	*x = *y;
-	return (tmp);
-}
 
 int	handles_command(char *line, int x, t_token **list, t_shell **all)
 {

@@ -110,12 +110,12 @@ NEW:
 				: $> echo $HOME9 OK ---->  echo $9HOME / $0HOME /
 				: $> echo $USER$var\$USER$USER\$USERtest$USER
 				: echo $hola*
-				: echo $""
-				: echo $''HOME
-				: $> echo "$HO"ME      --> pk je quitte minishell
-				: echo ""$HOME - echo ''$HOME
-				: echo "" $HOME - echo '' $HOME
-				: echo $"HO""ME"
+			V	: echo $""
+			V	: echo $''HOME
+			V	: $> echo "$HO"ME      --> pk je quitte minishell
+			V	: echo ""$HOME - echo ''$HOME
+			V	: echo "" $HOME - echo '' $HOME
+			V	: echo $"HO""ME"
 				: echo $ - echo $$ - echo $$$ - echo $$$$
 				: $> echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
 			V	: echo ''hola''
@@ -132,6 +132,7 @@ NEW:
 				: $DONTEXIST
 				: $LESS$VAR
 				: . --> permission denied
+				: unset PATH --> ls --> ls: No such file or directory
 --> ligne 211
 				: cat | rev (ctrl-C apres quelques enter)
 				: CTRL-Z (sans rien) ???? suspended

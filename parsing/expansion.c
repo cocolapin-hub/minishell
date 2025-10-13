@@ -54,14 +54,20 @@ int		handle_exit_status(char **str, int last_status, int x)
 
 void	get_variable_name(char *str, char *var_name, int *var_len, int *x)
 {
+	char c;
 	*var_len = 0;
 	(*x)++; 			//skip the $
 
 	while (str[*x] && (ft_isalnum(str[*x]) || str[*x] == '_'))
 	{
+		if (str[*x] == 32 || str[*x] == 39)
+			c = str[*x];
+
 		var_name[*var_len] = str[*x];
 		(*var_len)++;
 		(*x)++;
+		if (str[*x] == c)
+			break ;
 	}
 	var_name[*var_len] = '\0';
 }
