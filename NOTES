@@ -98,14 +98,13 @@ NEW:
 			V	: <> new line syntax error near unexpected token `newline'
 			V	: & - &&&&&   syntax error near unexpected token `&' or `&&'
 			V	: ; - ;;;;    syntax error near unexpected token `;' or `;;'
-				: () [] {}
-
-
+			V	: () [] {}
 			V	: / - ////////// - /././. - /.
-				: syntax error -----> $?
-				: & -- &&&&&&& --
+			V	: syntax error -----> $?
+
+
 				: $> echo      \n hola - \\ \\ - \\\\\\\\\\\	Attention : dans les heredocs non-quoted, Bash désactive linterprétation de \
-				: ""''echo hola""'''' que""'' tal""''
+			V	: ""''echo hola""'''' que""'' tal""''
 				: echo \$HOME
 				: echo $UID
 				: $> echo $HOME9 OK ---->  echo $9HOME / $0HOME /
@@ -119,19 +118,20 @@ NEW:
 				: echo $"HO""ME"
 				: echo $ - echo $$ - echo $$$ - echo $$$$
 				: $> echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
-				: echo ''hola''
+			V	: echo ''hola''
 				: echo "'"h'o'la"'" -->quitte minishell
 				: "" echo "" hola"""""""""""" ""
-				: echo ""hola -->ferme le terminal
-				: echo hola""bonjour
-				: "e"'c'ho 'b'"o"nj"o"'u'r
-				: ""e"'c'ho 'b'"o"nj"o"'u'r"
+			V	: echo ""hola -->ferme le terminal
+			V	: echo hola""bonjour
+			V	: "e"'c'ho 'b'"o"nj"o"'u'r
+			V	: ""e"'c'ho 'b'"o"nj"o"'u'r"
 				: $> echo "$DONTEXIST"Makefile
 				: $HOME
 				: $HOMEdskjhfkdshfsd
 				: "$HOMEdskjhfkdshfsd"
 				: $DONTEXIST
 				: $LESS$VAR
+				: . --> permission denied
 --> ligne 211
 				: cat | rev (ctrl-C apres quelques enter)
 				: CTRL-Z (sans rien) ???? suspended

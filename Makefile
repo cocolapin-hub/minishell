@@ -50,6 +50,7 @@ SRCS = \
 	signal/signal_exec.c \
 	signal/ctrl_c.c\
 	signal/ctrl_d.c\
+	libft/ft_strbrk.c \
 	libft/ft_atol.c \
 	libft/ft_isnumber.c \
 	libft/ft_isalpha.c \

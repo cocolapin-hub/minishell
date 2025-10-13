@@ -12,7 +12,7 @@ char 	*split_for_expansion(char *str, char *key, int start, char *key_value)
     size_t str_len;
 
     if (strcmp(key, "$?") != 0)
-        key_len = strlen(key) + 1;  // +1 fpour le $
+        key_len = strlen(key) + 1;  // +1 pour le $
     else
         key_len = strlen(key);
 

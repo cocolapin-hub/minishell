@@ -7,8 +7,10 @@ char	*between_quotes(char *line, char *quote, int *x, t_shell **all)
 	int		y;
 
 	y = *x + 1;
+
 	/*Assign quote*/
 	*quote = line[*x];
+
 	while (line[y] && line[y] != *quote)
 		y++;
 	if (line[y] == '\0')
@@ -61,7 +63,10 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 
 		/*attrape entre guillemet*/
 		if (line[x] == 39 || line [x] == 34)
+		{
 			tmp = between_quotes(line, &quote, &x, all);
+			y = x;
+		}
 
 		/*attrape en dehors des guillemet*/
 		else

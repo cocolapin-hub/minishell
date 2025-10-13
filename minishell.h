@@ -165,6 +165,7 @@ void		*ft_memcpy(void *dst, const void *src, size_t n);
 int			ft_strstr(const char *big, const char *little);
 void		ft_lstadd_back(t_token **lst, t_token *new);
 char		*ft_strdup_m(const char *s, int x, int len);
+char		ft_strbrk(const char *s1, const char *s2);
 t_local		*ft_lstnew_env(char *value, char *key);
 void		*ft_calloc(size_t nmemb, size_t size);
 char		*ft_strjoin(char *s1, char const *s2);

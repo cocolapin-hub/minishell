@@ -3,19 +3,12 @@
 
 t_token 	*check_char(t_token *list, t_shell **all)
 {
-	char c = list->value[0];
+	char c;
+	char s;
 
-	/*if it is one ; et &*/
-	if (strcmp(list->value, ";") == 0 || strcmp(list->value, "&") == 0)
-	{
-		write(2, "syntax error near unexpected token `", 36);
-		write(2, list->value, 1);
-		write(2, "'\n", 2);
-		(*all)->last_status = 2;
-		return (NULL);
-	}
 
 	/*if it is many ; et &*/
+	c = list->value[0];
 	if (c == ';' || c == '&')
 	{
 		if (list->value[0] == c && list->value[1] == c)
@@ -28,12 +21,16 @@ t_token 	*check_char(t_token *list, t_shell **all)
 		}
 	}
 
-	/* potentiellement gerer le cas ou  /../../.. */
-
-	//que des / et des points
-		// un maximum de / c'est ok
-		// pas plus de 2 . d'affille
-		// pas uniquement des .
+	/*if it is one ; et &*/
+	s = ft_strbrk(list->value, ";&{}[]():*?!");
+	if (s)
+	{
+		write(2, "syntax error near unexpected token `", 36);
+		write(2, &s , 1);
+		write(2, "'\n", 2);
+		(*all)->last_status = 2;
+		return (NULL);
+	}
 
 	return (list);
 }
@@ -145,7 +142,17 @@ void 	error_handling(t_shell **all, t_token **list)
 		// if (lst2->type == WORD)
 		// 	lst2 = check_unknown_char(lst2, all);
 
-		if (lst2->type == PIPE)
+		if (lst2 && lst2->type == WORD)
+		{
+			lst2 = check_char(lst2, all);
+			if (!lst2)
+			{
+				free_tokens(*list);
+				*list = NULL;
+				return;
+			}
+		}
+		else if (lst2->type == PIPE)
 			lst2 = check_pipe(lst2, all);
 
 		else if (lst2->type != WORD && lst2->type != PIPE)

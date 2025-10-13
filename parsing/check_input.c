@@ -79,7 +79,7 @@ char		*check_input(char *line, t_shell **all)
 
 	/*line complete d'espace et de !*/
 	x = 0;
-	if (line[0] == '!' || line[0] == ' ')
+	if (line[0] == ' ')
 	{
 		char c = line[0];
 		while (line[x])
@@ -90,10 +90,7 @@ char		*check_input(char *line, t_shell **all)
 		}
 		if (line[x] == '\0')
 		{
-			if (c == ' ')
-				(*all)->last_status = 0;
-			else
-				(*all)->last_status = 1;
+			(*all)->last_status = 0;
 			return (NULL);
 		}
 	}
