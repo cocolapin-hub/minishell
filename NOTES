@@ -138,9 +138,21 @@ NEW:
 				: CTRL-Z (sans rien) ???? suspended
 --> ligne 231
 				: export $OMG (variable inexistante)
-				: export ho!la=looooooool
-				: export ZOZO+=mdr
-
+				: export ho!la=looooooool	(! = event)
+				: export ZOZO+=mdr		(pas géré)
+				: exportHOLA=comova		(pas geré)
+				: export HOLA=bon;jour	
+				: export HOLA=bon!jour
+				: export "HOLA=bonjour"=casse-toi	(crash a cause de "")
+				: export $lol=lol	(segfault apres export lol)
+				: export HOLA="bonjour      "	(value peut pas terminer par un espace)
+				: export HOLA="   -n bonjour   "	(pas géré car export sans option)
+				: export HOLA="bonjour   "/		(crash a cause de "")
+				: export HOLA="  bonjour  hey  " --> echo $HOLA | cat -e	(bash enleve les espaces en trop)
+			v	: export HOLA="  bonjour  hey  " --> echo """$HOLA""" | cat -e 		(marche pour le moment, attention au changement de guillemets)
+				: export HOLA="s -la"  --> l$HOLA	(execute ls -la)
+				: export HOLA="l" --> "$HOLA"s		(crash "")
+				: 
 
 
 

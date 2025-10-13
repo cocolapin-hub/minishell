@@ -34,7 +34,7 @@ static int	env_size(t_local *env)
 	}
 	return (size);
 }
-// Cette fonction malloc chaque string et aussi le tableau. Donc faut free le tableau après usage !!
+
 char	**env_to_tab(t_local *env)
 {
 	char	**tab;
@@ -61,7 +61,5 @@ char	**env_to_tab(t_local *env)
 		i++;
 		env = env->next;
 	}
-	tab[i] = NULL;
-	return (tab);
+	return (tab[i] = NULL, tab);
 }
-
