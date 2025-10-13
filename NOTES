@@ -119,8 +119,8 @@ NEW:
 				: echo $ - echo $$ - echo $$$ - echo $$$$
 				: $> echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
 			V	: echo ''hola''
-				: echo "'"h'o'la"'" -->quitte minishell
-				: "" echo "" hola"""""""""""" ""
+			V	: echo "'"h'o'la"'" -->quitte minishell
+			V	: "" echo "" hola"""""""""""" ""
 			V	: echo ""hola -->ferme le terminal
 			V	: echo hola""bonjour
 			V	: "e"'c'ho 'b'"o"nj"o"'u'r

@@ -84,7 +84,18 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 	/*creats the 1st list element*/
 	new = ft_lstnew_token(cmd);
 	if (!*list)
+	{
+		if (ft_strcmp(cmd, "") == 0)
+		{
+			if (line[x - 1] == 39)
+				write (2, "\'\': command not found\n", 22);
+			else
+				write (2, "\"\": command not found\n", 22);
+			(*all)->last_status = 127;
+	 		return (-1);
+		}
 		*list = new;
+	}
 
 	/*creats others list element*/
 	else

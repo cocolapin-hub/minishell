@@ -69,7 +69,6 @@ void child_process(t_command *cmd, t_local *env)
 	int		redir_status;
 
 	redir_status = apply_redir(cmd->elem, cmd->all);
-	printf("%d", redir_status);
 	if (redir_status == -2)
 	{
 		g_in_heredoc = SIGINT;
@@ -188,8 +187,6 @@ void	run_command(t_command *cmd)
 {
 	pid_t	pid;
 
-	// if (ft_strcmp(cmd->args[0], "") == 0)
-	// 	return (print_error_exec("\"\"", "command not found"), (void)0);
 	if (is_builtin(cmd->args[0]))
 	{
 		cmd->all->last_status = run_builtin_command(cmd);
