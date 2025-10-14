@@ -107,6 +107,7 @@ NEW:
 			V	: ""''echo hola""'''' que""'' tal""''
 				: echo \$HOME
 				: echo $PATH	(syntax error ?????)
+		NON GERE: echo \$HOME
 				: echo $UID
 				: echo $HOME9 OK ---->  echo $9HOME / $0HOME /
 				: echo $USER$var\$USER$USER\$USERtest$USER
@@ -123,7 +124,7 @@ NEW:
 			V	: echo ""$HOME - echo ''$HOME
 			V	: echo "" $HOME - echo '' $HOME
 			V	: echo $"HO""ME"
-				: echo $ - echo $$ - echo $$$ - echo $$$$
+			V	: echo $ - echo $$ - echo $$$ - echo $$$$
 				: echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
 			V	: echo ''hola''
 			V	: echo "'"h'o'la"'" -->quitte minishell
@@ -132,9 +133,9 @@ NEW:
 			V	: echo hola""bonjour
 			V	: "e"'c'ho 'b'"o"nj"o"'u'r
 			V	: ""e"'c'ho 'b'"o"nj"o"'u'r"
-				: echo "$DONTEXIST"Makefile
-				: $HOME
-				: $HOMEdskjhfkdshfsd
+			V	: echo "$DONTEXIST"Makefile
+			V	: $HOME
+			V	: $HOMEdskjhfkdshfsd
 				: "$HOMEdskjhfkdshfsd"
 				: $DONTEXIST	(retour a la ligne normalement)
 				: $LESS$VAR
@@ -148,20 +149,20 @@ NEW:
 				: export ho!la=looooooool	(! = event)
 				: export ZOZO+=mdr		(pas géré)
 				: exportHOLA=comova		(pas geré)
-				: export HOLA=bon;jour	
+				: export HOLA=bon;jour
 				: export HOLA=bon!jour
 			v	: export "HOLA=bonjour"=casse-toi
 				: export $lol=lol	(segfault apres export lol)
-				: export HOLA="bonjour      "	(expansion découpage token) 
+				: export HOLA="bonjour      "	(expansion découpage token)
 				: export HOLA="   -n bonjour   "	(pas géré car export sans option)
 				: export HOLA="bonjour   "/		(expansion découpage token)
 				: export HOLA="  bonjour  hey  " --> echo $HOLA | cat -e	(expansion découpage token) argv[0] = "echo" argv[1] = "bonjour" argv[2] = "hey"
 			v	: export HOLA="  bonjour  hey  " --> echo """$HOLA""" | cat -e				✅ (ls, -la)		❌ ("ls -la")
 				: export HOLA="s -la"  --> l$HOLA	(expansion découpage token)	execve("/bin/ls", ["ls", "-la"] et non ["ls -la"]) : not found
-			v	: export HOLA="l" --> "$HOLA"s			
+			v	: export HOLA="l" --> "$HOLA"s
 			v	: export HOLA="s -la"  --> l"$HOLA"		(ls -la : command not found)
 				: export A=1 B=2 C=3 D=4 E=5 F=6 G=7 H=8 --> echo "$A'$B"'$C"$D'$E'"$F'"'$G'$H"
---> ligne 333				
+--> ligne 333
 				: unset PATH --> ls		(ls: no such file or directory)
 				: pwd --> unset PWD --> env | grep PWD --> cd $PWD --> pwd
 				: unset HOL?A	(not a valid identifier et non pas syntax error)
@@ -177,5 +178,5 @@ NEW:
 				: cd - 	(affiche le /home ????)
 				: cd -- (fait rien ??) non géré
 				: unset HOME --> export HOME= --> cd	 (censé marcher meme si HOME n'est pas set ????)
---> ligne 444	: 
+--> ligne 444	:
 

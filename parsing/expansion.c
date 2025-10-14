@@ -11,10 +11,10 @@ char 	*split_for_expansion(char *str, char *key, int start, char *key_value)
     size_t key_len;
     size_t str_len;
 
-    if (strcmp(key, "$?") != 0)
-        key_len = strlen(key) + 1;  // +1 pour le $
-    else
-        key_len = strlen(key);
+    if (ft_strcmp(key, "$?") == 0 || ft_strcmp(key, "$$") == 0)
+		key_len = strlen(key);
+	else
+		key_len = strlen(key) + 1;  // +1 pour le $
 
     str_len = strlen(str);
 
@@ -42,14 +42,26 @@ char 	*split_for_expansion(char *str, char *key, int start, char *key_value)
     return (result);
 }
 
-int		handle_exit_status(char **str, int last_status, int x)
+int handle_exit_status(char **str, int last_status, int x)
 {
-	char	*status;
+    char *status = ft_itoa(last_status);
+	int len;
 
 	status = ft_itoa(last_status);
-	*str = split_for_expansion(*str, "$?", x, status);
-	free(status);
-	return (x + ft_strlen(status));
+    *str = split_for_expansion(*str, "$?", x, status);
+    len = ft_strlen(status);
+    free(status);
+    return (x + len);
+}
+
+int		handle_pid(char **str, int x)
+{
+	char	*pid;
+
+	pid = ft_itoa(getpid());
+	*str = split_for_expansion(*str, "$$", x, pid);
+
+	return (free(pid), x + 1); //ft_strlen(pid));
 }
 
 void	get_variable_name(char *str, char *var_name, int *var_len, int *x)
@@ -98,9 +110,42 @@ int	find_variable_in_env(t_local *env, int start, char **str, char *var_name)
 	return (x);
 }
 
+char *clean_after_expansion(char *str)
+{
+	char 	*new_line;
+	int		len;
+	int 	x;
+	int 	y;
+
+
+	len = ft_strlen(str);
+	new_line = malloc(sizeof(char) * len + 1);
+	if (!new_line)
+		return (NULL);
+
+	y = 0;
+	x = 0;
+	while(str[x])
+	{
+		/*handles double spacing and tab*/
+		if ((x != 0 && str[x] == 32 && str[x - 1] == 32)
+		|| (x != 0 && str[x] == 9 && str[x - 1] == 9))
+			x++;
+
+		/*normal copy*/
+		else
+			new_line[y++] = str[x++];
+	}
+
+	new_line[y] = '\0';
+	return (new_line);
+}
+
+
 char *expansion(t_local *env, int last_status, char *str, int x)
 {
 	char 	var_name[1024];
+	char	*expand;
 	int 	var_len;
     int 	start;
 
@@ -115,22 +160,35 @@ char *expansion(t_local *env, int last_status, char *str, int x)
                 x = handle_exit_status(&str, last_status, x);
                 continue ;
             }
+			// Handle $$
+			else if (str[x + 1] == '$')
+			{
+				x = handle_pid(&str, x);
+				continue ;
+			}
 
-            // Extract variable name before $
-            start = x;
+			else if (ft_isalnum(str[x + 1]) || str[x + 1] == '_')
+			{
+				// Extract variable name before $
+				start = x;
 
-            // Get the variable name (alphanumeric + underscore)
-			get_variable_name(str, var_name, &var_len, &x);
+				// Get the variable name (alphanumeric + underscore)
+				get_variable_name(str, var_name, &var_len, &x);
 
-			// Just a $ with nothing after
-            if (var_len == 0)
-                continue ;
+				// Just a $ with nothing after
+				if (var_len == 0)
+					continue ;
 
-            // Search for this variable in the environment
-			 x = find_variable_in_env(env, start, &str, var_name);
-        }
+				// Search for this variable in the environment
+				x = find_variable_in_env(env, start, &str, var_name);
+			}
+			else
+				x++;
+		}
         else
             x++;
     }
-    return str;
+	expand = clean_after_expansion(str);  //<-- ??
+    return (expand);
 }
+

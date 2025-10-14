@@ -200,3 +200,154 @@ char	*exit_handling(char *line)
 
 	return line;
 }
+
+
+
+
+	/*works*/
+	new = ft_lstnew_token(cmd);
+	if (!*list)
+	{
+		if (ft_strcmp(cmd, "") == 0)
+		{
+			if (line[x - 1] == 39)
+				write (2, "\'\': command not found\n", 22);
+			else
+				write (2, "\"\": command not found\n", 22);
+			(*all)->last_status = 127;
+	 		return (-1);
+		}
+		*list = new;
+	}
+
+	/*creats others list element*/
+	else
+		ft_lstadd_back(list, new);
+
+
+
+	split = ft_split(cmd, ' ');
+	i = 0;
+	while (split[i])
+	{
+		if (ft_strlen(split[i]) > 0)
+		{
+			new = ft_lstnew_token(split[i]);
+			if (!*list)
+			{
+				if (ft_strcmp(cmd, "") == 0)
+				{
+					if (line[x - 1] == 39)
+						write (2, "\'\': command not found\n", 22);
+					else
+						write (2, "\"\": command not found\n", 22);
+					(*all)->last_status = 127;
+					// free(split);
+					// free(cmd);
+					return (-1);
+				}
+				*list = new;
+			}
+			else
+				ft_lstadd_back(list, new);
+		}
+		i++;
+	}
+
+
+
+
+
+
+	tmp = outside_quotes(line, &x, &y, all);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int	handles_command(char *line, int x, t_token **list, t_shell **all)
+{
+	t_token	*new;
+	char	*cmd;
+	char	*tmp;
+	char	quote;
+	int		y;
+	char 	**split;
+	int	i;
+
+
+	cmd = ft_strdup("");
+	quote = 0;
+	y = x;
+	while (line[x])
+	{
+		/*condition de fin*/
+		if (line[x] == 32 || line[x] == 9 || line[x] == 124 || line[x] == 60
+			|| line[x] == 62 )
+			break ;
+
+		/*attrape entre guillemet*/
+		if (line[x] == 39 || line [x] == 34)
+		{
+			tmp = between_quotes(line, &quote, &x, all);
+			y = x;
+		}
+
+		/*attrape en dehors des guillemet*/
+		else
+			tmp = outside_quotes(line, &x, &y, all);
+
+		if (!tmp)
+		{
+			free(cmd);
+			return (-1);
+		}
+		cmd = ft_strjoin(cmd, tmp);
+		free(tmp);
+    }
+
+	split = ft_split(cmd, ' ');
+	i = 0;
+	while (split[i])
+	{
+		if (ft_strlen(split[i]) > 0)
+		{
+			new = ft_lstnew_token(split[i]);
+			if (!*list)
+			{
+				if (ft_strcmp(cmd, "") == 0)
+				{
+					if (line[x - 1] == 39)
+						write (2, "\'\': command not found\n", 22);
+					else
+						write (2, "\"\": command not found\n", 22);
+					(*all)->last_status = 127;
+					// free(split);
+					// free(cmd);
+					return (-1);
+				}
+				*list = new;
+			}
+			else
+				ft_lstadd_back(list, new);
+		}
+		i++;
+	}
+
+
+	//free(split)
+	//free(cmd);
+    return (x);
+}

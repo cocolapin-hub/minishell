@@ -1,70 +1,96 @@
 
 #include "../minishell.h"
 
-//retirer les espaces inutile apres expansion
-//expansion avec une command ? faut il refaire une tokenisation ou alors pas complete mais direct apres l expansion gerer ce cas
-
-
-int	handles_command(char *line, int x, t_token **list, t_shell **all)
+int handles_command(char *line, int x, t_token **list, t_shell **all)
 {
-	t_token	*new;
-	char	*cmd;
-	char	*tmp;
-	char	quote;
-	int		y;
+    t_token *new;
+    char *cmd;
+    char *tmp;
+    char quote;
+    int y;
+    int was_in_quotes;
+    char **split;
+    int i;
 
-	cmd = ft_strdup("");
-	quote = 0;
-	y = x;
-	while (line[x])
-	{
-		/*condition de fin*/
-		if (line[x] == 32 || line[x] == 9 || line[x] == 124 || line[x] == 60
-			|| line[x] == 62 )
-			break ;
+    cmd = ft_strdup("");
+    quote = 0;
+    was_in_quotes = 0;
+    y = x;
 
-		/*attrape entre guillemet*/
-		if (line[x] == 39 || line [x] == 34)
-		{
-			tmp = between_quotes(line, &quote, &x, all);
-			y = x;
-		}
+    while (line[x])
+    {
+        if (line[x] == 32 || line[x] == 9 || line[x] == 124 ||
+            line[x] == 60 || line[x] == 62)
+            break;
 
-		/*attrape en dehors des guillemet*/
-		else
-			tmp = outside_quotes(line, &x, &y, all);
+        if (line[x] == 39 || line[x] == 34)
+        {
+            tmp = between_quotes(line, &quote, &x, all);
+            was_in_quotes = 1;  // Mark that this token had quotes
+            y = x;
+        }
+        else
+            tmp = outside_quotes(line, &x, &y, all);
 
-		if (!tmp)
-		{
-			free(cmd);
-			return (-1);
-		}
-		cmd = ft_strjoin(cmd, tmp);
-		free(tmp);
-	}
+        if (!tmp)
+        {
+            free(cmd);
+            return (-1);
+        }
+        cmd = ft_strjoin(cmd, tmp);
+        free(tmp);
+    }
 
-	/*creats the 1st list element*/
-	new = ft_lstnew_token(cmd);
-	if (!*list)
-	{
-		if (ft_strcmp(cmd, "") == 0)
-		{
-			if (line[x - 1] == 39)
-				write (2, "\'\': command not found\n", 22);
-			else
-				write (2, "\"\": command not found\n", 22);
-			(*all)->last_status = 127;
-	 		return (-1);
-		}
-		*list = new;
-	}
+    if (ft_strcmp(cmd, "") == 0)
+    {
+        if (line[x - 1] == 39)
+            write(2, "\'\': command not found\n", 22);
+        else
+            write(2, "\"\": command not found\n", 22);
+        (*all)->last_status = 127;
+        free(cmd);
+        return (-1);
+    }
 
-	/*creats others list element*/
-	else
-		ft_lstadd_back(list, new);
+    // If NOT in quotes and contains spaces, split it
+    if (!was_in_quotes && ft_strchr(cmd, ' '))
+    {
+        split = ft_split(cmd, ' ');
+        i = 0;
+        while (split[i])
+        {
+            if (ft_strlen(split[i]) > 0)
+            {
+                new = ft_lstnew_token(split[i]);
+                new->type = WORD;
+                new->amount = Q_NONE;
 
-	//free(cmd);
-	return (x);
+                if (!*list)
+                    *list = new;
+                else
+                    ft_lstadd_back(list, new);
+            }
+            i++;
+        }
+        free(cmd);
+        // Don't free split array or split[i] - tokens own them now
+    }
+    else
+    {
+        // Keep as one token (was in quotes or no spaces)
+        new = ft_lstnew_token(cmd);
+        new->type = WORD;
+        new->amount = quote;
+
+        if (!*list)
+            *list = new;
+        else
+            ft_lstadd_back(list, new);
+
+        // Don't free cmd - token owns it
+    }
+
+    return (x);
 }
 
 int		handles_special_char(char *line, int x, t_token **list)

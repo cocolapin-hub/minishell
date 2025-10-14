@@ -1,54 +1,25 @@
 #include "../minishell.h"
 
 
-// char	*expand_with_quotes(char *line, char *quote, int *x, t_shell **all)
-// {
-// 	char	*tmp;
-// 	int		y;
-// 	int		i = 0;;
-// 	y = *x + 1;
-
-// 	/*Assign quote*/
-// 	*quote = line[y];
-
-
-// 	while (line[y] && line[y] != *quote)
-// 		y++; i++;
-
-// 	if (line[y] == '\0')
-// 	{
-// 		write(2, "syntax error: unclosed quotes\n", 30);
-// 		(*all)->last_status = 258;
-// 		return (NULL);
-// 	}
-// 	else if (line[y] == *quote)
-// 		y++;
-
-
-// 	/*saves the cmd*/
-// 	tmp = ft_strdup_m(line, *x + 1, 0);
-// 	// if (*quote != 39)
-// 	// 	tmp = expansion((*all)->env, (*all)->last_status, tmp, 0);
-// 	*x = y + 1;
-
-
-// 	return (tmp);
-// }
-
-
 char	*outside_quotes(char *line, int *x, int *y, t_shell **all)
 {
 	char	*tmp;
-//	char	quote;
+//	char	*pid;
 
 	if (line[*y] == '$' && (line[*y + 1] == 34 || line[*y + 1] == 39))
 	{
 		(*x)++;
 		return(tmp = ft_strdup(""));
-
-		//tmp = expand_with_quotes(line, &quote, y, all);
 	}
 
+	// if (line[*y] == '$' && line[*y + 1] == '$')
+	// {
+	// 	(*x) += 2;
+	// 	(*y) += 2;
+	// 	pid = ft_itoa(getpid());
+	// 	tmp = ft_strdup(pid);
+	// 	return (free(pid), tmp);
+	// }
 
 	else
 	{
@@ -60,8 +31,6 @@ char	*outside_quotes(char *line, int *x, int *y, t_shell **all)
 		tmp = ft_strdup_m(line, *x, *y - *x);
 		tmp = expansion((*all)->env, (*all)->last_status, tmp, 0);
 	}
-
-
 	*x = *y;
 	return (tmp);
 }
