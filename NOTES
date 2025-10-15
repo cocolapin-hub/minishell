@@ -145,7 +145,7 @@ NEW:
 		NON GERE: export HOLA=bon;jour		(pas géré sauf si entre guillemets ="bon;jour" ) ???
 		NON GERE: export HOLA=bon!jour		(pas géré 	="bon!jour" marche pas dans bash)
 			v	: export "HOLA=bonjour"=casse-toi
-				: export $lol=lol	(segfault apres export lol)
+				: export $lol=lol	(segfault apres export lol) doit faire : bash: export: `=lol': not a valid identifier
 				: export HOLA="    lol     mdr      "	(bash ne réduit pas les espaces à 1 dans export)
 			v	: export HOLA="   -n bonjour   "		(marche mais les espaces sont réduit)
 			v	: export HOLA="bonjour   "/				(marche mais les espaces sont réduit)
