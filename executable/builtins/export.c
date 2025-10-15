@@ -135,15 +135,25 @@ static void	handle_export_arg(char *arg, t_local **env)
 int	builtin_export(char **args, t_local **env)
 {
 	int	i;
+	int	has_valid_arg;
 
 	if (!args[1])
 		return (print_sorted_env(*env), 0);
 	i = 1;
+	has_valid_arg = 0;
 	while (args[i])
 	{
+		if (args[i][0] == '\0')
+		{
+			i++;
+			continue ;
+		}
 		handle_export_arg(args[i], env);
+		has_valid_arg = 1;
 		i++;
 	}
+	if (!has_valid_arg)
+		print_sorted_env(*env);
 	return (0);
 }
 
