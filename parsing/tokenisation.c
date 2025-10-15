@@ -1,6 +1,12 @@
 
 #include "../minishell.h"
 
+
+//echo $lol -> apres un -export lol (donc lol est vide)  --> comment il gere le =
+//eho d'expansion qui n existe pas
+//expansion qui n'existe pas
+
+
 int handles_command(char *line, int x, t_token **list, t_shell **all)
 {
     t_token 	*new;
@@ -52,7 +58,7 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
         free(cmd);
         return (-1);
     }
-	
+
     // If NOT in quotes and contains spaces, split it
     if (!was_in_quotes && ft_strchr(cmd, ' '))
     {

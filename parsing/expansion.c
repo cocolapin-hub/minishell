@@ -73,8 +73,13 @@ int		find_variable_in_env(t_local *env, int start, char **str, char *var_name)
 	{
 		if (strcmp(env->key, var_name) == 0)
 		{
-			*str = split_for_expansion(*str, var_name, start, env->value);
-			x = start + strlen(env->value);
+			if (!env->value)
+				*str = ft_strdup("");
+			else
+			{
+				*str = split_for_expansion(*str, var_name, start, env->value); //<-- pete ici
+				x = start + strlen(env->value);
+			}
 			found = 1;
 			break;
 		}
