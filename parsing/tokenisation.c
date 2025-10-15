@@ -47,8 +47,14 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
         free(tmp);
     }
 
-	/*a corriger: est ce que la premiere commande est une chaine vide*/
-    if (ft_strcmp(cmd, "") == 0 && !*list)
+	if (ft_strcmp(cmd, "."))
+	{
+		write(2, ".: command not found\n", 21);
+        (*all)->last_status = 127;
+        free(cmd);
+        return (-1);
+	}
+    if (ft_strcmp(cmd, "") == 0 && !*list && (line[x - 1] == 39 || line[x - 1] == 34))
     {
         if (line[x - 1] == 39)
             write(2, "\'\': command not found\n", 22);

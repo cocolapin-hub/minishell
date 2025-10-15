@@ -130,8 +130,8 @@ NEW:
 			V	: $HOME
 			V	: $HOMEdskjhfkdshfsd
 			V	: "$HOMEdskjhfkdshfsd"
-				: $DONTEXIST	(retour a la ligne normalement)
-				: $LESS$VAR
+			V	: $DONTEXIST	(retour a la ligne normalement)
+			V	: $LESS$VAR
 				: . --> permission denied
 				: unset PATH --> ls --> ls: No such file or directory
 --> ligne 211
@@ -155,7 +155,7 @@ NEW:
 			v	: export HOLA="l" --> "$HOLA"s		(crash "")
 			v	: export A=1 B=2 C=3 D=4 E=5 F=6 G=7 H=8 --> echo "$A'$B"'$C"$D'$E'"$F'"'$G'$H"
 				: la variable _= (réservée a bash n'est pas censée etre dans la liste d'export ???????????)
---> ligne 333				
+--> ligne 333
 				: unset PATH --> ls		(ls: no such file or directory)
 				: pwd --> unset PWD --> env | grep PWD --> cd $PWD --> pwd
 				: unset HOL?A	(not a valid identifier et non pas syntax error)
