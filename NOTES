@@ -103,26 +103,20 @@ NEW:
 			V	: syntax error -----> $?
 
 
-				: echo      \n hola - \\ \\ - \\\\\\\\\\\	Attention : dans les heredocs non-quoted, Bash désactive linterprétation de \
+		NON GERE: echo      \n hola - \\ \\ - \\\\\\\\\\\	Attention : dans les heredocs non-quoted, Bash désactive linterprétation de \
 			V	: ""''echo hola""'''' que""'' tal""''
-				: echo \$HOME
-				: echo $PATH	(syntax error ?????)
+		NON GERE: echo \$HOME
+			V	: echo $PATH	(syntax error ?????)
 		NON GERE: echo \$HOME
 				: echo $UID
 				: echo $HOME9 OK ---->  echo $9HOME / $0HOME /
-				: echo $USER$var\$USER$USER\$USERtest$USER
-				: echo $hola*
+		NON GERE: echo $USER$var\$USER$USER\$USERtest$USER
+		NON GERE: echo $hola*
 				: echo $""
-				: echo $''HOME
-				: echo "$HO"ME      --> pk je quitte minishell
-				: echo ""$HOME - echo ''$HOME
-				: echo "" $HOME - echo '' $HOME
-				: echo $"HO""ME"
-			V	: echo $""
 			V	: echo $''HOME
-			V	: $> echo "$HO"ME      --> pk je quitte minishell
+			V	: echo "$HO"ME      --> pk je quitte minishell
 			V	: echo ""$HOME - echo ''$HOME
-			V	: echo "" $HOME - echo '' $HOME
+				: echo "" $HOME - echo '' $HOME
 			V	: echo $"HO""ME"
 			V	: echo $ - echo $$ - echo $$$ - echo $$$$
 				: echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
@@ -136,9 +130,8 @@ NEW:
 			V	: echo "$DONTEXIST"Makefile
 			V	: $HOME
 			V	: $HOMEdskjhfkdshfsd
-				: "$HOMEdskjhfkdshfsd"
+			V	: "$HOMEdskjhfkdshfsd"
 				: $DONTEXIST	(retour a la ligne normalement)
-			V	: $DONTEXIST
 				: $LESS$VAR
 				: . --> permission denied
 				: unset PATH --> ls --> ls: No such file or directory

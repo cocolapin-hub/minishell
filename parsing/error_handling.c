@@ -22,7 +22,7 @@ t_token 	*check_char(t_token *list, t_shell **all)
 	}
 
 	/*if it is one ; et &*/
-	s = ft_strbrk(list->value, ";&{}[]():*?!");
+	s = ft_strbrk(list->value, ";&{}[]()*?!");
 	if (s)
 	{
 		write(2, "syntax error near unexpected token `", 36);

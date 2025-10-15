@@ -30,7 +30,9 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
             y = x;
         }
         else
+        {
             tmp = outside_quotes(line, &x, &y, all);
+        }
 
         if (!tmp)
         {
