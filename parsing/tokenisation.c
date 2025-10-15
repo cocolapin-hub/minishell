@@ -3,14 +3,14 @@
 
 int handles_command(char *line, int x, t_token **list, t_shell **all)
 {
-    t_token *new;
-    char *cmd;
-    char *tmp;
-    char quote;
-    int y;
-    int was_in_quotes;
-    char **split;
-    int i;
+    t_token 	*new;
+    char 		*cmd;
+    char 		*tmp;
+    char 		quote;
+    int 		y;
+    int 		was_in_quotes;
+    char 		**split;
+    int 		i;
 
     cmd = ft_strdup("");
     quote = 0;
@@ -30,9 +30,7 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
             y = x;
         }
         else
-        {
             tmp = outside_quotes(line, &x, &y, all);
-        }
 
         if (!tmp)
         {
@@ -43,7 +41,8 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
         free(tmp);
     }
 
-    if (ft_strcmp(cmd, "") == 0)
+	/*a corriger: est ce que la premiere commande est une chaine vide*/
+    if (ft_strcmp(cmd, "") == 0 && !*list)
     {
         if (line[x - 1] == 39)
             write(2, "\'\': command not found\n", 22);
@@ -53,7 +52,7 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
         free(cmd);
         return (-1);
     }
-
+	
     // If NOT in quotes and contains spaces, split it
     if (!was_in_quotes && ft_strchr(cmd, ' '))
     {
@@ -91,7 +90,6 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
 
         // Don't free cmd - token owns it
     }
-
     return (x);
 }
 
@@ -148,6 +146,7 @@ t_token	*tokenisation(char *line, t_token **list, t_shell **all)
 			if ((*all)->last_status == 258 || x == -1)
 			{
 				free_tokens(*list);
+				printf("%d %d\n",(*all)->last_status, x);
 				return (NULL);
 			}
 		}

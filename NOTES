@@ -108,18 +108,17 @@ NEW:
 		NON GERE: echo \$HOME
 			V	: echo $PATH	(syntax error ?????)
 		NON GERE: echo \$HOME
-				: echo $UID
-				: echo $HOME9 OK ---->  echo $9HOME / $0HOME /
+			V	: echo $HOME9 OK ---->  echo $9HOME / $0HOME /
 		NON GERE: echo $USER$var\$USER$USER\$USERtest$USER
 		NON GERE: echo $hola*
-				: echo $""
+			V	: echo $""
 			V	: echo $''HOME
 			V	: echo "$HO"ME      --> pk je quitte minishell
 			V	: echo ""$HOME - echo ''$HOME
-				: echo "" $HOME - echo '' $HOME
+			V	: echo "" $HOME - echo '' $HOME
 			V	: echo $"HO""ME"
 			V	: echo $ - echo $$ - echo $$$ - echo $$$$
-				: echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
+			V	: echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
 			V	: echo ''hola''
 			V	: echo "'"h'o'la"'" -->quitte minishell
 			V	: "" echo "" hola"""""""""""" ""
@@ -166,7 +165,7 @@ NEW:
 			v	: export HOLA="s -la"  --> l"$HOLA"		(ls -la : command not found)
 				: export A=1 B=2 C=3 D=4 E=5 F=6 G=7 H=8 --> echo "$A'$B"'$C"$D'$E'"$F'"'$G'$H"
 				: la variable _= (réservée a bash n'est pas censée etre dans la liste d'export ??)
---> ligne 333				
+--> ligne 333
 				: unset PATH --> ls		(ls: no such file or directory)
 				: pwd --> unset PWD --> env | grep PWD --> cd $PWD --> pwd
 				: unset HOL?A	(not a valid identifier et non pas syntax error)

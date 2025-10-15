@@ -8,6 +8,11 @@ char	*outside_quotes(char *line, int *x, int *y, t_shell **all)
 
 	if (line[*y] == '$' && (line[*y + 1] == 34 || line[*y + 1] == 39))
 	{
+		// if (line[*y + 2] == line[*y + 1] && (line[*y + 3] == 32 || line[*y + 3] == 9))
+		// {
+		// 	*x += 2;
+		// 	return(tmp = ft_strdup(""));
+		// }
 		(*x)++;
 		return(tmp = ft_strdup(""));
 	}

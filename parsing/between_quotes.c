@@ -12,6 +12,12 @@ char	*between_quotes(char *line, char *quote, int *x, t_shell **all)
 	/*Assign quote*/
 	*quote = line[*x];
 
+	if (line[y] == *quote)
+	{
+		*x += 2;
+		return(tmp = ft_strdup(""));
+	}
+
 	while (line[y] && line[y] != *quote)
 		y++;
 

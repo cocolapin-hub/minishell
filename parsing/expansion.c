@@ -11,7 +11,7 @@ char 	*split_for_expansion(char *str, char *key, int start, char *key_value)
     size_t key_len;
     size_t str_len;
 
-    if (ft_strcmp(key, "$?") == 0 || ft_strcmp(key, "$$") == 0)
+    if (key[0] == '$')
 		key_len = strlen(key);
 	else
 		key_len = strlen(key) + 1;  // +1 pour le $
@@ -42,28 +42,6 @@ char 	*split_for_expansion(char *str, char *key, int start, char *key_value)
     return (result);
 }
 
-int handle_exit_status(char **str, int last_status, int x)
-{
-    char *status = ft_itoa(last_status);
-	int len;
-
-	status = ft_itoa(last_status);
-    *str = split_for_expansion(*str, "$?", x, status);
-    len = ft_strlen(status);
-    free(status);
-    return (x + len);
-}
-
-int		handle_pid(char **str, int x)
-{
-	char	*pid;
-
-	pid = ft_itoa(getpid());
-	*str = split_for_expansion(*str, "$$", x, pid);
-
-	return (free(pid), x + 1); //ft_strlen(pid));
-}
-
 void	get_variable_name(char *str, char *var_name, int *var_len, int *x)
 {
 	char c;
@@ -84,7 +62,7 @@ void	get_variable_name(char *str, char *var_name, int *var_len, int *x)
 	var_name[*var_len] = '\0';
 }
 
-int	find_variable_in_env(t_local *env, int start, char **str, char *var_name)
+int		find_variable_in_env(t_local *env, int start, char **str, char *var_name)
 {
 	int found;
 	int x ;
@@ -110,7 +88,7 @@ int	find_variable_in_env(t_local *env, int start, char **str, char *var_name)
 	return (x);
 }
 
-char *clean_after_expansion(char *str)
+char 	*clean_after_expansion(char *str)
 {
 	char 	*new_line;
 	int		len;
@@ -141,8 +119,51 @@ char *clean_after_expansion(char *str)
 	return (new_line);
 }
 
+int 	handle_exit_status(char **str, int last_status, int x)
+{
+    char *status = ft_itoa(last_status);
+	int len;
 
-char *expansion(t_local *env, int last_status, char *str, int x)
+	status = ft_itoa(last_status);
+    *str = split_for_expansion(*str, "$?", x, status);
+    len = ft_strlen(status);
+    free(status);
+    return (x + len);
+}
+
+int handle_pid(char **str, int x)
+{
+    char *pid;
+    int len;
+
+    pid = ft_itoa(getpid());
+    len = ft_strlen(pid);
+    *str = split_for_expansion(*str, "$$", x, pid);
+    free(pid);
+
+    return (x + len);
+}
+
+int		handle_numbers(char **str, int x)
+{
+	//il faut return rien ou toutes les lettres d'apres
+	*str = split_for_expansion(*str, "$1", x, "");
+
+	return (x);
+}
+
+int		handle_number_zero(char **str, int x)
+{
+// 	//return bash + toutes lettres d'apres
+	int len;
+
+	len = ft_strlen("minishell");
+	*str = split_for_expansion(*str, "$0", x, "minishell"); //split_for_expansion(*str, "$$", x, "");
+
+	return (x + len);
+}
+
+char 	*expansion(t_local *env, int last_status, char *str, int x)
 {
 	char 	var_name[1024];
 	char	*expand;
@@ -160,6 +181,7 @@ char *expansion(t_local *env, int last_status, char *str, int x)
                 x = handle_exit_status(&str, last_status, x);
                 continue ;
             }
+
 			// Handle $$
 			else if (str[x + 1] == '$')
 			{
@@ -167,6 +189,17 @@ char *expansion(t_local *env, int last_status, char *str, int x)
 				continue ;
 			}
 
+			// // handle number
+			else if (str[x + 1] >= 48 && str[x + 1] <= 57)
+			{
+				if (str[x + 1] != '0')
+					x = handle_numbers(&str, x);
+				else
+					x = handle_number_zero(&str, x);		//<1er lettre skiped
+				continue ;
+			}
+
+			//handle $VAR
 			else if (ft_isalnum(str[x + 1]) || str[x + 1] == '_')
 			{
 				// Extract variable name before $
