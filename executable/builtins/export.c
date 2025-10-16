@@ -143,7 +143,7 @@ int	builtin_export(char **args, t_local **env)
 	has_valid_arg = 0;
 	while (args[i])
 	{
-		if (args[i][0] == '\0')
+		if (args[i][0] == '\0' && !args[i][1])
 		{
 			i++;
 			continue ;

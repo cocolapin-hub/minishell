@@ -17,7 +17,7 @@ int	builtin_cd(char **args, t_local **env)
 {
 	char *path;
 
-	if (!args[1]) 							   // no arg -> HOME
+	if (!args[1] || args[1][0] == '\0') 							   // no arg -> HOME
 	{
 		path = get_env_value(*env, "HOME");
 		if (!path)

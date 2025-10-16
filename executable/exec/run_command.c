@@ -109,8 +109,11 @@ void child_process(t_command *cmd, t_local *env)
 
 	if (!path)
 	{
-		free_split(envp);
-		exit(exec_error(cmd->args[0], "command not found", 127));
+		if (!get_env_value(env, "PATH"))
+			exit(exec_error(cmd->args[0], "No such file or directory", 127));
+		else
+			exit(exec_error(cmd->args[0], "command not found", 127));
+		//free_split(envp);		free ici ??
 	}
 	if (execve(path, cmd->args, envp) == -1)
 	{
