@@ -190,8 +190,8 @@ void	run_command(t_command *cmd)
 {
 	pid_t	pid;
 
-	if (!cmd->args || !cmd ->args[0] || cmd->args[0][0] == '\0')	// commande vide : on fait rien
-		return (cmd->all->last_status = 0, (void)0);
+	// if (!cmd->args || !cmd ->args[0] || cmd->args[0][0] == '\0')	// commande vide : on fait rien
+	// 	return (cmd->all->last_status = 0, (void)0);
 	if (is_builtin(cmd->args[0]))
 	{
 		cmd->all->last_status = run_builtin_command(cmd);

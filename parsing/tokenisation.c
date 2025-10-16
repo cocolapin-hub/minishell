@@ -54,16 +54,17 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
     //     free(cmd);
     //     return (-1);
 	// }
-    if (ft_strcmp(cmd, "") == 0 && !*list && (line[x - 1] == 39 || line[x - 1] == 34))
-    {
-        if (line[x - 1] == 39)
-            write(2, "\'\': command not found\n", 22);
-        else
-            write(2, "\"\": command not found\n", 22);
-        (*all)->last_status = 127;
-        free(cmd);
-        return (-1);
-    }
+
+	//  if (ft_strcmp(cmd, "") == 0 && !*list && (line[x - 1] == 39 || line[x - 1] == 34))
+    // { //mais pas "" << ??
+    //     if (line[x - 1] == 39)
+    //         write(2, "\'\': command not found\n", 22);
+    //     else
+    //         write(2, "\"\": command not found\n", 22);
+    //     (*all)->last_status = 127;
+    //     free(cmd);
+    //     return (-1);
+    // }
 
     // If NOT in quotes and contains spaces, split it
     if (!was_in_quotes && ft_strchr(cmd, ' '))
@@ -144,6 +145,7 @@ int		handles_special_char(char *line, int x, t_token **list)
 t_token	*tokenisation(char *line, t_token **list, t_shell **all)
 {
 	int	x;
+	t_token *tmp_list = *list;
 
 	x = 0;
 	while (line[x])
@@ -162,5 +164,27 @@ t_token	*tokenisation(char *line, t_token **list, t_shell **all)
 			}
 		}
 	}
+
+	if (ft_strcmp((*list)->value, "") == 0 && (*list)->next->type != REDIR_HEREDOC)
+    {
+        write(2, "\'\': command not found\n", 22);
+        (*all)->last_status = 127;
+        return (NULL);
+    }
+
+	while (tmp_list)
+	{
+		if (tmp_list->type == PIPE)
+		{
+			if(ft_strcmp((tmp_list)->next->value, "") == 0 && tmp_list->next->next->type != REDIR_HEREDOC)
+			{
+				write(2, "\'\': command not found\n", 22);
+				(*all)->last_status = 127;
+				return (NULL);
+			}
+		}
+		tmp_list = tmp_list->next;
+	}
+
 	return (*list);
 }

@@ -167,6 +167,7 @@ NEW:
 				: cd loool		(cd: loool: No such file or directory)	bien dire cd: *file*: No such file...
 				: cd Makefile	(Makefile : not a directory)
 				: cd .././../.././../bin/ls		(cd: .././../.././../bin/ls: Not a directory)
+				: .././../.././s
 				: cd // --> pwd = //	(non gere)
 				: cd /minishell		(no such file or)
 				: cd - 	(affiche le /HOME ????)
@@ -179,9 +180,9 @@ NEW:
 				: ./Makefile	(permission denied et non Is a directory)
 				: touch hola --> ./hola		(permision denied et non Is a directory)
 				: env -i ./minishell	(ne copie pas l'env pour minishell donc env, export, cd ne fonctionnent plus)
-			-	: exit 0  /  +0	/ -0	(quitte mais affiche error numeric argument)
-			-	: exit 9223372036854775807  : quitte sans message   MAIS	exit 9223372036854775808 (+1) quitte avec message Numeric argument
-			-	: exit -9223372036854775808	: pareil
+			V	: exit 0  /  +0	/ -0	(quitte mais affiche error numeric argument)
+			V	: exit 9223372036854775807  : quitte sans message   MAIS	exit 9223372036854775808 (+1) quitte avec message Numeric argument
+			V	: exit -9223372036854775808	: pareil
 				: cat | ls	--> Ctrl-c 		(affiche mal le ^C) run_command ok mais pas exec_pipe
 			-	: ls | exit		(nouveau prompt sans quitter ni écrire exit)
 			-	: exit | ls		(affiche ls sans quitter ni écrire exit) --> eit avec pipe en gros
@@ -194,10 +195,10 @@ NEW:
 --> ligne 639
 			V	: echo hola >>> bonjour		(unexpected token `>') wrong error
 			V	: cat >>>		unexpeted token >>	wrong errror
-			v	: cat >> << 						wrong error
-			v	: cat >> > >> << >>					wrong error
-				: < pwd		double erreur avec redirection
-				: cat < pwd	double erreur redir
+			V	: cat >> << 						wrong error
+			V	: cat >> > >> << >>					wrong error
+				: << pwd		double erreur avec redirection
+			V	: cat < pwd	double erreur redir
 				: < Makefile .		permission denied		alors que bash : .: not enough arg	(non géré)
 				: cat << hola --> $HOME	,	hola	(doit afficher le HOME a la fermeture du heredoc)
 				: cat << ho"la"		quand il y a des guillemets dans le EOF de heredoc, l'expansion ne sera pas prise ne compte
@@ -209,3 +210,4 @@ NEW:
 				: << $"hola"$"b"	minishell essaye de lire l'expansion mais doit l'ignorer
 				: echo hola <<< bonjour 			doit juste retourner hola
 				: echo hola <<<< ou <<<<< bonjour 			unexpted token '<'	ou	'<<'
+				: pwd | cat  << he --> > $HOME > he --> /home/ochkaoul     --> toute commande apres heredoc sont ignore mais apres

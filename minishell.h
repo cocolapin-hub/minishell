@@ -12,12 +12,13 @@
 # include <signal.h>
 # include <string.h>
 # include <unistd.h>
+# include <limits.h>
 # include <stdlib.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <fcntl.h>
 # include <errno.h>
-# include <limits.h>
+
 
 extern int		g_in_heredoc;
 
@@ -114,8 +115,8 @@ void		free_tokens(t_token *list);
 void		end_code(t_command *cmd);
 void		free_args(char **args);
 
-char	*outside_quotes(char *line, int *x, int *y, t_shell **all);
-char	*between_quotes(char *line, char *quote, int *x, t_shell **all);
+char		*between_quotes(char *line, char *quote, int *x, t_shell **all);
+char		*outside_quotes(char *line, int *x, int *y, t_shell **all);
 
 
 /*________________________________executable________________________________*/
@@ -164,6 +165,7 @@ char		*ft_substr(char const *s, unsigned int start, size_t len);
 size_t		ft_strlcpy(char *dst, const char *src, size_t size);
 void		ft_lstadd_back_cmd(t_command **lst, t_command *new);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
+int			ft_islonglong(const char *str, long long *out);
 int			ft_strstr(const char *big, const char *little);
 void		ft_lstadd_back(t_token **lst, t_token *new);
 char		*ft_strdup_m(const char *s, int x, int len);
@@ -179,7 +181,7 @@ t_token		*ft_lstnew_token(char *content);
 void		ft_putendl_fd(char *s, int fd);
 int 		ft_strcmp(char *s1, char *s2);
 void		ft_putstr_fd(char *s, int fd);
-int 		ft_isnumber(const char *str);
+int 		ft_isnumber(const char *str);  	//not needed anymore?
 int 		ft_count_strings(char **arr);
 int			ft_atoi(const char *nptr);
 t_token		*ft_lstlast(t_token *lst);
@@ -191,6 +193,10 @@ int			ft_isalnum(int c);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 char		*ft_itoa(int n);
+
+
+long long 	ft_strtoll(const char *nptr, int *is_long);
+int 		ft_strisnum(const char *str);
 
 #endif
 

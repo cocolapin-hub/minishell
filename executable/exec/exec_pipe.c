@@ -4,22 +4,33 @@ static void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
 {
 	if (prev_fd != -1)		// si fd du pipe précédent existe
 	{
+	//	write(1, "laa\n", 4);
 		dup2(prev_fd, STDIN_FILENO);		// dup2 #1 : duplique le fd du pipe précédent sur stdin (fd 0)
 		close(prev_fd);		// on ferme car plus besoin sous ce nom (dup2 a créé un alias)
 	}
 	if (cmd->next)			// si pas la derniere cmd, redirige stdout(sortie) de l'enfant vers pipefd[1]
 	{
+	//	write(1, "lii\n", 4);
 		close(pipefd[0]);	// close lecture inutile de l'enfant
 		dup2(pipefd[1], STDOUT_FILENO);		// dup2 #2 : dup la sortie vers pipefd[1]
 		close(pipefd[1]);	// ferme pipefd[1] car dup2 a fait la copie
 	}						// IMPORTANT  : ces deux dup2 positionnent stdin/out par défaut pour la cmd
 							//			(apply_redir peut ensuite appeler d'autrs dup2 pour écraser ces réglages avec un redir > ou <)
 	if (apply_redir(cmd->elem, cmd->all) != 0)		// applique les redir propre a la cmd, viennent apres la config du pipe (dernier dup2 wins)
+	{
+	//	write(1, "ica\n", 4);
 		fatal_error("redir", 1);
+	}
 	if (is_builtin(cmd->args[0]))			// dans un pipe meme le builtin s'execute dans l'enfant, on va gérer plus haut pour les commandes uniques dans exec_command()
+	{
+	//	write(1, "gag\n", 4);
 		exit(exec_builtin(cmd, cmd->all));			// on exit en appelant exec_builtin pour que l'enfant finisse avec le bon code de sortie ET leurs modifications d’environnement ne doivent pas affecter le shell parent (c’est le comportement standard)
+	}
 	else
+	{
+	//	write(1, "ici\n", 4);
 		child_process(cmd, cmd->all->env);	// fait execve et ne revient pas
+	}
 }
 
 static void	pipe_parent(t_pipe *mescouilles, t_command *cmd)
@@ -80,16 +91,19 @@ void exec_pipe(t_command *cmd_list, t_shell *all)    //<-- modified
 
         mescouilles.pid = fork();
         if (mescouilles.pid == -1)
-            exit(exec_error("fork", strerror(errno), 1));
+		{
+
+			exit(exec_error("fork", strerror(errno), 1));
+		}
 
         if (mescouilles.pid == 0)  // ENFANT
-        {
+		{
             signal(SIGINT, SIG_DFL);
             signal(SIGQUIT, SIG_DFL);
             pipe_child(cmd_list, mescouilles.prev_fd, mescouilles.pipefd);
         }
         else  // PARENT
-            pipe_parent(&mescouilles, cmd_list);
+			pipe_parent(&mescouilles, cmd_list);
 
         cmd_list = cmd_list->next;
     }
