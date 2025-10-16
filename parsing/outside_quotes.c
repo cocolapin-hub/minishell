@@ -4,7 +4,7 @@
 char	*outside_quotes(char *line, int *x, int *y, t_shell **all)
 {
 	char	*tmp;
-//	char	*pid;
+	char	*quote = NULL;
 
 	if (line[*y] == '$' && (line[*y + 1] == 34 || line[*y + 1] == 39))
 	{
@@ -34,7 +34,7 @@ char	*outside_quotes(char *line, int *x, int *y, t_shell **all)
 			(*y)++;
 
 		tmp = ft_strdup_m(line, *x, *y - *x);
-		tmp = expansion((*all)->env, (*all)->last_status, tmp, 0);
+		tmp = expansion((*all)->env, (*all)->last_status, tmp, quote);
 	}
 	*x = *y;
 	return (tmp);

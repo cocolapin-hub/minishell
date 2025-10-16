@@ -48,7 +48,7 @@ void	get_variable_name(char *str, char *var_name, int *var_len, int *x)
 	*var_len = 0;
 	(*x)++; 			//skip the $
 
-	while (str[*x] && (ft_isalnum(str[*x]) || str[*x] == '_'))
+	while (str[*x] && (ft_isalnum(str[*x]) || str[*x] == '_') && str[*x] != 61)
 	{
 		if (str[*x] == 32 || str[*x] == 39)
 			c = str[*x];
@@ -74,10 +74,14 @@ int		find_variable_in_env(t_local *env, int start, char **str, char *var_name)
 		if (strcmp(env->key, var_name) == 0)
 		{
 			if (!env->value)
-				*str = ft_strdup("");
+			{
+				*str = split_for_expansion(*str, var_name, start, "");
+				x = start;
+				return (x);
+			}
 			else
 			{
-				*str = split_for_expansion(*str, var_name, start, env->value); //<-- pete ici
+				*str = split_for_expansion(*str, var_name, start, env->value);
 				x = start + strlen(env->value);
 			}
 			found = 1;
@@ -136,7 +140,7 @@ int 	handle_exit_status(char **str, int last_status, int x)
     return (x + len);
 }
 
-int handle_pid(char **str, int x)
+int 	handle_pid(char **str, int x)
 {
     char *pid;
     int len;
@@ -168,18 +172,23 @@ int		handle_number_zero(char **str, int x)
 	return (x + len);
 }
 
-char 	*expansion(t_local *env, int last_status, char *str, int x)
+char 	*expansion(t_local *env, int last_status, char *str, char *quote)
 {
 	char 	var_name[1024];
 	char	*expand;
 	int 	var_len;
     int 	start;
+	int		expansion_done;
+	int		x;
 
+	expansion_done = 0;
     x = 0;
-    while(str[x])
+    while(str[x] && str[x] != 61)
     {
         if (str[x] == '$')
         {
+			expansion_done = 1;
+
             // Handle $?
             if (str[x + 1] == '?')
             {
@@ -200,7 +209,7 @@ char 	*expansion(t_local *env, int last_status, char *str, int x)
 				if (str[x + 1] != '0')
 					x = handle_numbers(&str, x);
 				else
-					x = handle_number_zero(&str, x);		//<1er lettre skiped
+					x = handle_number_zero(&str, x);
 				continue ;
 			}
 
@@ -219,6 +228,8 @@ char 	*expansion(t_local *env, int last_status, char *str, int x)
 
 				// Search for this variable in the environment
 				x = find_variable_in_env(env, start, &str, var_name);
+
+
 			}
 			else
 				x++;
@@ -226,7 +237,10 @@ char 	*expansion(t_local *env, int last_status, char *str, int x)
         else
             x++;
     }
-	expand = clean_after_expansion(str);  //<-- ??
-    return (expand);
+	if (expansion_done == 1 && !quote)
+		expand = clean_after_expansion(str);  //<-- ??
+    else
+		expand = ft_strdup(str);
+	return (str);
 }
 

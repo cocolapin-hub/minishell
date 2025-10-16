@@ -47,13 +47,13 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
         free(tmp);
     }
 
-	if (ft_strcmp(cmd, "."))
-	{
-		write(2, ".: command not found\n", 21);
-        (*all)->last_status = 127;
-        free(cmd);
-        return (-1);
-	}
+	// if (ft_strcmp(cmd, "."))
+	// {
+	// 	write(2, ".: command not found\n", 21);
+    //     (*all)->last_status = 127;
+    //     free(cmd);
+    //     return (-1);
+	// }
     if (ft_strcmp(cmd, "") == 0 && !*list && (line[x - 1] == 39 || line[x - 1] == 34))
     {
         if (line[x - 1] == 39)
@@ -158,7 +158,6 @@ t_token	*tokenisation(char *line, t_token **list, t_shell **all)
 			if ((*all)->last_status == 258 || x == -1)
 			{
 				free_tokens(*list);
-				printf("%d %d\n",(*all)->last_status, x);
 				return (NULL);
 			}
 		}

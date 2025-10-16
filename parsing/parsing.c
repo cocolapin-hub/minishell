@@ -138,7 +138,7 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 	// //  	list = list->next;
 	// // }
 
-	// print_pipeline(*cmd);      // <-- to print result
+	print_pipeline(*cmd);      // <-- to print result
 	// if(list)
 	// 	free_tokens(list);
 	// free(cleaned_line);

@@ -101,7 +101,7 @@ void		setup_sig(void);
 
 /*_________________________________parsing_________________________________*/
 /*PARS*/
-char		*expansion(t_local *env, int last_status, char *str, int x);
+char 		*expansion(t_local *env, int last_status, char *str, char *quote);
 t_command	*set_command(t_command **cmd, t_token *list, t_shell *all);
 t_token		*tokenisation(char *line, t_token **list, t_shell **all);
 void		parsing(char *line, t_shell *all, t_command **cmd);

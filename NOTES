@@ -178,12 +178,12 @@ NEW:
 				: ./Makefile	(permission denied et non Is a directory)
 				: touch hola --> ./hola		(permision denied et non Is a directory)
 				: env -i ./minishell	(ne copie pas l'env pour minishell donc env, export, cd ne fonctionnent plus)
-				: exit 0  /  +0	/ -0	(quitte mais affiche error numeric argument)
-				: exit 9223372036854775807  : quitte sans message   MAIS	exit 9223372036854775808 (+1) quitte avec message Numeric argument
-				: exit -9223372036854775808	: pareil
+			-	: exit 0  /  +0	/ -0	(quitte mais affiche error numeric argument)
+			-	: exit 9223372036854775807  : quitte sans message   MAIS	exit 9223372036854775808 (+1) quitte avec message Numeric argument
+			-	: exit -9223372036854775808	: pareil
 				: cat | ls	--> Ctrl-c 		(affiche mal le ^C) run_command ok mais pas exec_pipe
-				: ls | exit		(nouveau prompt sans quitter ni écrire exit)
-				: exit | ls		(affiche ls sans quitter ni écrire exit)
+			-	: ls | exit		(nouveau prompt sans quitter ni écrire exit)
+			-	: exit | ls		(affiche ls sans quitter ni écrire exit) --> eit avec pipe en gros
 				: sleep 3 | exit	(attend 3 sans quitter ni écrire exit) same a l'envers
 				: echo hola > bonjour	-->  cat -e bonjour | exit		(nouveau prompt sans rien écrire)
 				: echo hola > bonjour	-->  exit | cat -e bonjour		(ecrit : hola$ + nouveau prompt)
@@ -191,10 +191,10 @@ NEW:
 				: echo bite || cat		(non géré)
 				: time sleep 3 | sleep 3	(affiche real	0m3.002s	user 0m0.002s	sys 0m0.000s	genre pk c'est différent wesh
 --> ligne 639
-				: echo hola >>> bonjour		(unexpected token `>') wrong error
-				: cat >>>		unexpeted token >>	wrong errror
-				: cat >> << 						wrong error
-				: cat >> > >> << >>					wrong error
+			-	: echo hola >>> bonjour		(unexpected token `>') wrong error
+			-	: cat >>>		unexpeted token >>	wrong errror
+			-	: cat >> << 						wrong error
+			-	: cat >> > >> << >>					wrong error
 				: < pwd		double erreur avec redirection
 				: cat < pwd	double erreur redir
 				: < Makefile .		permission denied		alors que bash : .: not enough arg	(non géré)
@@ -204,7 +204,7 @@ NEW:
 				: cat << hola | rev			ca part en couille mdr mais ca marche a moitié
 				: cat << prout << lol << koala	--> ferme heredoc si on ecrit dans l'ordre prout, lol, koala. (ecrit les mots qui ne sont pas EOF et ajoute )
 				: ATTENTION : Les lignes écritent dans heredoc sont ajoutées a l'historique !!!
-				: << $hola		Ambiguous redirect ??
-				: << $"hola"$"b"	minishell essaye de lire l'expansion mais doit l'ignorer
+			-	: << $hola		Ambiguous redirect ??
+			-	: << $"hola"$"b"	minishell essaye de lire l'expansion mais doit l'ignorer
 				: echo hola <<< bonjour 			doit juste retourner hola
-				: echo hola <<<< ou <<<<< bonjour 			unexpted token '<'	ou	'<<'
+			-	: echo hola <<<< ou <<<<< bonjour 			unexpted token '<'	ou	'<<'
