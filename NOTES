@@ -184,8 +184,8 @@ NEW:
 			V	: exit 9223372036854775807  : quitte sans message   MAIS	exit 9223372036854775808 (+1) quitte avec message Numeric argument
 			V	: exit -9223372036854775808	: pareil
 				: cat | ls	--> Ctrl-c 		(affiche mal le ^C) run_command ok mais pas exec_pipe
-			-	: ls | exit		(nouveau prompt sans quitter ni écrire exit)
-			-	: exit | ls		(affiche ls sans quitter ni écrire exit) --> eit avec pipe en gros
+				: ls | exit		(nouveau prompt sans quitter ni écrire exit)
+				: exit | ls		(affiche ls sans quitter ni écrire exit) --> eit avec pipe en gros
 				: sleep 3 | exit	(attend 3 sans quitter ni écrire exit) same a l'envers
 				: echo hola > bonjour	-->  cat -e bonjour | exit		(nouveau prompt sans rien écrire)
 				: echo hola > bonjour	-->  exit | cat -e bonjour		(ecrit : hola$ + nouveau prompt)
@@ -208,6 +208,6 @@ NEW:
 				: ATTENTION : Les lignes écritent dans heredoc sont ajoutées a l'historique !!!
 				: << $hola		Ambiguous redirect ??
 				: << $"hola"$"b"	minishell essaye de lire l'expansion mais doit l'ignorer
-				: echo hola <<< bonjour 			doit juste retourner hola
-				: echo hola <<<< ou <<<<< bonjour 			unexpted token '<'	ou	'<<'
+		NON GERE: echo hola <<< bonjour 			doit juste retourner hola   -se sont des here string. comportement special. nous on utilise seulement avec redir
+		NON GERE: echo hola <<<< ou <<<<< bonjour 			unexpted token '<'	ou	'<<'
 				: pwd | cat  << he --> > $HOME > he --> /home/ochkaoul     --> toute commande apres heredoc sont ignore mais apres
