@@ -161,22 +161,22 @@ NEW:
 			v	: pwd --> unset PWD --> env | grep PWD	(recup OLDPWD) --> cd $PWD --> pwd	(return HOME car PWD n'existe plus donc = "")
 		NON GERE: unset HOL?A	(not a valid identifier et non pas syntax error)
 		NON GERE: unset hol?a hol.a		(pas de message d'erreur dans bash ??)
-				: unset hol\\\a		(non géré)
+		NON GERE: unset hol\\\a		(non géré)
 			v	: /bin/echo		 (Is a directory ??)
 			v	: cd bite cul	(too many arguments et non no such file)
 			v	: cd loool		(cd: loool: No such file or directory)	bien dire cd: *file*: No such file...
-				: cd Makefile	(Makefile : not a directory)
-				: cd .././../.././../bin/ls		(cd: .././../.././../bin/ls: Not a directory)
-				: .././../.././s
-				: cd // --> pwd = //	(non gere)
-				: cd /minishell		(no such file or)
-				: cd - 	(affiche le /HOME ????)
-				: cd -- (fait rien ??) non géré
-				: cd ~ (et cd ~/  echo $? = 0)		(retourne à HOME)
-				: unset HOME --> export HOME= --> cd	 (censé marcher meme si HOME n'est pas set ????)
+			v	: cd Makefile	(Makefile : not a directory)
+			v	: cd .././../.././../bin/ls		(cd: .././../.././../bin/ls: Not a directory)
+			v	: .././../.././s
+		NON GERE: cd // --> pwd = //	(non gere)
+			v	: cd /minishell		(no such file or)
+		NON GERE: cd - 	(affiche le /HOME ????)
+		NON GERE: cd -- (fait rien ??) non géré
+		NON GERE: cd ~ (et cd ~/  echo $? = 0)		(retourne à HOME)
+			v	: unset HOME --> export HOME= --> cd	 (censé marcher meme si HOME n'est pas set ????)
 --> ligne 444	:
-				: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> cd ..		(cd: error retrieving curr) (pwd: lol/b/..)
-				: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> PWD = minishell/lol/mdr	OLDPWD = minishell/
+			v	: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> cd ..		(cd: error retrieving curr) (pwd: lol/b/..)
+			v	: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> PWD = minishell/lol/mdr	OLDPWD = minishell/
 				: ./Makefile	(permission denied et non Is a directory)
 				: touch hola --> ./hola		(permision denied et non Is a directory)
 				: env -i ./minishell	(ne copie pas l'env pour minishell donc env, export, cd ne fonctionnent plus)
