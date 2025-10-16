@@ -12,6 +12,18 @@ char    *get_env_value(t_local *env, char *key)
     return (NULL);
 }
 
+t_local	*find_env_key(t_local *env, char *key)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+			return (env);
+		env = env->next;
+	}
+	return (NULL);
+}
+
+
 // pointeur vers le pointeur tete, peut lire la list via *env ET modifier la tete (*env = new_node)
 // void    set_env_value(t_local **env, char *key, char *value)
 // {

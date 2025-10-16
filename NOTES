@@ -99,7 +99,7 @@ NEW:
 			V	: & - &&&&&   syntax error near unexpected token `&' or `&&'
 			V	: ; - ;;;;    syntax error near unexpected token `;' or `;;'
 			V	: () [] {}
-			V	: / - ////////// - /././. - /.
+				: / - ////////// - /././. - /.
 			V	: syntax error -----> $?
 
 
@@ -158,13 +158,13 @@ NEW:
 			v	: la variable _= (réservée a bash n'est pas censée etre dans la liste d'export ???????????)
 --> ligne 333
 			v	: unset PATH --> ls		(ls: no such file or directory)
-				: pwd --> unset PWD --> env | grep PWD	(recup OLDPWD) --> cd $PWD --> pwd	(return HOME car PWD n'existe plus donc = "")
+			v	: pwd --> unset PWD --> env | grep PWD	(recup OLDPWD) --> cd $PWD --> pwd	(return HOME car PWD n'existe plus donc = "")
 		NON GERE: unset HOL?A	(not a valid identifier et non pas syntax error)
 		NON GERE: unset hol?a hol.a		(pas de message d'erreur dans bash ??)
 				: unset hol\\\a		(non géré)
-				: /bin/echo		 (Is a directory ??)
-				: cd bite cul	(too many arguments et non no such file)
-				: cd loool		(cd: loool: No such file or directory)	bien dire cd: *file*: No such file...
+			v	: /bin/echo		 (Is a directory ??)
+			v	: cd bite cul	(too many arguments et non no such file)
+			v	: cd loool		(cd: loool: No such file or directory)	bien dire cd: *file*: No such file...
 				: cd Makefile	(Makefile : not a directory)
 				: cd .././../.././../bin/ls		(cd: .././../.././../bin/ls: Not a directory)
 				: .././../.././s

@@ -83,6 +83,7 @@ void		setup_shell(t_shell *all, char **envp);
 void    	set_env_value(t_local **env, char *key, char *value);
 void   		unset_env_value(t_local **env, char *key);
 char		*get_env_value(t_local *env, char *key);
+t_local		*find_env_key(t_local *env, char *key);
 char		**env_to_tab(t_local *env);
 void		sort_env_tab(char **tab);
 

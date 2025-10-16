@@ -23,21 +23,43 @@ void	set_env_value(t_local **env, char *key, char *value)
 {
 	t_local	*node;
 
-	node = *env;
-	while (node)
+	node = find_env_key(*env, key);
+	if (node)
 	{
-		if (ft_strcmp(node->key, key) == 0)
+		// Si la variable existe déjà
+		if (node->value)
 		{
-			if (node->value && value)
-			{
-				free(node->value);
-				node->value = ft_strdup(value);
-			}
-			else if (!node->value && value)
-				node->value = ft_strdup(value);
-			return ;
+			free(node->value);
+			node->value = NULL;
 		}
-		node = node->next;
+		if (value)
+			node->value = ft_strdup(value);
+		return ;
 	}
+	// Sinon, on l’ajoute
 	add_new_var(env, key, value);
 }
+
+
+// void	set_env_value(t_local **env, char *key, char *value)
+// {
+// 	t_local	*node;
+
+// 	node = find_env_key(*env, key);
+// 	if (node)
+// 	{
+// 		if (ft_strcmp(node->key, key) == 0)
+// 		{
+// 			if (node->value && value)
+// 			{
+// 				free(node->value);
+// 				node->value = ft_strdup(value);
+// 			}
+// 			else if (!node->value && value)
+// 				node->value = ft_strdup(value);
+// 			return ;
+// 		}
+// 		node = node->next;
+// 	}
+// 	add_new_var(env, key, value);
+// }

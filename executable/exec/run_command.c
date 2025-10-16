@@ -88,15 +88,15 @@ void child_process(t_command *cmd, t_local *env)
 		path = ft_strdup(cmd->args[0]);
 
 		//check si c'est directory
-		struct stat st;
-		if (stat(path, &st) == 0)
-		{
-			free(path);
-			exit(exec_error(cmd->args[0], "Is a directory", 126));
-		}
+		// struct stat st;
+		// if (stat(path, &st) == 0)
+		// {
+		// 	free(path);
+		// 	exit(exec_error(cmd->args[0], "Is a directory", 126));
+		// }
 
 		//check si c'est un path
-		else if (!path || access(path, X_OK) != 0)
+		if (!path || access(path, X_OK) != 0)
 		{
 			free(path);
 			exit(exec_error(cmd->args[0], "No such file or directory", 127));
