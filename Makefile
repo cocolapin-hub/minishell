@@ -36,28 +36,36 @@ SRCS = \
 	executable/free_errors/free.c \
 	executable/redir/heredoc.c \
 	executable/redir/redir.c \
-	parsing/check_input.c \
-	parsing/error_handling.c \
 	parsing/parsing.c \
-	parsing/set_command.c \
+	parsing/check_input.c \
+	parsing/set_cmd/fill_elements.c \
+	parsing/set_cmd/set_command.c \
+	parsing/set_cmd/create_args.c \
+	parsing/set_cmd/create_cmd.c \
+	parsing/set_cmd/fill_args.c \
 	parsing/free_error_pars/end_code.c \
 	parsing/free_error_pars/free_args.c \
 	parsing/free_error_pars/free_env.c \
 	parsing/free_error_pars/free_tokens.c \
 	parsing/free_error_pars/print_error.c \
-	parsing/tokenisation/handles_special_char.c \
-	parsing/tokenisation/handles_command.c \
-	parsing/tokenisation/outside_quotes.c \
-	parsing/tokenisation/between_quotes.c \
-	parsing/tokenisation/tokenisation.c \
-	parsing/tokenisation/expansion/find_variable_in_env.c \
-	parsing/tokenisation/expansion/split_for_expansion.c \
-	parsing/tokenisation/expansion/handle_exit_status.c \
-	parsing/tokenisation/expansion/handle_number_zero.c \
-	parsing/tokenisation/expansion/get_variable_name.c \
-	parsing/tokenisation/expansion/handle_numbers.c \
-	parsing/tokenisation/expansion/handle_pid.c \
-	parsing/tokenisation/expansion/expansion.c \
+	parsing/set_token/handles_special_char.c \
+	parsing/set_token/handles_command.c \
+	parsing/set_token/outside_quotes.c \
+	parsing/set_token/between_quotes.c \
+	parsing/set_token/tokenisation.c \
+	parsing/set_token/expansion/find_variable_in_env.c \
+	parsing/set_token/expansion/split_for_expansion.c \
+	parsing/set_token/expansion/handle_exit_status.c \
+	parsing/set_token/expansion/handle_number_zero.c \
+	parsing/set_token/expansion/get_variable_name.c \
+	parsing/set_token/expansion/handle_numbers.c \
+	parsing/set_token/expansion/handle_pid.c \
+	parsing/set_token/expansion/expansion.c \
+	parsing/syntax/check_first_word.c \
+	parsing/syntax/error_handling.c \
+	parsing/syntax/check_redir.c \
+	parsing/syntax/check_char.c \
+	parsing/syntax/check_pipe.c \
 	signal/signal_exec.c \
 	signal/ctrl_c.c\
 	signal/ctrl_d.c\

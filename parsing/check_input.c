@@ -95,8 +95,6 @@ char		*check_input(char *line, t_shell **all)
 		}
 	}
 
-
-
 	/*espaces et tabulations*/
 	return (clean_line(line));
 }

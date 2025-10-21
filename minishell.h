@@ -107,9 +107,7 @@ void		setup_sig(void);
 
 /*_________________________________parsing_________________________________*/
 /*PARS*/
-t_command	*set_command(t_command **cmd, t_token *list, t_shell *all);
 void		parsing(char *line, t_shell *all, t_command **cmd);
-void 		error_handling(t_shell **all, t_token **list);
 char		*check_input(char *line, t_shell **all);
 
 /*EXPANSION*/
@@ -129,6 +127,19 @@ int 		handles_command(char *line, int x, t_token **list, t_shell **all);
 t_token		*tokenisation(char *line, t_token **list, t_shell **all);
 int			handles_special_char(char *line, int x, t_token **list);
 
+/*ERROR_HANDLING*/
+t_token		*check_first_word(t_token *list, t_shell **all);
+void 		error_handling(t_shell **all, t_token **list);
+t_token 	*check_redir(t_token *list, t_shell **all);
+t_token 	*check_char(t_token *list, t_shell **all);
+t_token 	*check_pipe(t_token *list, t_shell **all);
+
+/*SET_COMMAND*/
+void		create_args(t_token *list, int token_count, int skip_next, char ***args);
+void		create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end);
+t_command	*set_command(t_command **cmd, t_token *list, t_shell *all);
+void		fill_elements(t_token **list, t_token **elements);
+void		fill_args(t_token *list, char ***args);
 
 /*FREE & ERROR*/
 void		print_error(char *line, char *msg);
