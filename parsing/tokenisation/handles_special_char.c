@@ -1,0 +1,38 @@
+#include "../../minishell.h"
+
+
+int		handles_special_char(char *line, int x, t_token **list)
+{
+	t_token	*new;
+	char	*cmd = NULL;
+	int		y;
+
+	y = x;
+
+	/*saves the pipe*/
+	if (line[x] == 124)
+		cmd = ft_strdup_m(line, x, 1);
+
+	/*saves arrows*/
+	else if (line[x] == 60 || line[x] == 62)
+	{
+		if (line[x + 1] == line[x])
+		{
+			cmd = ft_strdup_m(line, x, 2);
+			y++;
+		}
+		else
+			cmd = ft_strdup_m(line, x, 1);
+	}
+
+	/*creats the 1st list element*/
+	new = ft_lstnew_token(cmd, 0);
+	if (!*list)
+		*list = new;
+
+	/*creats others list element*/
+	else
+		ft_lstadd_back(list, new);
+
+	return (y + 1);
+}

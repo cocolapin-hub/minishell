@@ -38,17 +38,26 @@ SRCS = \
 	executable/redir/redir.c \
 	parsing/check_input.c \
 	parsing/error_handling.c \
-	parsing/expansion.c \
 	parsing/parsing.c \
 	parsing/set_command.c \
-	parsing/tokenisation.c \
-	parsing/outside_quotes.c \
-	parsing/between_quotes.c \
 	parsing/free_error_pars/end_code.c \
 	parsing/free_error_pars/free_args.c \
 	parsing/free_error_pars/free_env.c \
 	parsing/free_error_pars/free_tokens.c \
 	parsing/free_error_pars/print_error.c \
+	parsing/tokenisation/handles_special_char.c \
+	parsing/tokenisation/handles_command.c \
+	parsing/tokenisation/outside_quotes.c \
+	parsing/tokenisation/between_quotes.c \
+	parsing/tokenisation/tokenisation.c \
+	parsing/tokenisation/expansion/find_variable_in_env.c \
+	parsing/tokenisation/expansion/split_for_expansion.c \
+	parsing/tokenisation/expansion/handle_exit_status.c \
+	parsing/tokenisation/expansion/handle_number_zero.c \
+	parsing/tokenisation/expansion/get_variable_name.c \
+	parsing/tokenisation/expansion/handle_numbers.c \
+	parsing/tokenisation/expansion/handle_pid.c \
+	parsing/tokenisation/expansion/expansion.c \
 	signal/signal_exec.c \
 	signal/ctrl_c.c\
 	signal/ctrl_d.c\

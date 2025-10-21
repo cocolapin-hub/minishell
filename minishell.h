@@ -107,12 +107,28 @@ void		setup_sig(void);
 
 /*_________________________________parsing_________________________________*/
 /*PARS*/
-char 		*expansion(t_local *env, int last_status, char *str, char *quote);
 t_command	*set_command(t_command **cmd, t_token *list, t_shell *all);
-t_token		*tokenisation(char *line, t_token **list, t_shell **all);
 void		parsing(char *line, t_shell *all, t_command **cmd);
 void 		error_handling(t_shell **all, t_token **list);
 char		*check_input(char *line, t_shell **all);
+
+/*EXPANSION*/
+int			find_variable_in_env(t_local *env, int start, char **str, char *var_name);
+char 		*split_for_expansion(char *str, char *key, int start, char *key_value);
+void		get_variable_name(char *str, char *var_name, int *var_len, int *x);
+char 		*expansion(t_local *env, int last_status, char *str, char *quote);
+int 		handle_exit_status(char **str, int last_status, int x);
+int			handle_number_zero(char **str, int x);
+int			handle_numbers(char **str, int x);
+int 		handle_pid(char **str, int x);
+
+/*TOKENISATION*/
+char		*between_quotes(char *line, char *quote, int *x, t_shell **all, t_token **list);
+char		*outside_quotes(char *line, int *x, int *y, t_shell **all, t_token **list);
+int 		handles_command(char *line, int x, t_token **list, t_shell **all);
+t_token		*tokenisation(char *line, t_token **list, t_shell **all);
+int			handles_special_char(char *line, int x, t_token **list);
+
 
 /*FREE & ERROR*/
 void		print_error(char *line, char *msg);
@@ -120,8 +136,7 @@ void		free_tokens(t_token *list);
 void		end_code(t_command *cmd);
 void		free_args(char **args);
 
-char		*between_quotes(char *line, char *quote, int *x, t_shell **all, t_token **list);
-char		*outside_quotes(char *line, int *x, int *y, t_shell **all, t_token **list);
+
 
 
 /*________________________________executable________________________________*/
@@ -131,6 +146,7 @@ void		child_process(t_command *cmd, t_local *env);
 char		*find_in_path(char *cmd, t_local *env);
 int			is_valid_identifier(const char *key);
 void		run_command(t_command *cmd);
+
 /*BUILTINS*/
 int 		builtin_exit(char **args, t_shell *all, t_command *cmd_list);
 int			exec_builtin(t_command *cmd, t_shell *all);
@@ -142,10 +158,9 @@ int			builtin_env(t_local *env);
 int			is_builtin(char *cmd);
 int			builtin_pwd(void);
 
-
 /*REDIR*/
-int			apply_redir(t_token *redir, t_shell *all);
 int			create_heredoc(char *limiter, t_shell *all);
+int			apply_redir(t_token *redir, t_shell *all);
 
 /*ERROR & FREE*/
 void		exit_clean_af(t_shell *all, t_command *cmd_list, int code);
@@ -174,6 +189,8 @@ int			ft_islonglong(const char *str, long long *out);
 int			ft_strstr(const char *big, const char *little);
 void		ft_lstadd_back(t_token **lst, t_token *new);
 char		*ft_strdup_m(const char *s, int x, int len);
+t_token		*ft_lstnew_token(char *content, char quote);
+long long 	ft_strtoll(const char *nptr, int *is_long);
 char		ft_strbrk(const char *s1, const char *s2);
 t_local		*ft_lstnew_env(char *value, char *key);
 void		*ft_calloc(size_t nmemb, size_t size);
@@ -182,12 +199,12 @@ void		*ft_memset(void *s, int c, size_t n);
 char		**ft_split(char const *s, char c);
 char		*ft_strchr(const char *s, int c);
 t_command	*ft_lstlast_cmd(t_command *lst);
-t_token		*ft_lstnew_token(char *content, char quote);
 void		ft_putendl_fd(char *s, int fd);
 int 		ft_strcmp(char *s1, char *s2);
 void		ft_putstr_fd(char *s, int fd);
-int 		ft_isnumber(const char *str);  	//not needed anymore?
+int 		ft_isnumber(const char *str);
 int 		ft_count_strings(char **arr);
+int 		ft_strisnum(const char *str);
 int			ft_atoi(const char *nptr);
 t_token		*ft_lstlast(t_token *lst);
 char		*ft_strdup(const char *s);
@@ -199,9 +216,6 @@ int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 char		*ft_itoa(int n);
 
-
-long long 	ft_strtoll(const char *nptr, int *is_long);
-int 		ft_strisnum(const char *str);
 
 #endif
 
