@@ -23,7 +23,7 @@ static int	close_and_free(char *line, int fd1, int fd2, int ret)
 }
 
 // stocker le heredoc dans un pipe plutot que dans un fichier tmp : mieux
-int	create_heredoc(char *limiter)
+int	create_heredoc(char *limiter, t_shell *all)
 {
 	int		pipefd[2];		// tab à deux cases car fd[0] et fd[1]
 	char	*line;
@@ -38,6 +38,12 @@ int	create_heredoc(char *limiter)
 			return (close_and_free(line, pipefd[0], pipefd[1], -2));
 		if (!line || ft_strcmp(line, limiter) == 0)
 			break ;
+
+		//ici on gere les cas d' expansion dans un heredoc
+			// -->mettre une condition -
+			// -> expansion uniquement si delimiter has no quotes
+		if (all->cmd_head->elem->amount == Q_NONE)
+			line = expansion(all->env, all->last_status, line, 0);
 		write(pipefd[1], line, ft_strlen(line));
 		write(pipefd[1], "\n", 1);
 		free(line);

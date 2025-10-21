@@ -1,6 +1,45 @@
 
 #include "../minishell.h"
 
+
+t_token		*check_first_word(t_token *list, t_shell **all)
+{
+	int		counter;
+	int 	x;
+
+	counter = 0;
+	x = 0;
+
+	//is_a_directory
+	if (list && list->type == WORD)
+	{
+		while (list->value[x])
+		{
+			if (list->value[x] == '.' || list->value[x] == '/')
+			{
+				if (list->value[x] == '.')
+					counter++;
+				else
+					counter = 0;
+				if (counter > 2)
+					return (list);
+				x++;
+			}
+			else
+				break ;
+			if (list->value[x] == '\0')
+			{
+				write(2, list->value, ft_strlen(list->value));
+				write(2, ": Is a directory\n", 17);
+				(*all)->last_status = 126;
+				return NULL;
+			}
+		}
+	}
+
+	return (list);
+}
+
 t_token 	*check_char(t_token *list, t_shell **all)
 {
 	char c;
@@ -32,9 +71,6 @@ t_token 	*check_char(t_token *list, t_shell **all)
 		return (NULL);
 	}
 
-	// /*if cat >> then again a redir*/
-	// if(list->next->value)
-
 	return (list);
 }
 
@@ -54,6 +90,12 @@ t_token 	*check_pipe(t_token *list, t_shell **all)
 		write(2, "syntax error near unexpected token `|'\n", 39);
 		(*all)->last_status = 2;
 		return NULL;
+	}
+
+	if (list->type == PIPE && list->next->type == WORD)
+	{
+		if (!check_first_word(list->next, all))
+			return (NULL);
 	}
 
 	return (list);
@@ -130,7 +172,7 @@ void 	error_handling(t_shell **all, t_token **list)
 	/*check the first ;s or &s*/
 	else if (lst2 && lst2->type == WORD)
 	{
-		lst2 = check_char(lst2, all);
+		lst2 = check_first_word(lst2, all);
 		if (!lst2)
 		{
 			free_tokens(*list);

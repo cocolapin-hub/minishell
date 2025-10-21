@@ -99,7 +99,7 @@ NEW:
 			V	: & - &&&&&   syntax error near unexpected token `&' or `&&'
 			V	: ; - ;;;;    syntax error near unexpected token `;' or `;;'
 			V	: () [] {}
-				: / - ////////// - /././. - /.
+			V	: / - ////////// - /././. - /.
 			V	: syntax error -----> $?
 
 
@@ -133,7 +133,7 @@ NEW:
 			V	: $DONTEXIST	(retour a la ligne normalement)
 			V	: $LESS$VAR
 				: . --> permission denied
-				: "" lol  -->  minishell: : No such file or directory
+			V	: "" lol  -->  minishell: : No such file or directory
 
 --> ligne 211
 				: cat | rev (ctrl-C apres quelques enter)
@@ -175,20 +175,20 @@ NEW:
 		NON GERE: cd ~ (et cd ~/  echo $? = 0)		(retourne à HOME)
 			v	: unset HOME --> export HOME= --> cd	 (censé marcher meme si HOME n'est pas set ????)
 --> ligne 444	:
-			v	: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> cd ..		(cd: error retrieving curr) (pwd: lol/b/..)
-			v	: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> PWD = minishell/lol/mdr	OLDPWD = minishell/
+				: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> cd ..		(cd: error retrieving curr) (pwd: lol/b/..)
+				: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> PWD = minishell/lol/mdr	OLDPWD = minishell/
 				: ./Makefile	(permission denied et non Is a directory)
 				: touch hola --> ./hola		(permision denied et non Is a directory)
 				: env -i ./minishell	(ne copie pas l'env pour minishell donc env, export, cd ne fonctionnent plus)
 			V	: exit 0  /  +0	/ -0	(quitte mais affiche error numeric argument)
 			V	: exit 9223372036854775807  : quitte sans message   MAIS	exit 9223372036854775808 (+1) quitte avec message Numeric argument
 			V	: exit -9223372036854775808	: pareil
-				: cat | ls	--> Ctrl-c 		(affiche mal le ^C) run_command ok mais pas exec_pipe
-				: ls | exit		(nouveau prompt sans quitter ni écrire exit)
-				: exit | ls		(affiche ls sans quitter ni écrire exit) --> eit avec pipe en gros
-				: sleep 3 | exit	(attend 3 sans quitter ni écrire exit) same a l'envers
-				: echo hola > bonjour	-->  cat -e bonjour | exit		(nouveau prompt sans rien écrire)
-				: echo hola > bonjour	-->  exit | cat -e bonjour		(ecrit : hola$ + nouveau prompt)
+			V	: cat | ls	--> Ctrl-c 		(affiche mal le ^C) run_command ok mais pas exec_pipe
+			V	: ls | exit		(nouveau prompt sans quitter ni écrire exit) --> just condition de write si rien n est pipe avant
+			V	: exit | ls		(affiche ls sans quitter ni écrire exit) --> eit avec pipe en gros
+			V	: sleep 3 | exit	(attend 3 sans quitter ni écrire exit) same a l'envers --> just condition de write si rien n est pipe avant
+			V	: echo hola > bonjour	-->  cat -e bonjour | exit		(nouveau prompt sans rien écrire)
+			V	: echo hola > bonjour	-->  exit | cat -e bonjour		(ecrit : hola$ + nouveau prompt)
 				: ifconfig | grep ":"	(affiche docker0: flags=4099<UP,...)	on doit vraiment gérer cette merde ???
 		NON GERE: echo bite || cat		(non géré)
 				: time sleep 3 | sleep 3	(affiche real	0m3.002s	user 0m0.002s	sys 0m0.000s	genre pk c'est différent wesh
@@ -197,17 +197,26 @@ NEW:
 			V	: cat >>>		unexpeted token >>	wrong errror
 			V	: cat >> << 						wrong error
 			V	: cat >> > >> << >>					wrong error
-				: << pwd		double erreur avec redirection
+        omar	: << pwd		double erreur avec redirection
 			V	: cat < pwd	double erreur redir
 				: < Makefile .		permission denied		alors que bash : .: not enough arg	(non géré)
-				: cat << hola --> $HOME	,	hola	(doit afficher le HOME a la fermeture du heredoc)
-				: cat << ho"la"		quand il y a des guillemets dans le EOF de heredoc, l'expansion ne sera pas prise ne compte
-				: cat << $HOME		--> Pas de lecture d'expansion a l'interieur de heredoc
-				: cat << hola | rev			ca part en couille mdr mais ca marche a moitié
-				: cat << prout << lol << koala	--> ferme heredoc si on ecrit dans l'ordre prout, lol, koala. (ecrit les mots qui ne sont pas EOF et ajoute )
-				: ATTENTION : Les lignes écritent dans heredoc sont ajoutées a l'historique !!!
-				: << $hola		Ambiguous redirect ??
-				: << $"hola"$"b"	minishell essaye de lire l'expansion mais doit l'ignorer
+			V	: cat << ho"la"		quand il y a des guillemets dans le EOF de heredoc, l'expansion ne sera pas prise ne compte
+			V	: cat << $HOME		--> Pas de lecture d'expansion a l'interieur de heredoc
+		omar	: cat << hola | rev			ca part en couille mdr mais ca marche a moitié
+		omar	: cat << prout << lol << koala	--> ferme heredoc si on ecrit dans l'ordre prout, lol, koala. (ecrit les mots qui ne sont pas EOF et ajoute )
+		omar	: ATTENTION : Les lignes écritent dans heredoc sont ajoutées a l'historique !!!
+			V	: << $hola		Ambiguous redirect ??
+		omar	: << $"hola"$"b"	minishell essaye de lire l'expansion mais doit l'ignorer
+			V	: cat << hola --> $HOME	,	hola	(doit afficher le HOME a la fermeture du heredoc)
 		NON GERE: echo hola <<< bonjour 			doit juste retourner hola   -se sont des here string. comportement special. nous on utilise seulement avec redir
 		NON GERE: echo hola <<<< ou <<<<< bonjour 			unexpted token '<'	ou	'<<'
-				: pwd | cat  << he --> > $HOME > he --> /home/ochkaoul     --> toute commande apres heredoc sont ignore mais apres
+		omar	: pwd | cat  << he --> > $HOME > he --> /home/ochkaoul     --> toute commande apres heredoc sont ignore mais apres
+				: quand tu enleve le permission il te faut un permission denied
+			V	: echo lol | "" --> permission denied
+			V	: "" | echo lol --> ecris lol avand le message d erreur --> tout ces cas sont a deplacer dans l'exec
+			V	: > hey | ls
+			V	: "" -> permission denied
+			V	: > hey
+			V	: < hey
+			V	: >> hey
+			V	: << hey

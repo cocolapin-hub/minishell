@@ -101,10 +101,10 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 
 	/*Etapes de mon parsing*/
 	// if(line[0] == 59)
-	// 	write(1, "test1\n", 6);
+
 	cleaned_line = check_input(line, &all);
 	// if(cleaned_line[0] == 59)
-	// 	write(1, "test2\n", 6);
+
 
 
 	if (!cleaned_line)
@@ -114,8 +114,16 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 	}
 
 	/*Creation de la commande*/
+
 	tokenisation(cleaned_line, &list, &all);
-	error_handling(&all, &list);
+	if (!list)
+	{
+		*cmd = NULL;
+		return ;
+	}
+	else
+		error_handling(&all, &list);
+
 	if (!list)
 		*cmd = NULL;
 	else
@@ -132,11 +140,11 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 	// }
 
 	// /* ____PRINT CHECK____*/
-	// // while(list)
-	// // {
-	// // 	printf("**args: %s\ncmd: %s\n\n", list->type,  list->value);
-	// //  	list = list->next;
-	// // }
+	// while(list)
+	// {
+	// 	printf("**args: %u\ncmd: %s\n\n", list->type,  list->value);
+	//  	list = list->next;
+	// }
 
 	// print_pipeline(*cmd);      // <-- to print result
 	// if(list)

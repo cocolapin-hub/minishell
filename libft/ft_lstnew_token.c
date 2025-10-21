@@ -1,16 +1,16 @@
 #include "../minishell.h"
 
-// void	quotes_assignation(char quotes, t_quote *amount)
-// {
-// 	if (quotes == 34)
-// 		*amount = Q_DOUBLE;
-// 	else if (quotes == 39)
-// 		*amount = Q_SINGLE;
-// 	else if (quotes == 35)
-// 		*amount = Q_ERROR;
-// 	else
-// 		*amount = Q_NONE;
-// }
+void	quotes_assignation(char quotes, t_quote *amount)
+{
+	if (quotes == 34)
+		*amount = Q_DOUBLE;
+
+	else if (quotes == 39)
+		*amount = Q_SINGLE;
+
+	else
+		*amount = Q_NONE;
+}
 
 void	type_assignation(char *content, t_type *type)
 {
@@ -33,7 +33,7 @@ void	type_assignation(char *content, t_type *type)
 		*type = WORD;
 }
 
-t_token	*ft_lstnew_token(char *content)
+t_token	*ft_lstnew_token(char *content, char quote)
 {
 	t_token	*node;
 
@@ -46,6 +46,9 @@ t_token	*ft_lstnew_token(char *content)
 
 	/*element*/
 	type_assignation(content, &node->type);
+
+	/*quote*/
+	quotes_assignation(quote, &node->amount);
 
 	node->next = NULL;
 	return (node);

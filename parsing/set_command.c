@@ -46,6 +46,7 @@ void		create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
         *new = malloc(sizeof(t_token));
         (*new)->type = (*tmp)->type;
         (*new)->value = ft_strdup(target->value);
+		(*new)->amount = target->amount; 
         (*new)->next = NULL;
 
         if (!(*start))
@@ -142,7 +143,10 @@ t_command	*set_command(t_command **cmd, t_token *list, t_shell *all)
             return NULL;
 
         if (!*cmd)
+		{
             *cmd = new;
+			all->cmd_head = *cmd;
+		}
         else
             ft_lstadd_back_cmd(cmd, new);
     }

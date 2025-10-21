@@ -1,10 +1,24 @@
 
-//RO DO:	//gerer les cas rare
-			//gerer end code / ctr D etc..
+//TO DO:	V	//gerer ctr C for exec pipe
+				//expansion dans heredoc
+
+
+				//couper les fonctions dans le parsing
+				// -> tokenisation est sous folder dans tokenisation
+					// -> tokenisation est lui meme un folder
+
+
 
 			//plusieurs fonction de plus de 25 lines
 			//frees
 			//norminette
+
+
+
+
+// cat >> me""uoi -> pas d'expansion pour le end of file mais il faut retirer les guillemets
+// le cat fait l'expansion si il n'y avait pas de ghuillemets dans le end of file
+
 
 #include "minishell.h"
 
@@ -20,7 +34,7 @@ int main(int argc, char **argv, char **envp)
     // Initialize shell environment
     setup_shell(&all, envp);
     all.last_status = 0;
-
+	all.sig_type = 0;
     // Install signal handlers
     setup_sig();
 
@@ -28,7 +42,6 @@ int main(int argc, char **argv, char **envp)
     {
         // Read input
         line = readline("minishell$ ");
-
 		handles_ctrl_d(line, all, cmd_list);
 
 		if (handles_ctrl_c(all, line) || line[0] == '\0')

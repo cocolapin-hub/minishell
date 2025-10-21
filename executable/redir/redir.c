@@ -78,7 +78,7 @@ static int	handle_redir_heredoc(t_token *redir, t_shell *all)	// << shell lit to
 
 	if (!redir->value || redir->value[0] == '\0')
 		return (redir_error(redir->value, "ambiguous redirect"));
-	fd = create_heredoc(redir->value);	// crée le pipe et return pipefd[0] : lecture
+	fd = create_heredoc(redir->value, all);	// crée le pipe et return pipefd[0] : lecture
 	if (fd == -2)
 	{
 		all->last_status = 130;  // SIGINT

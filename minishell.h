@@ -28,9 +28,13 @@ typedef struct s_local {
     struct s_local   		*next;
 }   t_local;
 
+typedef struct s_command t_command;
+
 typedef struct s_shell {
     t_local           		*env;     		// VAR || $HOME ETC
     int						last_status;   	// Word or PATH
+	int						sig_type;
+	t_command				*cmd_head;
 }   t_shell;
 
 typedef enum e_quote {
@@ -116,8 +120,8 @@ void		free_tokens(t_token *list);
 void		end_code(t_command *cmd);
 void		free_args(char **args);
 
-char		*between_quotes(char *line, char *quote, int *x, t_shell **all);
-char		*outside_quotes(char *line, int *x, int *y, t_shell **all);
+char		*between_quotes(char *line, char *quote, int *x, t_shell **all, t_token **list);
+char		*outside_quotes(char *line, int *x, int *y, t_shell **all, t_token **list);
 
 
 /*________________________________executable________________________________*/
@@ -141,7 +145,7 @@ int			builtin_pwd(void);
 
 /*REDIR*/
 int			apply_redir(t_token *redir, t_shell *all);
-int			create_heredoc(char *limiter);
+int			create_heredoc(char *limiter, t_shell *all);
 
 /*ERROR & FREE*/
 void		exit_clean_af(t_shell *all, t_command *cmd_list, int code);
@@ -178,7 +182,7 @@ void		*ft_memset(void *s, int c, size_t n);
 char		**ft_split(char const *s, char c);
 char		*ft_strchr(const char *s, int c);
 t_command	*ft_lstlast_cmd(t_command *lst);
-t_token		*ft_lstnew_token(char *content);
+t_token		*ft_lstnew_token(char *content, char quote);
 void		ft_putendl_fd(char *s, int fd);
 int 		ft_strcmp(char *s1, char *s2);
 void		ft_putstr_fd(char *s, int fd);

@@ -5,7 +5,9 @@ int builtin_exit(char **args, t_shell *all, t_command *cmd_list)
 	long long 	val;
 
 	val = 0;
-	write(2, "exit\n", 5);
+	if (cmd_list->next == NULL && cmd_list == all->cmd_head)
+		write(2, "exit\n", 5);
+
 	// aucun argument
 	if (!args[1])
 		exit_clean_af(all, cmd_list, all->last_status);

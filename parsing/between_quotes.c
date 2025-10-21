@@ -1,8 +1,9 @@
 
 #include "../minishell.h"
 
-char	*between_quotes(char *line, char *quote, int *x, t_shell **all)
+char	*between_quotes(char *line, char *quote, int *x, t_shell **all, t_token **list)
 {
+	t_token *last = NULL;
 	char	*tmp;
 	int		y;
 
@@ -31,7 +32,14 @@ char	*between_quotes(char *line, char *quote, int *x, t_shell **all)
 	/*saves the cmd*/  // < -- ISSUE
 	tmp = ft_strdup_m(line, *x + 1, y - *x - 1);
 
-	if (*quote != 39)
+	if (*list)
+	{
+		last = *list;
+		while (last->next)
+			last = last->next;
+	}
+
+	if (*quote != 39 && (!last || last->type != REDIR_HEREDOC))
 		tmp = expansion((*all)->env, (*all)->last_status, tmp, quote);
 
 	*x = y + 1;

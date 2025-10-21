@@ -121,6 +121,7 @@ void child_process(t_command *cmd, t_local *env)
 		free(path);
 		exit(exec_error(cmd->args[0], strerror(errno), 126));	// verif le code d'erreur de bash car je suis pas sur
 	}
+
 }
 
 static void run_parent(t_command *cmd, pid_t pid)
@@ -163,6 +164,7 @@ static int	run_builtin_command(t_command *cmd)
 	int	ret;
 	int	redir_status;
 
+
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	if (saved_stdin == -1 || saved_stdout == -1)
@@ -190,8 +192,13 @@ void	run_command(t_command *cmd)
 {
 	pid_t	pid;
 
-	// if (!cmd->args || !cmd ->args[0] || cmd->args[0][0] == '\0')	// commande vide : on fait rien
-	// 	return (cmd->all->last_status = 0, (void)0);
+	if ((!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0') && !cmd->elem)
+	{
+		write(2, "\'\': command not found\n", 22);
+		cmd->all->last_status = 127;
+		return;
+	}
+
 	if (is_builtin(cmd->args[0]))
 	{
 		cmd->all->last_status = run_builtin_command(cmd);
@@ -200,6 +207,7 @@ void	run_command(t_command *cmd)
 	pid = fork();
 	if (pid == -1)
 		 return (print_error_exec(cmd->args[0], "fork failed"), (void)0);
+
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
@@ -217,7 +225,12 @@ void	run_command(t_command *cmd)
 
 
 
-
+// if (cmd->args || !cmd ->args[0] || cmd->args[0][0] == '\0')	// commande vide : on fait rien
+// 	{
+// 		write(2, "\'\': command not found\n", 22);
+// 	//	cmd->all->last_status = 0;
+// 		return 0;
+// 	}
 
 
 /*
