@@ -104,7 +104,8 @@ SRCS = \
 	libft/ft_strstr.c \
 	libft/ft_calloc.c \
 	libft/ft_strlcpy.c \
-	libft/ft_memset.c
+	libft/ft_memset.c \
+	libft/ft_strtrim.c
 
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 

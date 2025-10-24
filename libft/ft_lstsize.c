@@ -1,3 +1,4 @@
+
 #include "../minishell.h"
 
 int	ft_lstsize(t_token *lst)

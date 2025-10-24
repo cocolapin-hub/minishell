@@ -19,11 +19,11 @@ int	is_valid_identifier(const char *key)
 	return (1);
 }
 
-static int	is_invalid_key(char *key, char *arg)
+static int	is_invalid_key(char *key, char *arg, t_shell *all)
 {
 	if (!key || !is_valid_identifier(key))
 	{
-		print_invalid_identifier(arg);
+		print_invalid_identifier(arg, all);
 		free(key);
 		return (1);
 	}
@@ -34,7 +34,6 @@ static void	print_sorted_env(t_local *env)
 {
 	char	**tab;
 	int		i;
-	char	*equal;
 
 	tab = env_to_tab(env);
 	if (!tab)
@@ -44,103 +43,49 @@ static void	print_sorted_env(t_local *env)
 	while (tab[i])
 	{
 		ft_putstr_fd("declare -x ", 1);
-		equal = ft_strchr(tab[i], '=');
-		if (equal)
-		{
-			*equal = '\0';
-			ft_putstr_fd(tab[i], 1);
-			ft_putstr_fd("=\"", 1);
-			ft_putstr_fd(equal + 1, 1);
-			ft_putendl_fd("\"", 1);
-			*equal = '=';
-		}
-		else
-			ft_putendl_fd(tab[i], 1);
+		print_export_var(tab[i]);
 		i++;
 	}
 	free_split(tab);
 }
 
-// void	print_sorted_env(t_local *env)
-// {
-// 	t_local	*cur;
-
-// 	cur = env;
-// 	while (cur)
-// 	{
-// 		if (cur->value == NULL)
-// 			printf("declare -x %s\n", cur->key);
-// 		else if (cur->value[0] == '\0')
-// 			printf("declare -x %s=\"\"\n", cur->key);
-// 		else
-// 			printf("declare -x %s=\"%s\"\n", cur->key, cur->value);
-// 		cur = cur->next;
-// 	}
-// }
-
-// static void	handle_export_arg(char *arg, t_local **env)
-// {
-// 	char	*equal;
-// 	char	*key;
-// 	char	*value;
-
-// 	equal = ft_strchr(arg, '=');
-// 	if (!equal)
-// 	{
-// 		if (!is_valid_identifier(arg))
-// 			return (print_invalid_identifier(arg));
-// 		if (!get_env_value(*env, arg))
-// 			set_env_value(env, arg, NULL);
-// 		return ;
-// 	}
-// 	*equal = '\0';
-// 	key = ft_strdup(arg);
-// 	value = ft_strdup(equal + 1);
-// 	*equal = '=';
-// 	if (!key || !is_valid_identifier(key))
-// 		return (print_invalid_identifier(arg), free(key), free(value), (void)0);
-// 	set_env_value(env, key, value);
-// 	free(key);
-// 	free(value);
-// }
-
-
-static void	handle_export_arg(char *arg, t_local **env)
+static int	handle_export_arg(char *arg, t_local **env, t_shell *all)
 {
 	char	*equal;
 	char	*key;
 	char	*value;
 
+	if (!arg || arg[0] == '\0')
+		return (print_sorted_env(*env), 0);
 	equal = ft_strchr(arg, '=');
 	if (!equal)
 	{
 		if (is_valid_identifier(arg))
 			set_env_value(env, arg, NULL);
 		else
-			print_invalid_identifier(arg);
-		return ;
+			print_invalid_identifier(arg, all);
+		return (all->last_status);
 	}
 	*equal = '\0';
 	key = ft_strdup(arg);
 	value = ft_strdup(equal + 1);
 	*equal = '=';
-	if (is_invalid_key(key, arg))
-		return (free(value), (void)0);
+	if (is_invalid_key(key, arg, all))
+		return (free(value), 1);
 	if (ft_strcmp(key, "_") != 0)
 		set_env_value(env, key, value);
-	free(key);
-	free(value);
+	return (free(key), free(value), 0);
 }
 
-int	builtin_export(char **args, t_local **env)
+int	builtin_export(char **args, t_local **env, t_shell *all)
 {
 	int	i;
-	int	has_valid_arg;
+	int	has_error;
 
 	if (!args[1])
 		return (print_sorted_env(*env), 0);
 	i = 1;
-	has_valid_arg = 0;
+	has_error = 0;
 	while (args[i])
 	{
 		if (args[i][0] == '\0' && !args[i][1])
@@ -148,108 +93,15 @@ int	builtin_export(char **args, t_local **env)
 			i++;
 			continue ;
 		}
-		handle_export_arg(args[i], env);
-		has_valid_arg = 1;
+		if (handle_export_arg(args[i], env, all))
+			has_error = 1;
 		i++;
 	}
-	if (!has_valid_arg)
-		print_sorted_env(*env);
-	return (0);
+	all->last_status = has_error;
+	return (has_error);
 }
 
 /*
-__________________________________________________________________________________________________________________________________________________
-
-
-
-static int	is_valid_identifier(char *arg)
-{
-	int i;
-
-	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
-		return (0);
-	i = 1;
-	while (arg[i] && arg[i] != '=')
-	{
-		if (!isalnum(arg[i]) && arg[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-static void	print_sorted_env(t_local *env)
-{
-	t_local	**envcopy;
-	t_local	*tmp;
-	int		size;
-	int		i;
-
-	size = 0;
-	tmp = env;
-	while (tmp)
-	{
-		size++;
-		tmp = tmp->next;
-	}
-	envcopy = malloc(sizeof(t_local *) * size);
-	if (!envcopy)
-		return ;
-	i = 0;
-	tmp = env;
-	while (tmp)
-	{
-		envcopy[i++] = tmp;
-		tmp = tmp->next;
-	}	
-	sort_env_tab(envcopy, size);
-	i = 0;
-	while (i < size)
-	{
-		if (envcopy[i]->value)
-			printf("declare -x %s=\"%s\"\n", envcopy[i]->key, envcopy[i]->value);
-		else
-			printf("declare -x %s\n", envcopy[i]->key);
-		i++;
-	}
-	free(envcopy);
-}
-
-int	builtin_export(char **args, t_local *env)
-{
-	int		i;
-	char	*equal;
-	char	*key;
-	char	*value;
-
-	if (!args[1])
-		return (print_sorted_env(env), 0);
-	i = 1; 								 // args[0] = "export"
-	while (args[i])
-	{
-		if (!is_valid_identifier(args[i]))
-		{
-			printf("bash: export: '%s': not a valid identifier\n", args[i]);
-			i++;
-			continue ;
-		}
-		equal = ft_strchr(args[i], '='); // pointe sur le '=' dans la chaîne
-		if (!equal)						 // si pas de =, on ignore et on passe à args suivant
-		{
-			i++;
-			continue;
-		}
-		*equal = '\0';					 // On remplace le '=' par un caractère '\0'. pour terminer la chaine. donc "PATH=/bin" devient deux chaînes (evite de faire un new malloc)
-		key = args[i];					 // apres le \0, key pointe uniquement sur "KEY" (ex : key = "PATH")
-		value = equal + 1;				 // equal pointe sur \0, +1 c'est la position apres donc "VALUE" (Exemple : "PATH=/bin" → value = "/bin")
-		set_env_value(&env, key, value); // maj de la variable dans la liste chainée
-		*equal = '=';					 // on remet le '=' pour ne pas modifier largs original (args[i]) et pouvoir réutiliser la chaine
-		i++;							 // args suivant
-	}
-	return (0);
-}
-
-
 
 	Objectif
 		Si la variable existe déjà → mettre à jour sa valeur.

@@ -1,6 +1,7 @@
+
 #include "../../minishell.h"
 
-static void	print_unset_error(char *arg)	// a uniformiser avec les autres erreurs
+static void	print_unset_error(char *arg)
 {
 	write(2, "minishell: unset: `", 19);
 	write(2, arg, ft_strlen(arg));
@@ -31,7 +32,6 @@ int	builtin_unset(char **args, t_local **env)
 	}
 	return (0);
 }
-
 
 /*
 Parcours la liste chaînée.

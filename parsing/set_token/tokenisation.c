@@ -1,12 +1,11 @@
 
 #include "../../minishell.h"
 
-
 t_token *tokenisation(char *line, t_token **list, t_shell **all)
 {
     int x;
 
-	(*all)->last_status = 0;
+	// (*all)->last_status = 0;
     x = 0;
     while (line[x])
     {

@@ -42,7 +42,12 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
         cmd = ft_strjoin(cmd, tmp);
         free(tmp);
     }
-
+	// if (!was_in_quotes)
+	// {
+	// 	char *cleaned = clean_after_expansion(cmd);
+	// 	free(cmd);
+	// 	cmd = cleaned;
+	// }
     // If NOT in quotes and contains spaces, split it
     if (!was_in_quotes && ft_strchr(cmd, ' '))
     {

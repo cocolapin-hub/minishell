@@ -118,7 +118,8 @@ NEW:
 			V	: echo "" $HOME - echo '' $HOME
 			V	: echo $"HO""ME"
 			V	: echo $ - echo $$ - echo $$$ - echo $$$$
-			V	: echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
+				: echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
+				: echo lol $cou cou$cou _lol$jusdecouille ".$cul mdr     1 "	petit test cadeau rien que pour toi <3
 			V	: echo ''hola''
 			V	: echo "'"h'o'la"'" -->quitte minishell
 			V	: "" echo "" hola"""""""""""" ""
@@ -132,12 +133,12 @@ NEW:
 			V	: "$HOMEdskjhfkdshfsd"
 			V	: $DONTEXIST	(retour a la ligne normalement)
 			V	: $LESS$VAR
-				: . --> permission denied
+			v	: . --> permission denied
 			V	: "" lol  -->  minishell: : No such file or directory
 
 --> ligne 211
-				: cat | rev (ctrl-C apres quelques enter)
-				: CTRL-Z (sans rien) ???? suspended
+			v	: cat | rev (ctrl-C apres quelques enter)
+			v	: CTRL-Z (sans rien) ???? suspended
 --> ligne 231
 			v	: export $OMG (variable inexistante) censé ouvrir export
 		NON GERE: export ho!la=looooooool	(! = event)
@@ -155,6 +156,8 @@ NEW:
 			v	: export HOLA="s -la"  --> l$HOLA	(execute ls -la)
 			v	: export HOLA="l" --> "$HOLA"s		(crash "")
 			v	: export A=1 B=2 C=3 D=4 E=5 F=6 G=7 H=8 --> echo "$A'$B"'$C"$D'$E'"$F'"'$G'$H"
+quote	omar	: export 'coucou&'=mdr		(syntax error near... exit code = 2)	devrait : bash: export: `coucou&=mdr': not a valid identifier
+		omar	: export "coucou&"=mdr		same shit
 			v	: la variable _= (réservée a bash n'est pas censée etre dans la liste d'export ???????????)
 --> ligne 333
 			v	: unset PATH --> ls		(ls: no such file or directory)
@@ -175,23 +178,26 @@ NEW:
 		NON GERE: cd ~ (et cd ~/  echo $? = 0)		(retourne à HOME)
 			v	: unset HOME --> export HOME= --> cd	 (censé marcher meme si HOME n'est pas set ????)
 --> ligne 444	:
-				: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> cd ..		(cd: error retrieving curr) (pwd: lol/b/..)
-				: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> PWD = minishell/lol/mdr	OLDPWD = minishell/
-				: ./Makefile	(permission denied et non Is a directory)
-				: touch hola --> ./hola		(permision denied et non Is a directory)
-				: env -i ./minishell	(ne copie pas l'env pour minishell donc env, export, cd ne fonctionnent plus)
+			v	: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> cd ..		(cd: error retrieving curr) (pwd: lol/b/..)
+			v	: mkdir lol -- > mkdir lol/mdr --> cd lol/mdr --> rm -r ../../lol --> PWD = minishell/lol/mdr	OLDPWD = minishell/
+			v	: ./Makefile	(permission denied et non Is a directory)
+			v	: touch hola --> ./hola		(permision denied et non Is a directory)
+			v	: env -i ./minishell	(ne copie pas l'env pour minishell donc env, export, cd ne fonctionnent plus)
 			V	: exit 0  /  +0	/ -0	(quitte mais affiche error numeric argument)
 			V	: exit 9223372036854775807  : quitte sans message   MAIS	exit 9223372036854775808 (+1) quitte avec message Numeric argument
 			V	: exit -9223372036854775808	: pareil
+			v	: exit + 42		bash: exit: +: numeric argument required		et quitte quand meme
+			v	: exit '    5    '		prend juste le 5 et code erreur = 5
+			v	: exit '   5   5 '		les espaces autour sont autorisés mais pas au milieu
 			V	: cat | ls	--> Ctrl-c 		(affiche mal le ^C) run_command ok mais pas exec_pipe
 			V	: ls | exit		(nouveau prompt sans quitter ni écrire exit) --> just condition de write si rien n est pipe avant
 			V	: exit | ls		(affiche ls sans quitter ni écrire exit) --> eit avec pipe en gros
 			V	: sleep 3 | exit	(attend 3 sans quitter ni écrire exit) same a l'envers --> just condition de write si rien n est pipe avant
 			V	: echo hola > bonjour	-->  cat -e bonjour | exit		(nouveau prompt sans rien écrire)
 			V	: echo hola > bonjour	-->  exit | cat -e bonjour		(ecrit : hola$ + nouveau prompt)
-				: ifconfig | grep ":"	(affiche docker0: flags=4099<UP,...)	on doit vraiment gérer cette merde ???
+			v	: ifconfig | grep ":"	(affiche docker0: flags=4099<UP,...)	on doit vraiment gérer cette merde ???
 		NON GERE: echo bite || cat		(non géré)
-				: time sleep 3 | sleep 3	(affiche real	0m3.002s	user 0m0.002s	sys 0m0.000s	genre pk c'est différent wesh
+			?	: time sleep 3 | sleep 3	(affiche real	0m3.002s	user 0m0.002s	sys 0m0.000s	prob waitpid dans execpipe
 --> ligne 639
 			V	: echo hola >>> bonjour		(unexpected token `>') wrong error
 			V	: cat >>>		unexpeted token >>	wrong errror
@@ -211,12 +217,12 @@ NEW:
 		NON GERE: echo hola <<< bonjour 			doit juste retourner hola   -se sont des here string. comportement special. nous on utilise seulement avec redir
 		NON GERE: echo hola <<<< ou <<<<< bonjour 			unexpted token '<'	ou	'<<'
 		omar	: pwd | cat  << he --> > $HOME > he --> /home/ochkaoul     --> toute commande apres heredoc sont ignore mais apres
-				: quand tu enleve le permission il te faut un permission denied
+			v	: quand tu enleve le permission il te faut un permission denied
 			V	: echo lol | "" --> permission denied
 			V	: "" | echo lol --> ecris lol avand le message d erreur --> tout ces cas sont a deplacer dans l'exec
 			V	: > hey | ls
 			V	: "" -> permission denied
 			V	: > hey
-			V	: < hey
+			v	: < hey		segfault chez moi
 			V	: >> hey
 			V	: << hey

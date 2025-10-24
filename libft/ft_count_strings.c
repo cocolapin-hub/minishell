@@ -1,12 +1,12 @@
 
 #include "../minishell.h"
 
-
-int ft_count_strings(char **arr)
+int	ft_count_strings(char **arr)
 {
-    int i = 0;
+	int	i;
 
-    while (arr[i])
-        i++;
-    return i;
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
 }

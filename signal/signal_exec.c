@@ -47,6 +47,7 @@ void setup_sig(void)
     sa.sa_flags = 0;  // PAS de SA_RESTART - important!
     sigaction(SIGINT, &sa, NULL);
     signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
 }
 
 // on n’affiche pas ^\Quit dans le parent. Ça doit seulement se faire quand un enfant est tué par SIGQUIT.

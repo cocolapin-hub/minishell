@@ -102,6 +102,6 @@ char 	*expansion(t_local *env, int last_status, char *str, char *quote)
 		expand = clean_after_expansion(str);  //<-- ??
     else
 		expand = ft_strdup(str);
-	return (str);
+	return (expand);
 }
 

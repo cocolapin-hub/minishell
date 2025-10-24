@@ -1,11 +1,10 @@
 
-
 #include "../minishell.h"
 
 int	count_words(const char *s, char c)
 {
-	int		is_word;
-	int		word_count;
+	int	is_word;
+	int	word_count;
 
 	word_count = 0;
 	is_word = 0;
@@ -27,7 +26,7 @@ int	count_words(const char *s, char c)
 
 char	**free_str_arr(char **arr, int nelm)
 {
-	int		x;
+	int	x;
 
 	x = -1;
 	while (++x < nelm)

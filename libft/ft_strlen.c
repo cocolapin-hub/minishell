@@ -1,5 +1,4 @@
 
-
 #include "../minishell.h"
 
 size_t	ft_strlen(const char *s)
@@ -18,4 +17,5 @@ int	main(void)
 {
 	const char *x= "hello";
 	printf("%zu", ft_strlen(x));
-}*/
+}
+*/

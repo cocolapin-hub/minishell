@@ -88,6 +88,7 @@ void    	set_env_value(t_local **env, char *key, char *value);
 void   		unset_env_value(t_local **env, char *key);
 char		*get_env_value(t_local *env, char *key);
 t_local		*find_env_key(t_local *env, char *key);
+void		print_export_var(char *var);
 char		**env_to_tab(t_local *env);
 void		sort_env_tab(char **tab);
 
@@ -118,6 +119,7 @@ char 		*expansion(t_local *env, int last_status, char *str, char *quote);
 int 		handle_exit_status(char **str, int last_status, int x);
 int			handle_number_zero(char **str, int x);
 int			handle_numbers(char **str, int x);
+char 		*clean_after_expansion(char *str);
 int 		handle_pid(char **str, int x);
 
 /*TOKENISATION*/
@@ -161,7 +163,7 @@ void		run_command(t_command *cmd);
 /*BUILTINS*/
 int 		builtin_exit(char **args, t_shell *all, t_command *cmd_list);
 int			exec_builtin(t_command *cmd, t_shell *all);
-int			builtin_export(char **args, t_local **env);
+int			builtin_export(char **args, t_local **env, t_shell *all);
 int			builtin_unset(char **args, t_local **env);
 int			builtin_cd(char **args, t_local **env);
 int			builtin_echo(char **args);
@@ -178,7 +180,7 @@ void		exit_clean_af(t_shell *all, t_command *cmd_list, int code);
 int			exec_error(const char *cmd, const char *msg, int code);
 void		fatal_error(const char *msg, int code);
 void		print_error_exec(char *cmd, char *msg);
-void		print_invalid_identifier(char *arg);
+void		print_invalid_identifier(char *arg, t_shell *all);
 int			redir_error(char *file, char *msg);
 void		free_command(t_command *cmd);
 void		free_split(char **array);
@@ -198,6 +200,7 @@ void		ft_lstadd_back_cmd(t_command **lst, t_command *new);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 int			ft_islonglong(const char *str, long long *out);
 int			ft_strstr(const char *big, const char *little);
+char		*ft_strtrim(char const *s1, char const *set);
 void		ft_lstadd_back(t_token **lst, t_token *new);
 char		*ft_strdup_m(const char *s, int x, int len);
 t_token		*ft_lstnew_token(char *content, char quote);
@@ -229,38 +232,6 @@ char		*ft_itoa(int n);
 
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

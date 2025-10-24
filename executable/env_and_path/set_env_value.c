@@ -26,7 +26,6 @@ void	set_env_value(t_local **env, char *key, char *value)
 	node = find_env_key(*env, key);
 	if (node)
 	{
-		// Si la variable existe déjà
 		if (node->value)
 		{
 			free(node->value);
@@ -36,30 +35,5 @@ void	set_env_value(t_local **env, char *key, char *value)
 			node->value = ft_strdup(value);
 		return ;
 	}
-	// Sinon, on l’ajoute
 	add_new_var(env, key, value);
 }
-
-
-// void	set_env_value(t_local **env, char *key, char *value)
-// {
-// 	t_local	*node;
-
-// 	node = find_env_key(*env, key);
-// 	if (node)
-// 	{
-// 		if (ft_strcmp(node->key, key) == 0)
-// 		{
-// 			if (node->value && value)
-// 			{
-// 				free(node->value);
-// 				node->value = ft_strdup(value);
-// 			}
-// 			else if (!node->value && value)
-// 				node->value = ft_strdup(value);
-// 			return ;
-// 		}
-// 		node = node->next;
-// 	}
-// 	add_new_var(env, key, value);
-// }

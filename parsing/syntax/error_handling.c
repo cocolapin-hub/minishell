@@ -16,16 +16,16 @@ void 	error_handling(t_shell **all, t_token **list)
 	}
 
 	/*check the first ;s or &s*/
-	else if (lst2 && lst2->type == WORD)
-	{
-		lst2 = check_first_word(lst2, all);
-		if (!lst2)
-		{
-			free_tokens(*list);
-			*list = NULL;
-			return;
-		}
-	}
+	// else if (lst2 && lst2->type == WORD)
+	// {
+	// 	lst2 = check_first_word(lst2, all);
+	// 	if (!lst2)
+	// 	{
+	// 		free_tokens(*list);
+	// 		*list = NULL;
+	// 		return;
+	// 	}
+	// }
 
 	/*check other syntax*/
 	while (lst2)
