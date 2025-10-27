@@ -96,24 +96,12 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 	t_token 	*list = NULL;
 	char		*cleaned_line;
 
-
-
-	/*Etapes de mon parsing*/
-	// if(line[0] == 59)
-
 	cleaned_line = check_input(line, &all);
-	// if(cleaned_line[0] == 59)
-
-
-
 	if (!cleaned_line)
 	{
 		*cmd = NULL;
 		return ;
 	}
-
-	/*Creation de la commande*/
-
 	tokenisation(cleaned_line, &list, &all);
 	if (!list)
 	{
@@ -129,7 +117,7 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 		set_command(cmd, list, all);
 
 
-	//FREE EN COMMENTAIRE POUR L'INSTANT
+	//FREE TOUT A LA TOUTE FIN DU MAIN
 
 	// if(!set_command(&cmd, list, all))
 	// {
@@ -138,17 +126,9 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 	// 	end_code(cmd);
 	// }
 
-	// /* ____PRINT CHECK____*/
-	// while(list)
-	// {
-	// 	printf("**args: %u\ncmd: %s\n\n", list->type,  list->value);
-	//  	list = list->next;
-	// }
-
 	// print_pipeline(*cmd);      // <-- to print result
+
 	// if(list)
 	// 	free_tokens(list);
 	// free(cleaned_line);
-
-//	return (cmd);
 }

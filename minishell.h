@@ -76,6 +76,14 @@ typedef struct s_pipe
 	t_command				*cmd_list;
 }	t_pipe;
 
+typedef struct s_cmd_state
+{
+	char	*cmd;
+	int		x;
+	int		was_in_quotes;
+	char	quote;
+}	t_cmd_state;
+
 
 /*_______________________________environnement_______________________________*/
 /*PARS*/ //--> on garde celui ci
@@ -124,8 +132,8 @@ char 		*clean_after_expansion(char *str);
 int 		handle_pid(char **str, int x);
 
 /*TOKENISATION*/
-char		*between_quotes(char *line, char *quote, int *x, t_shell **all, t_token **list);
-char		*outside_quotes(char *line, int *x, int *y, t_shell **all, t_token **list);
+char		*between_quotes(char *line, int *x, t_shell **all, t_token **list);
+char		*outside_quotes(char *line, int *x, t_shell **all, t_token **list);
 int 		handles_command(char *line, int x, t_token **list, t_shell **all);
 t_token		*tokenisation(char *line, t_token **list, t_shell **all);
 int			handles_special_char(char *line, int x, t_token **list);
