@@ -118,8 +118,8 @@ NEW:
 			V	: echo "" $HOME - echo '' $HOME
 			V	: echo $"HO""ME"
 			V	: echo $ - echo $$ - echo $$$ - echo $$$$
-				: echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
-				: echo lol $cou cou$cou _lol$jusdecouille ".$cul mdr     1 "	petit test cadeau rien que pour toi <3
+		-->		: echo $DONTEXIST Hola --> rajoute un espace quand variable est vide
+		-->		: echo lol $cou cou$cou _lol$jusdecouille ".$cul mdr     1 "	petit test cadeau rien que pour toi <3
 			V	: echo ''hola''
 			V	: echo "'"h'o'la"'" -->quitte minishell
 			V	: "" echo "" hola"""""""""""" ""

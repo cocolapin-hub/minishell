@@ -2,6 +2,7 @@
 # define MINISHELL_H
 
 # define MAX_LINE_LEN 4096
+#define SKIP_TOKEN ((char *)1)
 
 # include <readline/readline.h>
 # include <readline/history.h>

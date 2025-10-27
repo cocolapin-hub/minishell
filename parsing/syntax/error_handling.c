@@ -12,20 +12,9 @@ void 	error_handling(t_shell **all, t_token **list)
 		write(2, "syntax error near unexpected token `|'\n", 39);
 		(*all)->last_status = 2;
 		free_tokens(*list);
+		*list = NULL;
 		return ;
 	}
-
-	/*check the first ;s or &s*/
-	// else if (lst2 && lst2->type == WORD)
-	// {
-	// 	lst2 = check_first_word(lst2, all);
-	// 	if (!lst2)
-	// 	{
-	// 		free_tokens(*list);
-	// 		*list = NULL;
-	// 		return;
-	// 	}
-	// }
 
 	/*check other syntax*/
 	while (lst2)
@@ -58,6 +47,4 @@ void 	error_handling(t_shell **all, t_token **list)
 		}
 		lst2 = lst2->next;
 	}
-
-	//*list = lst2;
 }

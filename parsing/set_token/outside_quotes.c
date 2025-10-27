@@ -7,6 +7,8 @@ char	*outside_quotes(char *line, int *x, int *y, t_shell **all, t_token **list)
 	t_token *last = NULL;
 	int		start;
 	char	*tmp;
+	//int		expanded = 0;
+
 
 	if (line[*y] == '$' && (line[*y + 1] == 34 || line[*y + 1] == 39))
 	{
@@ -35,6 +37,17 @@ char	*outside_quotes(char *line, int *x, int *y, t_shell **all, t_token **list)
 			tmp = expansion((*all)->env, (*all)->last_status, tmp, quote);
 	}
 
+	if (line[start] == '$' && ft_strcmp(tmp, "") == 0)
+	{
+		*x = *y;
+		free(tmp);
+		return (SKIP_TOKEN);
+	}
+
 	*x = *y;
 	return (tmp);
 }
+
+
+// if chaine vide provient d'une expansion alors suprimer le token.
+// il retourne null

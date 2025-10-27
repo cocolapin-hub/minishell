@@ -90,7 +90,6 @@ char 	*expansion(t_local *env, int last_status, char *str, char *quote)
 				// Search for this variable in the environment
 				x = find_variable_in_env(env, start, &str, var_name);
 
-
 			}
 			else
 				x++;

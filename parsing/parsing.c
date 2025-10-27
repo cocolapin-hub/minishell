@@ -93,7 +93,6 @@ void print_pipeline(t_command *cmd)
 
 void	parsing(char *line, t_shell *all, t_command **cmd)
 {
-//  t_command 	*cmd = NULL;
 	t_token 	*list = NULL;
 	char		*cleaned_line;
 

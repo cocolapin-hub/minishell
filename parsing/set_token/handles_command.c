@@ -39,16 +39,18 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
             free(cmd);
             return (-1);
         }
+		if (tmp == SKIP_TOKEN)
+			continue;
         cmd = ft_strjoin(cmd, tmp);
         free(tmp);
     }
-	// if (!was_in_quotes)
-	// {
-	// 	char *cleaned = clean_after_expansion(cmd);
-	// 	free(cmd);
-	// 	cmd = cleaned;
-	// }
-    // If NOT in quotes and contains spaces, split it
+
+	if (tmp == SKIP_TOKEN)
+    {
+        free(cmd);
+        return (x);
+    }
+
     if (!was_in_quotes && ft_strchr(cmd, ' '))
     {
         split = ft_split(cmd, ' ');
@@ -58,9 +60,6 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
             if (ft_strlen(split[i]) > 0)
             {
                 new = ft_lstnew_token(split[i], quote);
-                // new->type = WORD;
-                // new->amount = Q_NONE;
-
                 if (!*list)
                     *list = new;
                 else
@@ -75,8 +74,6 @@ int handles_command(char *line, int x, t_token **list, t_shell **all)
     {
         // Keep as one token (was in quotes or no spaces)
         new = ft_lstnew_token(cmd, quote);
-        // new->type = WORD;
-        // new->amount = quote;
 
         if (!*list)
             *list = new;
