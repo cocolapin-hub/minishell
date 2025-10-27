@@ -28,7 +28,7 @@ int	exec_builtin(t_command *cmd, t_shell *all)
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		return (builtin_pwd());
+		return (builtin_pwd(all));
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		return (builtin_echo(cmd->args));
 	if (ft_strcmp(cmd->args[0], "cd") == 0)

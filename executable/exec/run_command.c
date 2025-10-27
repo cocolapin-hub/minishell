@@ -306,7 +306,30 @@ void	run_command(t_command *cmd)
 {
 	pid_t	pid;
 	char	*path_env;
+	int 	saved_stdin;
+    int 	saved_stdout;
 
+    saved_stdin = dup(STDIN_FILENO);
+    saved_stdout = dup(STDOUT_FILENO);
+    if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')	// protege contre null, et le cas ""
+    {
+        if (cmd->elem)	// si y'a un redir
+        {
+            int r = apply_redir(cmd->elem, cmd->all);	// apply redir se charge de print les errors et return 1 si !fichier
+			dup2(saved_stdin, STDIN_FILENO);
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdin);
+			close(saved_stdout);
+            if (r == -2)	// apply_redir return -2 si heredoc interrompu
+                cmd->all->last_status = 130;
+            else if (r != 0)	// apply_redir already printed the error et si il a return 0 c'est que c'est bon
+                cmd->all->last_status = 1;
+			return ;
+        }	// No command and no redirection => nothing to do
+        
+        close(saved_stdin);
+		close(saved_stdout);
+    }
 	path_env = get_env_value(cmd->all->env, "PATH");
 	if (cmd->args[0][0] == '\0')	// commande vide ""
 	{

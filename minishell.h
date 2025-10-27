@@ -177,8 +177,8 @@ int			builtin_unset(char **args, t_local **env);
 int			builtin_cd(char **args, t_local **env);
 int			builtin_echo(char **args);
 int			builtin_env(t_local *env);
+int			builtin_pwd(t_shell *all);
 int			is_builtin(char *cmd);
-int			builtin_pwd(void);
 
 /*REDIR*/
 int			create_heredoc(char *limiter, t_shell *all);
