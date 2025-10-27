@@ -40,7 +40,6 @@ void	setup_env(t_local **env, char *tab, int len, int y)
 
 void	setup_shell(t_shell *all, char **envp)
 {
-
 	int 	x;
 
 	// *all = malloc(sizeof(t_shell));
@@ -48,12 +47,10 @@ void	setup_shell(t_shell *all, char **envp)
 	// 	exit (1);
 	all->env = NULL;
 	all->last_status = 0;
-
 	x = 0;
 	while (envp[x])
 	{
 		setup_env(&(all->env), envp[x], 0, 0);
 		x++;
 	}
-
 }

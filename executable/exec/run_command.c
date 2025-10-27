@@ -343,8 +343,7 @@ void	run_command(t_command *cmd)
 		cmd->all->last_status = 2;
 		return ;
 	}
-
-	if (is_builtin(cmd->args[0]))			
+	if (is_builtin(cmd->args[0]))
 	{
 		cmd->all->last_status = run_builtin_command(cmd);
 		return ;
@@ -352,7 +351,6 @@ void	run_command(t_command *cmd)
 	pid = fork();
 	if (pid == -1)
 		 return (print_error_exec(cmd->args[0], "fork failed"), (void)0);
-
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
@@ -365,10 +363,9 @@ void	run_command(t_command *cmd)
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
 		run_parent(cmd, pid);
-		setup_sig(); // restaure le handler readline
+		setup_sig();	// restaure le handler readline
 	}
 }
-
 
 
 /*

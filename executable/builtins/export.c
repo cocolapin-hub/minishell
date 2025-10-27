@@ -56,7 +56,7 @@ static int	handle_export_arg(char *arg, t_local **env, t_shell *all)
 	char	*value;
 
 	if (!arg || arg[0] == '\0')
-		return (print_sorted_env(*env), 0);
+		return (print_invalid_identifier(arg, all), 1);
 	equal = ft_strchr(arg, '=');
 	if (!equal)
 	{
@@ -88,11 +88,6 @@ int	builtin_export(char **args, t_local **env, t_shell *all)
 	has_error = 0;
 	while (args[i])
 	{
-		if (args[i][0] == '\0' && !args[i][1])
-		{
-			i++;
-			continue ;
-		}
 		if (handle_export_arg(args[i], env, all))
 			has_error = 1;
 		i++;
