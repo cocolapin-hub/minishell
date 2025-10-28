@@ -1,5 +1,5 @@
-#include "../../minishell.h"
 
+#include "../../minishell.h"
 
 void		fill_args(t_token *list, char ***args)
 {

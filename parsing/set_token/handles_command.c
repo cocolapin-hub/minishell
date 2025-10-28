@@ -72,7 +72,7 @@ int		parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_tok
 			continue;
 
 		joined = ft_strjoin_free(cmd_state->cmd, tmp);
-		free(cmd_state->cmd);
+		//free(cmd_state->cmd);
 		cmd_state->cmd = joined;
 		//free(cmd_state->tmp);
 	}

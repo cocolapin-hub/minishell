@@ -1,6 +1,5 @@
 #include "../../minishell.h"
 
-
 t_token 	*check_char(t_token *list, t_shell **all)
 {
 	char c;

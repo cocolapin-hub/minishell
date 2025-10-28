@@ -19,11 +19,5 @@ t_token 	*check_pipe(t_token *list, t_shell **all)
 		return NULL;
 	}
 
-	if (list->type == PIPE && list->next->type == WORD)
-	{
-		if (!check_first_word(list->next, all))
-			return (NULL);
-	}
-
 	return (list);
 }

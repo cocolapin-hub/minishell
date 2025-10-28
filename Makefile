@@ -30,15 +30,14 @@ SRCS = \
 	executable/env_and_path/env_to_tab.c \
 	executable/env_and_path/env_utils.c \
 	executable/env_and_path/find_path.c \
+	executable/exec/child_process.c \
 	executable/exec/run_command.c \
+	executable/exec/pipe_child.c \
 	executable/exec/exec_pipe.c \
 	executable/free_errors/error.c \
 	executable/free_errors/free.c \
 	executable/redir/heredoc.c \
 	executable/redir/redir.c \
-	executable/exec/child_process.c \
-	executable/exec/pipe_child.c \
-	parsing/parsing.c \
 	parsing/check_input.c \
 	parsing/parsing.c \
 	parsing/set_cmd/fill_elements.c \
@@ -65,7 +64,6 @@ SRCS = \
 	parsing/set_token/expansion/handle_numbers.c \
 	parsing/set_token/expansion/handle_pid.c \
 	parsing/set_token/expansion/expansion.c \
-	parsing/syntax/check_first_word.c \
 	parsing/syntax/error_handling.c \
 	parsing/syntax/check_redir.c \
 	parsing/syntax/check_char.c \
@@ -77,6 +75,7 @@ SRCS = \
 	libft/ft_lstadd_back_cmd.c \
 	libft/ft_count_strings.c \
 	libft/ft_lstnew_token.c \
+	libft/ft_strjoin_free.c \
 	libft/ft_lstadd_back.c \
 	libft/ft_lstlast_cmd.c \
 	libft/ft_islonglong.c \
@@ -110,7 +109,6 @@ SRCS = \
 	libft/ft_split.c \
 	libft/ft_atol.c \
 	libft/ft_itoa.c \
-	libft/ft_strjoin_free.c \
 	libft/ft_atoi.c
 
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)

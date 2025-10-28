@@ -2,6 +2,17 @@
 #include "../../minishell.h"
 
 
+static void	link_lst(t_command **cmd, t_shell *all, t_command	*new)
+{
+	if (!*cmd)
+	{
+		*cmd = new;
+		all->cmd_head = *cmd;
+	}
+	else
+		ft_lstadd_back_cmd(cmd, new);
+}
+
 t_command	*set_command(t_command **cmd, t_token *list, t_shell *all)
 {
 	t_command	*new;
@@ -24,13 +35,7 @@ t_command	*set_command(t_command **cmd, t_token *list, t_shell *all)
         if (!new)
             return NULL;
 
-        if (!*cmd)
-		{
-            *cmd = new;
-			all->cmd_head = *cmd;
-		}
-        else
-            ft_lstadd_back_cmd(cmd, new);
+		link_lst(cmd, all, new);
     }
 	//free_args(args); not here perhaps
 	return (*cmd);

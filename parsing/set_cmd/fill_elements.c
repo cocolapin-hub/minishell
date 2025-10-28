@@ -24,7 +24,7 @@ void		fill_elements(t_token **list, t_token **elements)
 		tmp = tmp->next;
 	}
 	*elements = start;
-
+	
 	/*move after the pipe for next cmd*/
 	if (tmp && tmp->type == PIPE)
 		*list = tmp->next;

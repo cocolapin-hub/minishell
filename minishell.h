@@ -143,7 +143,6 @@ t_token 	*tokenisation(int x, char *line, t_token **list, t_shell **all);
 int			handles_special_char(char *line, int x, t_token **list);
 
 /*ERROR_HANDLING*/
-t_token		*check_first_word(t_token *list, t_shell **all);
 void 		error_handling(t_shell **all, t_token **list);
 t_token 	*check_redir(t_token *list, t_shell **all);
 t_token 	*check_char(t_token *list, t_shell **all);
