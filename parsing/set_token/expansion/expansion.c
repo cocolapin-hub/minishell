@@ -67,7 +67,7 @@ static int	handle_expansion(int *x, char **str, t_local *env, int last_status)
 
 static char *wrap_up_expansion(char *expand, int expansion_done, char *quote, char *str)
 {
-	if (expansion_done == 1 && !quote)
+	if (expansion_done == 1 && (!quote || *quote == 0))
 		expand = clean_after_expansion(str);
     else
 		expand = ft_strdup(str);

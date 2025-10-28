@@ -3,8 +3,8 @@
 
 void		fill_elements(t_token **list, t_token **elements)
 {
-	t_token	*tmp = *list;
 	t_token	*start = NULL;
+	t_token	*tmp = *list;
 	t_token	*end = NULL;
 	t_token	*new = NULL;
 
@@ -24,7 +24,7 @@ void		fill_elements(t_token **list, t_token **elements)
 		tmp = tmp->next;
 	}
 	*elements = start;
-	
+
 	/*move after the pipe for next cmd*/
 	if (tmp && tmp->type == PIPE)
 		*list = tmp->next;

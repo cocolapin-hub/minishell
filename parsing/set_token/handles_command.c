@@ -22,8 +22,8 @@ void	token_flag_off(char *cmd, int quote, t_token **list)
 		}
 		i++;
 	}
+    free(split);
 	free(cmd);
-     // Don't free split array or split[i] - tokens own them now
 }
 
 void 	token_flag_on(char *cmd, int quote, t_token **list)

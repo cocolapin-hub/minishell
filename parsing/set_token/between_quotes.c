@@ -2,7 +2,7 @@
 #include "../../minishell.h"
 
 
-static void	expand_word(char **tmp, char *quote, t_shell **all, t_token **list)
+static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 {
 	t_token *last = NULL;
 
@@ -13,8 +13,8 @@ static void	expand_word(char **tmp, char *quote, t_shell **all, t_token **list)
 			last = last->next;
 	}
 
-	if (*quote != 39 && (!last || last->type != REDIR_HEREDOC))
-		*tmp = expansion((*all)->env, (*all)->last_status, *tmp, quote);
+	if (quote != 39 && (!last || last->type != REDIR_HEREDOC))
+		*tmp = expansion((*all)->env, (*all)->last_status, *tmp, &quote);
 }
 
 char		*between_quotes(char *line, int *x, t_shell **all, t_token **list)
@@ -42,7 +42,7 @@ char		*between_quotes(char *line, int *x, t_shell **all, t_token **list)
 	}
 
 	tmp = ft_strdup_m(line, *x + 1, y - *x - 1);
-	expand_word(&tmp, &quote, all, list);
+	expand_word(&tmp, quote, all, list);
 	*x = y + 1;
 	return (tmp);
 }

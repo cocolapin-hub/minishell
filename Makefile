@@ -38,6 +38,7 @@ SRCS = \
 	executable/free_errors/free.c \
 	executable/redir/heredoc.c \
 	executable/redir/redir.c \
+	parsing/parsing.c \
 	parsing/check_input.c \
 	parsing/set_cmd/fill_elements.c \
 	parsing/set_cmd/set_command.c \

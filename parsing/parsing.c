@@ -116,18 +116,9 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 	else
 		set_command(cmd, list, all);
 
+	free(cleaned_line);
 
-	//FREE TOUT A LA TOUTE FIN DU MAIN
-
-	// if(!set_command(&cmd, list, all))
-	// {
-	// 	free(line);
-	// 	free_tokens(list);
-	// 	end_code(cmd);
-	// }
-
-	// print_pipeline(*cmd);      // <-- to print result
-
+	// print_pipeline(*cmd);
 	// if(list)
 	// 	free_tokens(list);
 	// free(cleaned_line);
