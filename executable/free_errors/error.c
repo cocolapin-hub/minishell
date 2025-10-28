@@ -61,3 +61,29 @@ void	print_invalid_identifier(char *arg, t_shell *all)
 	ft_putendl_fd("': not a valid identifier", 2);
 	all->last_status = 1;
 }
+
+void	print_err(const char *prefix, const char *cmd, const char *msg)
+{
+	if (prefix)
+		write(2, prefix, ft_strlen(prefix));
+	if (cmd && *cmd)
+	{
+		write(2, cmd, ft_strlen(cmd));
+		write(2, ": ", 2);
+	}
+	if (msg)
+		write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
+}
+
+int	error_with_code(const char *cmd, const char *msg, int code)
+{
+	print_err("minishell: ", cmd, msg);
+	return (code);
+}
+
+void	fatal_exit(const char *msg, int code)
+{
+	perror(msg);
+	exit(code);
+}

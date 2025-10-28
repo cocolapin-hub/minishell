@@ -1,111 +1,5 @@
+
 #include "../../minishell.h"
-
-// static void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
-// {
-// 	// if (!cmd->args || !cmd->args[0] || !*cmd->args[0])
-// 	// {
-// 	// 	exit(127);
-// 	// }
-
-// 	if (prev_fd != -1)							// si fd du pipe précédent existe
-// 	{
-// 		dup2(prev_fd, STDIN_FILENO);			// dup2 #1 : duplique le fd du pipe précédent sur stdin (fd 0)
-// 		close(prev_fd);							// on ferme car plus besoin sous ce nom (dup2 a créé un alias)
-// 	}
-
-// 	write(1, "2\n", 2);
-// 	if (cmd->next)								// si pas la derniere cmd, redirige stdout(sortie) de l'enfant vers pipefd[1]
-// 	{
-// 		close(pipefd[0]);						// close lecture inutile de l'enfant
-// 		dup2(pipefd[1], STDOUT_FILENO);			// dup2 #2 : dup la sortie vers pipefd[1]
-// 		close(pipefd[1]);						// ferme pipefd[1] car dup2 a fait la copie
-// 	}											// IMPORTANT  : ces deux dup2 positionnent stdin/out par défaut pour la cmd
-
-// 	write(1, "3\n", 2);							//(apply_redir peut ensuite appeler d'autrs dup2 pour écraser ces réglages avec un redir > ou <)
-// 	if (apply_redir(cmd->elem, cmd->all) != 0)	// applique les redir propre a la cmd, viennent apres la config du pipe (dernier dup2 wins)
-// 		fatal_error("redir", 1);
-
-// 	write(1, "4\n", 2);
-// 	if (is_builtin(cmd->args[0]))				// dans un pipe meme le builtin s'execute dans l'enfant, on va gérer plus haut pour les commandes uniques dans exec_command()
-// 		exit(exec_builtin(cmd, cmd->all));		// on exit en appelant exec_builtin pour que l'enfant finisse avec le bon code de sortie ET leurs modifications d’environnement ne doivent pas affecter le shell parent (c’est le comportement standard)
-
-// 	else
-// 	{
-// 		child_process(cmd, cmd->all->env);		// fait execve et ne revient pas
-// 		write(1, "5\n", 2);
-// 	}
-// }
-
-
-static void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
-{
-	int redir_status;
-
-	// === Check for empty/invalid command FIRST ===
-	if ((!cmd->args || !cmd->args[0] || !*cmd->args[0]) && !cmd->elem)
-	{
-		// Still need to set up pipes properly even if command is invalid
-		if (prev_fd != -1)
-		{
-			dup2(prev_fd, STDIN_FILENO);
-			close(prev_fd);
-		}
-		if (cmd->next)
-		{
-			close(pipefd[0]);
-			dup2(pipefd[1], STDOUT_FILENO);
-			close(pipefd[1]);
-		}
-
-		// Apply redirections (might have redirections even with empty command)
-		redir_status = apply_redir(cmd->elem, cmd->all);
-		if (redir_status == -2)
-		{
-			g_in_heredoc = SIGINT;
-			exit(130);
-		}
-		if (redir_status != 0)
-			fatal_error("redirection", 1);
-
-		exec_error("", "command not found", 127); //<-- une histoire de buffer
-		exit(127);
-	}
-
-	// === Normal command setup ===
-	if (prev_fd != -1)
-	{
-		dup2(prev_fd, STDIN_FILENO);
-		close(prev_fd);
-	}
-
-	if (cmd->next)
-	{
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-	}
-
-	// Apply redirections
-	// redir_status = apply_redir(cmd->elem, cmd->all);
-	// if (redir_status == -2)
-	// {
-	// 	write(1, "dane\n", 5);
-	// 	g_in_heredoc = SIGINT;
-	// 	exit(130);
-	// }
-
-
-	// if (redir_status != 0)
-	// 	fatal_error("redirection", 1);
-
-
-	// Execute builtin or external command
-	if (is_builtin(cmd->args[0]))
-		exit(exec_builtin(cmd, cmd->all));
-	else
-		child_process(cmd, cmd->all->env);  // This calls exit() internally
-
-}
 
 static void	pipe_parent(t_pipe *mescouilles, t_command *cmd)
 {
@@ -126,7 +20,6 @@ static void wait_pipeline(t_shell *all, pid_t last_pid)
     pid_t wpid;
 
     all->sig_type = 0;
-
     while ((wpid = wait(&status)) > 0)
     {
         if (WIFSIGNALED(status))
@@ -137,7 +30,6 @@ static void wait_pipeline(t_shell *all, pid_t last_pid)
             else if (sig == SIGQUIT)
                 all->sig_type = SIGQUIT;
         }
-
         if (wpid == last_pid)
         {
             if (WIFEXITED(status))
@@ -150,49 +42,36 @@ static void wait_pipeline(t_shell *all, pid_t last_pid)
     }
 }
 
-
 void exec_pipe(t_command *cmd_list, t_shell *all)
 {
     t_pipe 	mescouilles;
 
     mescouilles.prev_fd = -1;
     mescouilles.last_pid = -1;
-
-    // *** modification est ici ***
     signal(SIGINT, SIG_IGN);
     signal(SIGQUIT, SIG_IGN);
-
  	while (cmd_list)
     {
         if (cmd_list->next && pipe(mescouilles.pipefd) == -1)
             fatal_error("pipe", 1);
-
         mescouilles.pid = fork();
-
         if (mescouilles.pid == -1)
             exit(exec_error("fork", strerror(errno), 1));
-
         if (mescouilles.pid == 0)  // ENFANT
         {
             signal(SIGINT, SIG_DFL);
             signal(SIGQUIT, SIG_DFL);
             pipe_child(cmd_list, mescouilles.prev_fd, mescouilles.pipefd);
         }
-
-
         else  // PARENT
             pipe_parent(&mescouilles, cmd_list);
-
         cmd_list = cmd_list->next;
     }
-
     wait_pipeline(all, mescouilles.last_pid);
 	if (all->sig_type == SIGINT)
         write(STDOUT_FILENO, "\n", 1);
     else if (all->sig_type == SIGQUIT)
         write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
-
-    // *** modification est ici ***
     setup_sig();  // Restaurer les signaux du shell
 }
 

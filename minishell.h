@@ -110,7 +110,8 @@ void 		setup_heredoc_signals(void);
 void		sigquit_handler(int sig);
 void		sigint_handler(int sig);
 void		sigint_heredoc(int sig);
-
+void 		ignore_signals(void);
+void		restore_default_signals(void);
 void		setup_sig(void);
 
 
@@ -168,6 +169,10 @@ void		child_process(t_command *cmd, t_local *env);
 char		*find_in_path(char *cmd, t_local *env);
 int			is_valid_identifier(const char *key);
 void		run_command(t_command *cmd);
+int			validate_command(t_command *cmd, t_shell *all);
+void		pipe_child(t_command *cmd, int prev_fd, int *pipefd);
+void		restore_std(int saved_stdin, int saved_stdout);
+void		run_parent(t_command *cmd, pid_t pid);
 
 /*BUILTINS*/
 int 		builtin_exit(char **args, t_shell *all, t_command *cmd_list);
@@ -193,6 +198,9 @@ void		print_invalid_identifier(char *arg, t_shell *all);
 int			redir_error(char *file, char *msg);
 void		free_command(t_command *cmd);
 void		free_split(char **array);
+void 		print_err(const char *prefix, const char *cmd, const char *msg);
+int 		error_with_code(const char *cmd, const char *msg, int code);
+void		fatal_exit(const char *msg, int code);
 
 
 
@@ -214,6 +222,7 @@ void		ft_lstadd_back(t_token **lst, t_token *new);
 char		*ft_strdup_m(const char *s, int x, int len);
 t_token		*ft_lstnew_token(char *content, char quote);
 long long 	ft_strtoll(const char *nptr, int *is_long);
+char		*ft_strjoin_free(char *s1, char const *s2);
 char		ft_strbrk(const char *s1, const char *s2);
 t_local		*ft_lstnew_env(char *value, char *key);
 void		*ft_calloc(size_t nmemb, size_t size);

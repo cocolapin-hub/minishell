@@ -36,6 +36,8 @@ SRCS = \
 	executable/free_errors/free.c \
 	executable/redir/heredoc.c \
 	executable/redir/redir.c \
+	executable/exec/child_process.c \
+	executable/exec/pipe_child.c \
 	parsing/parsing.c \
 	parsing/check_input.c \
 	parsing/set_cmd/fill_elements.c \
@@ -69,6 +71,7 @@ SRCS = \
 	signal/signal_exec.c \
 	signal/ctrl_c.c\
 	signal/ctrl_d.c\
+	signal/signal_utils.c \
 	libft/ft_islonglong.c \
 	libft/ft_strtoll.c \
 	libft/ft_strisnum.c \
@@ -105,7 +108,8 @@ SRCS = \
 	libft/ft_calloc.c \
 	libft/ft_strlcpy.c \
 	libft/ft_memset.c \
-	libft/ft_strtrim.c
+	libft/ft_strtrim.c \
+	libft/ft_strjoin_free.c
 
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
