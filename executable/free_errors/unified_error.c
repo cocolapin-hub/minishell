@@ -21,6 +21,6 @@ void	print_err(const char *cmd, const char *arg, const char *msg)
 
 int	error_code(const char *cmd, const char *msg, int code)
 {
-	print_err("minishell: ", cmd, msg);
+	print_err(cmd, NULL, msg);
 	return (code);
 }

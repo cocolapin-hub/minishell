@@ -32,15 +32,10 @@ static int	run_builtin_command(t_command *cmd)
 static int	handle_empty_command(t_shell *all, char *path_env)
 {
 	if (!path_env || path_env[0] == '\0')
-	{
-		print_err("minishell: ", "", "No such file or directory");
-		all->last_status = 127;
-	}
+		print_err(NULL, NULL, "No such file or directory");
 	else
-	{
-		print_err("minishell: ", "", "command not found");
-		all->last_status = 127;
-	}
+		print_err(NULL, NULL, "command not found");
+	all->last_status = 127;
 	return (1);
 }
 
@@ -50,12 +45,12 @@ static int	handle_dot_commands(char *cmd, t_shell *all, char *path_env)
 	{
 		if (!path_env || path_env[0] == '\0')
 		{
-			print_err("minishell: ", "..", "Is a directory");
+			print_err("..", NULL, "Is a directory");
 			all->last_status = 126;
 		}
 		else
 		{
-			print_err("minishell: ", "..", "command not found");
+			print_err("..", NULL, "command not found");
 			all->last_status = 127;
 		}
 		return (1);
@@ -88,7 +83,7 @@ int	validate_command(t_command *cmd, t_shell *all)
 }
 
 void	run_command(t_command *cmd)
-	{
+{
 	pid_t	pid;
 
 	if (validate_command(cmd, cmd->all))
@@ -100,7 +95,7 @@ void	run_command(t_command *cmd)
 	}
 	pid = fork();
 	if (pid == -1)
-		return (print_err("minishell: ", cmd->args[0], "fork failed"), (void)0);
+		return (print_err(cmd->args[0], NULL, "fork failed"), (void)0);
 	if (pid == 0)
 	{
 		restore_default_signals();

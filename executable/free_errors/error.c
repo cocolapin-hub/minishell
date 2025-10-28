@@ -32,7 +32,7 @@
 
 int	redir_error(char *file, char *msg)
 {
-	print_err("minishell: ", file, msg);
+	print_err("redir", file, msg);
 	return (1);
 }
 void	print_invalid_id(char *arg, t_shell *all)
@@ -69,3 +69,11 @@ void	exit_clean_af(t_shell *all, t_command *cmd_list, int code)
 // 	// si necessário: free cmd list
 // 	exit(status);
 // }
+
+/*
+
+minishell: cmd: msg	print_err(cmd, NULL, msg)
+minishell: cmd: arg: msg	print_err(cmd, arg, msg)
+minishell: msg	print_err(NULL, NULL, msg)
+
+*/

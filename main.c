@@ -1,57 +1,57 @@
 
 #include "minishell.h"
 
-int main(int argc, char **argv, char **envp)
-{
-    t_command  *cmd_list = NULL;
-    char       *line;
-    t_shell    all;
+// int main(int argc, char **argv, char **envp)
+// {
+//     t_command  *cmd_list = NULL;
+//     char       *line;
+//     t_shell    all;
 
-    (void)argc;
-    (void)argv;
+//     (void)argc;
+//     (void)argv;
 
-    // Initialize shell environment
-    setup_shell(&all, envp);
-    all.last_status = 0;
-	all.sig_type = 0;
+//     // Initialize shell environment
+//     setup_shell(&all, envp);
+//     all.last_status = 0;
+// 	all.sig_type = 0;
 
-    // Install signal handlers
-    setup_sig();
+//     // Install signal handlers
+//     setup_sig();
 
-    while (1)
-    {
-        // Read input
-        line = readline("minishell$ ");
-		handles_ctrl_d(line, all, cmd_list);
+//     while (1)
+//     {
+//         // Read input
+//         line = readline("minishell$ ");
+// 		handles_ctrl_d(line, all, cmd_list);
 
-		if (handles_ctrl_c(all, line) || line[0] == '\0')
-		{
-			free(line);
-			continue ;
-		}
+// 		if (handles_ctrl_c(all, line) || line[0] == '\0')
+// 		{
+// 			free(line);
+// 			continue ;
+// 		}
 
-        add_history(line);
-		parsing(line, &all, &cmd_list);
-       // free(line);
+//         add_history(line);
+// 		parsing(line, &all, &cmd_list);
+//        // free(line);
 
-        if (!cmd_list)
-            continue;
+//         if (!cmd_list)
+//             continue;
 
-        // Execute commands
-        // if (cmd_list->next) 			//cmd avec pipe
-        //     exec_pipe(cmd_list, &all);
-        // else
-        //     run_command(cmd_list);		//cmd sans pipe
+//         // Execute commands
+//         // if (cmd_list->next) 			//cmd avec pipe
+//         //     exec_pipe(cmd_list, &all);
+//         // else
+//         //     run_command(cmd_list);		//cmd sans pipe
 
-		free_command(cmd_list);
-		cmd_list = NULL;
-	}
+// 		free_command(cmd_list);
+// 		cmd_list = NULL;
+// 	}
 
-	// Free command list
-	// make free(line);
+// 	// Free command list
+// 	// make free(line);
 
-    return (0);
-}
+//     return (0);
+// }
 
 
 // int main(int argc, char **argv, char **envp)
@@ -113,81 +113,81 @@ int main(int argc, char **argv, char **envp)
 // }
 
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_command	*cmd_list;
-// 	t_shell		all;
-// 	char		*line;
-// 	char		**split_cmds;
-// 	int			i;
+int	main(int argc, char **argv, char **envp)
+{
+	t_command	*cmd_list;
+	t_shell		all;
+	char		*line;
+	char		**split_cmds;
+	int			i;
 
-// 	cmd_list = NULL;
-// 	setup_shell(&all, envp);
-// 	all.last_status = 0;
-// 	all.sig_type = 0;
-// 	setup_sig();
+	cmd_list = NULL;
+	setup_shell(&all, envp);
+	all.last_status = 0;
+	all.sig_type = 0;
+	setup_sig();
 
-// 	// === MODE TESTER : ./minishell -c "commandes" === //
-// 	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0 && argv[2])
-// 	{
-// 		split_cmds = ft_split(argv[2], ';');
-// 		if (!split_cmds)
-// 			return (fatal_error("malloc", 1), 1);
-// 		i = 0;
-// 		while (split_cmds[i])
-// 		{
-// 			line = ft_strtrim(split_cmds[i], " \t\n");
-// 			if (!line || !*line)
-// 			{
-// 				free(line);
-// 				i++;
-// 				continue ;
-// 			}
-// 			parsing(line, &all, &cmd_list);
-// 			free(line);
-// 			if (!cmd_list)
-// 			{
-// 				i++;
-// 				continue ;
-// 			}
-// 			if (cmd_list->next)
-// 				exec_pipe(cmd_list, &all);
-// 			else
-// 				run_command(cmd_list);
-// 			free_command(cmd_list);
-// 			cmd_list = NULL;
-// 			i++;
-// 		}
-// 		free_split(split_cmds);
-// 		return (all.last_status);
-// 	}
+	// === MODE TESTER : ./minishell -c "commandes" === //
+	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0 && argv[2])
+	{
+		split_cmds = ft_split(argv[2], ';');
+		if (!split_cmds)
+			return (fatal_exit("malloc", 1), 1);
+		i = 0;
+		while (split_cmds[i])
+		{
+			line = ft_strtrim(split_cmds[i], " \t\n");
+			if (!line || !*line)
+			{
+				free(line);
+				i++;
+				continue ;
+			}
+			parsing(line, &all, &cmd_list);
+			free(line);
+			if (!cmd_list)
+			{
+				i++;
+				continue ;
+			}
+			if (cmd_list->next)
+				exec_pipe(cmd_list, &all);
+			else
+				run_command(cmd_list);
+			free_command(cmd_list);
+			cmd_list = NULL;
+			i++;
+		}
+		free_split(split_cmds);
+		return (all.last_status);
+	}
 
-// 	// === MODE INTERACTIF NORMAL === //
-// 	while (1)
-// 	{
-// 		line = readline("minishell$ ");
-// 		handles_ctrl_d(line, all, cmd_list);
+	// === MODE INTERACTIF NORMAL === //
+	while (1)
+	{
+		line = readline("minishell$ ");
+		handles_ctrl_d(line, all, cmd_list);
 
-// 		if (handles_ctrl_c(all, line) || line[0] == '\0')
-// 		{
-// 			free(line);
-// 			continue ;
-// 		}
+		if (handles_ctrl_c(all, line) || line[0] == '\0')
+		{
+			free(line);
+			continue ;
+		}
 
-// 		add_history(line);
-// 		parsing(line, &all, &cmd_list);
-// 		free(line);
+		add_history(line);
+		parsing(line, &all, &cmd_list);
+		free(line);
 
-// 		if (!cmd_list)
-// 			continue;
+		if (!cmd_list)
+			continue;
 
-// 		if (cmd_list->next)
-// 			exec_pipe(cmd_list, &all);
-// 		else
-// 			run_command(cmd_list);
+		if (cmd_list->next)
+			exec_pipe(cmd_list, &all);
+		else
+			run_command(cmd_list);
 
-// 		free_command(cmd_list);
-// 		cmd_list = NULL;
-// 	}
-// 	return (all.last_status);
-// }
+		free_command(cmd_list);
+		cmd_list = NULL;
+	}
+	return (all.last_status);
+}
