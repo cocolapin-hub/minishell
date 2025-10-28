@@ -1,7 +1,6 @@
 
 #include "../../minishell.h"
 
-
 void	token_flag_off(char *cmd, int quote, t_token **list)
 {
 	char 	**split;
@@ -48,9 +47,8 @@ void	set_values(char *line, char *quote, int *was_in_quotes, int x)
 	*was_in_quotes = 1;
 }
 
-int		parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_token **list)
+int	parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_token **list)
 {
-	char	*joined;
 	char	*tmp;
 
 	while (line[cmd_state->x])
@@ -58,7 +56,6 @@ int		parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_tok
 		if (line[cmd_state->x] == 32 || line[cmd_state->x] == 9 ||
 			line[cmd_state->x] == 124 || line[cmd_state->x] == 60 || line[cmd_state->x] == 62)
 			break;
-
 		if (line[cmd_state->x] == 39 || line[cmd_state->x] == 34)
 		{
 			set_values(line, &cmd_state->quote, &cmd_state->was_in_quotes, cmd_state->x);
@@ -70,11 +67,8 @@ int		parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_tok
 			return (-1);
 		if (tmp == SKIP_TOKEN)
 			continue;
-
-		joined = ft_strjoin_free(cmd_state->cmd, tmp);
-		free(cmd_state->cmd);
-		cmd_state->cmd = joined;
-		//free(cmd_state->tmp);
+		cmd_state->cmd = ft_strjoin_free(cmd_state->cmd, tmp);
+		free(tmp);
 	}
 	return (0);
 }
