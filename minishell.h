@@ -1,8 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define SKIP_TOKEN ((char *)1)
 # define MAX_LINE_LEN 4096
-#define SKIP_TOKEN ((char *)1)
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -24,8 +24,8 @@
 extern int		g_in_heredoc;
 
 typedef struct s_local {
-    char            		*key;     		// VAR || $HOME ETC
-    char            		*value;   		// Word or PATH
+    char            		*key;
+    char            		*value;
     struct s_local   		*next;
 }   t_local;
 
@@ -44,27 +44,27 @@ typedef enum e_quote {
 	Q_DOUBLE
 }	t_quote;
 
-typedef enum e_type {						//element dans parsing
+typedef enum e_type {
 	WORD,
-	PIPE,									// |
-    REDIR_IN,      							// <
-    REDIR_OUT,     							// >
-    REDIR_APPEND,  							// >>
-    REDIR_HEREDOC				  			// <<
+	PIPE,
+    REDIR_IN,
+    REDIR_OUT,
+    REDIR_APPEND,
+    REDIR_HEREDOC
 }   t_type;
 
 typedef struct s_token {
-    t_type 					type;			// word, opérateur (|), ou redirection
-	t_quote  				amount;			// si le mot est entouré de ' ou "
-	char 					*value;			// contenu textuel (ls, "hello", '*.c' etc)
+    t_type 					type;
+	t_quote  				amount;
+	char 					*value;
     struct s_token 			*next;
 }   t_token;
 
-typedef struct s_command {					//names are differents here too
-	char 					**args;        // tous les arguments, ex: ["ls", "-la", NULL] à passer à execve ou à builtin
-    t_token 				*elem;		   // liste chaînée des redirs (<,>,>>,...)
-	t_shell					*all;		   // contient env et last_status
-	struct s_command 		*next;		   // prochaine commande (si pipe)
+typedef struct s_command {
+	char 					**args;
+    t_token 				*elem;
+	t_shell					*all;
+	struct s_command 		*next;
 }   t_command;
 
 typedef struct s_pipe
@@ -83,6 +83,8 @@ typedef struct s_cmd_state
 	int		was_in_quotes;
 	char	quote;
 }	t_cmd_state;
+
+
 
 
 /*_______________________________environnement_______________________________*/
@@ -130,13 +132,14 @@ int 		handle_exit_status(char **str, int last_status, int x);
 int			handle_number_zero(char **str, int x);
 int			handle_numbers(char **str, int x);
 char 		*clean_after_expansion(char *str);
+char 		*clean_after_expansion(char *str);
 int 		handle_pid(char **str, int x);
 
 /*TOKENISATION*/
 char		*between_quotes(char *line, int *x, t_shell **all, t_token **list);
 char		*outside_quotes(char *line, int *x, t_shell **all, t_token **list);
 int 		handles_command(char *line, int x, t_token **list, t_shell **all);
-t_token		*tokenisation(char *line, t_token **list, t_shell **all);
+t_token 	*tokenisation(int x, char *line, t_token **list, t_shell **all);
 int			handles_special_char(char *line, int x, t_token **list);
 
 /*ERROR_HANDLING*/
@@ -176,8 +179,8 @@ void		run_parent(t_command *cmd, pid_t pid);
 
 /*BUILTINS*/
 int 		builtin_exit(char **args, t_shell *all, t_command *cmd_list);
-int			exec_builtin(t_command *cmd, t_shell *all);
 int			builtin_export(char **args, t_local **env, t_shell *all);
+int			exec_builtin(t_command *cmd, t_shell *all);
 int			builtin_unset(char **args, t_local **env);
 int			builtin_cd(char **args, t_local **env);
 int			builtin_echo(char **args);
@@ -192,9 +195,9 @@ int			apply_redir(t_token *redir, t_shell *all);
 /*ERROR & FREE*/
 void		exit_clean_af(t_shell *all, t_command *cmd_list, int code);
 int			exec_error(const char *cmd, const char *msg, int code);
+void		print_invalid_identifier(char *arg, t_shell *all);
 void		fatal_error(const char *msg, int code);
 void		print_error_exec(char *cmd, char *msg);
-void		print_invalid_identifier(char *arg, t_shell *all);
 int			redir_error(char *file, char *msg);
 void		free_command(t_command *cmd);
 void		free_split(char **array);
@@ -247,7 +250,6 @@ int			ft_isalnum(int c);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 char		*ft_itoa(int n);
-
 
 #endif
 

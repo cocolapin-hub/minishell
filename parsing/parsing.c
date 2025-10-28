@@ -102,7 +102,7 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 		*cmd = NULL;
 		return ;
 	}
-	tokenisation(cleaned_line, &list, &all);
+	tokenisation(0, cleaned_line, &list, &all);
 	if (!list)
 	{
 		*cmd = NULL;

@@ -2,7 +2,6 @@
 #include "../../minishell.h"
 
 
-
 void	token_flag_off(char *cmd, int quote, t_token **list)
 {
 	char 	**split;
@@ -51,8 +50,8 @@ void	set_values(char *line, char *quote, int *was_in_quotes, int x)
 
 int		parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_token **list)
 {
-	char *tmp;
-	char *joined;
+	char	*joined;
+	char	*tmp;
 
 	while (line[cmd_state->x])
 	{
@@ -71,11 +70,11 @@ int		parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_tok
 			return (-1);
 		if (tmp == SKIP_TOKEN)
 			continue;
-			
+
 		joined = ft_strjoin_free(cmd_state->cmd, tmp);
 		free(cmd_state->cmd);
 		cmd_state->cmd = joined;
-		free(tmp);
+		//free(cmd_state->tmp);
 	}
 	return (0);
 }
@@ -94,6 +93,11 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 	{
 		free(cmd_state.cmd);
 		return (-1);
+	}
+	if (status == 1)  // SKIP_TOKEN rencontré
+	{
+		free(cmd_state.cmd);
+		return (cmd_state.x);
 	}
 	if (!cmd_state.was_in_quotes && ft_strchr(cmd_state.cmd, ' '))
 		token_flag_off(cmd_state.cmd, cmd_state.quote, list);

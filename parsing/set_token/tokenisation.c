@@ -1,11 +1,8 @@
 
 #include "../../minishell.h"
 
-t_token *tokenisation(char *line, t_token **list, t_shell **all)
+t_token *tokenisation(int x, char *line, t_token **list, t_shell **all)
 {
-    int x;
-
-    x = 0;
     while (line[x])
     {
         while (line[x] == 32 || line[x] == 9)
