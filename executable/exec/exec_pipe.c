@@ -1,15 +1,15 @@
 
 #include "../../minishell.h"
 
-static void	pipe_parent(t_pipe *mescouilles, t_command *cmd)
+static void	pipe_parent(t_pipe *p, t_command *cmd)
 {
-	mescouilles->last_pid = mescouilles->pid;	// on met a jour le dernier PID
-	if (mescouilles->prev_fd != -1)				// on garde le pid du dernier lancé
-		close(mescouilles->prev_fd);			// ferme ancienne lecture qui n'est plus utile au parent
-	if (cmd->next)								// si on a créé un pipe
+	p->last_pid = p->pid;		// on met a jour le dernier PID
+	if (p->prev_fd != -1)		// on garde le pid du dernier lancé
+		close(p->prev_fd);		// ferme ancienne lecture qui n'est plus utile au parent
+	if (cmd->next)				// si on a créé un pipe
 	{
-		close(mescouilles->pipefd[1]);			// parent ferme extrémité écriture (parent n'écrit pas)
-		mescouilles->prev_fd = mescouilles->pipefd[0];	// la sortie de ce pipe devient l'entrée de la prochaine cmd
+		close(p->pipefd[1]);		// parent ferme extrémité écriture (parent n'écrit pas)
+		p->prev_fd = p->pipefd[0];	// la sortie de ce pipe devient l'entrée de la prochaine cmd
 	}
 }
 
@@ -41,37 +41,46 @@ static void wait_pipeline(t_shell *all, pid_t last_pid)
         }
     }
 }
+static int	fork_and_execute(t_pipe *p, t_command *cmd)
+{
+	if (cmd->next && pipe(p->pipefd) == -1)
+		return (fatal_exit("pipe", 1), -1);
+	p->pid = fork();
+	if (p->pid == -1)
+		return (error_code("fork", strerror(errno), 1));
+	if (p->pid == 0)
+	{
+		restore_default_signals();
+		pipe_child(cmd, p->prev_fd, p->pipefd);
+	}
+	return (0);
+}
+
+static void	print_signal_message(t_shell *all)
+{
+	if (all->sig_type == SIGINT)
+		write(STDOUT_FILENO, "\n", 1);
+	else if (all->sig_type == SIGQUIT)
+		write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+}
 
 void exec_pipe(t_command *cmd_list, t_shell *all)
 {
-    t_pipe 	mescouilles;
+    t_pipe 	p;
 
-    mescouilles.prev_fd = -1;
-    mescouilles.last_pid = -1;
-    signal(SIGINT, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
- 	while (cmd_list)
+    p.prev_fd = -1;
+    p.last_pid = -1;
+	p.cmd_list = cmd_list;
+	ignore_signals();
+ 	while (p.cmd_list)
     {
-        if (cmd_list->next && pipe(mescouilles.pipefd) == -1)
-            fatal_error("pipe", 1);
-        mescouilles.pid = fork();
-        if (mescouilles.pid == -1)
-            exit(exec_error("fork", strerror(errno), 1));
-        if (mescouilles.pid == 0)  // ENFANT
-        {
-            signal(SIGINT, SIG_DFL);
-            signal(SIGQUIT, SIG_DFL);
-            pipe_child(cmd_list, mescouilles.prev_fd, mescouilles.pipefd);
-        }
-        else  // PARENT
-            pipe_parent(&mescouilles, cmd_list);
-        cmd_list = cmd_list->next;
+		if (fork_and_execute(&p, p.cmd_list) == -1)
+			return ;
+        pipe_parent(&p, p.cmd_list);
+        p.cmd_list = p.cmd_list->next;
     }
-    wait_pipeline(all, mescouilles.last_pid);
-	if (all->sig_type == SIGINT)
-        write(STDOUT_FILENO, "\n", 1);
-    else if (all->sig_type == SIGQUIT)
-        write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+    wait_pipeline(all, p.last_pid);
+	print_signal_message(all);
     setup_sig();  // Restaurer les signaux du shell
 }
 

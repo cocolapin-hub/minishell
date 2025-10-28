@@ -34,6 +34,7 @@ SRCS = \
 	executable/exec/run_command.c \
 	executable/exec/pipe_child.c \
 	executable/exec/exec_pipe.c \
+	executable/free_errors/unified_error.c \
 	executable/free_errors/error.c \
 	executable/free_errors/free.c \
 	executable/redir/heredoc.c \

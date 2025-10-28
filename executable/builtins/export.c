@@ -23,7 +23,7 @@ static int	is_invalid_key(char *key, char *arg, t_shell *all)
 {
 	if (!key || !is_valid_identifier(key))
 	{
-		print_invalid_identifier(arg, all);
+		print_invalid_id(arg, all);
 		free(key);
 		return (1);
 	}
@@ -56,14 +56,14 @@ static int	handle_export_arg(char *arg, t_local **env, t_shell *all)
 	char	*value;
 
 	if (!arg || arg[0] == '\0')
-		return (print_invalid_identifier(arg, all), 1);
+		return (print_invalid_id(arg, all), 1);
 	equal = ft_strchr(arg, '=');
 	if (!equal)
 	{
 		if (is_valid_identifier(arg))
 			set_env_value(env, arg, NULL);
 		else
-			print_invalid_identifier(arg, all);
+			print_invalid_id(arg, all);
 		return (all->last_status);
 	}
 	*equal = '\0';

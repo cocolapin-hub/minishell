@@ -15,14 +15,15 @@ int	builtin_exit(char **args, t_shell *all, t_command *cmd_list)
 	else if (!ft_islonglong(trimmed, &val) || !ft_strisnum(trimmed))
 	{
 		write(2, "exit: ", 6);
-		print_error_exec(args[1], "numeric argument required");
+		print_err("exit", args[1], "numeric argument required");
 		free(trimmed);
 		exit_clean_af(all, cmd_list, 2);
 	}
 	else if (args[2])
 	{
 		free(trimmed);
-		print_error_exec("exit", "too many arguments");
+		print_err("exit", NULL, "too many arguments");
+		all->last_status = 1;
 		return (1);
 	}
 	ft_islonglong(trimmed, &val);

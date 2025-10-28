@@ -193,16 +193,15 @@ int			apply_redir(t_token *redir, t_shell *all);
 
 /*ERROR & FREE*/
 void		exit_clean_af(t_shell *all, t_command *cmd_list, int code);
-int			exec_error(const char *cmd, const char *msg, int code);
-void		print_invalid_identifier(char *arg, t_shell *all);
-void		fatal_error(const char *msg, int code);
-void		print_error_exec(char *cmd, char *msg);
+// int		exec_error(const char *cmd, const char *msg, int code);
+void		print_invalid_id(char *arg, t_shell *all);
+void		fatal_exit(const char *msg, int code);
+// void		print_error_exec(char *cmd, char *msg);
 int			redir_error(char *file, char *msg);
 void		free_command(t_command *cmd);
 void		free_split(char **array);
 void 		print_err(const char *prefix, const char *cmd, const char *msg);
-int 		error_with_code(const char *cmd, const char *msg, int code);
-void		fatal_exit(const char *msg, int code);
+int 		error_code(const char *cmd, const char *msg, int code);
 
 
 

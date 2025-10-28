@@ -1,7 +1,49 @@
 
 #include "../../minishell.h"
 
-void	fatal_error(const char *msg, int code)	// cas où le shell  ne peut pas continuer (pipe, fork, dup2 echoue)
+// void	fatal_error(const char *msg, int code)	// cas où le shell  ne peut pas continuer (pipe, fork, dup2 echoue)
+// {
+// 	perror(msg);
+// 	exit(code);
+// }
+
+
+
+// void	print_error_exec(char *cmd, char *msg)	// cas où commande inconnue / execve fail mais shell continue (bash ne quitte pas sur un ls raté par ex)
+// {
+// 	write(2, cmd, ft_strlen(cmd));
+// 	write(2, ": ", 2);
+// 	write(2, msg, ft_strlen(msg));
+// 	write(2, "\n", 1);
+// }
+
+// int	exec_error(const char *cmd, const char *msg, int code)
+// {
+// 	write(2, "minishell: ", 11);
+// 	if (cmd && *cmd)
+// 	{
+// 		write(2, cmd, ft_strlen(cmd));
+// 		write(2, ": ", 2);
+// 	}
+// 	write(2, msg, ft_strlen(msg));
+// 	write(2, "\n", 1);
+// 	return (code);
+// }
+
+int	redir_error(char *file, char *msg)
+{
+	print_err("minishell: ", file, msg);
+	return (1);
+}
+void	print_invalid_id(char *arg, t_shell *all)
+{
+	write(2, "minishell: export: `", 20);
+	write(2, arg, ft_strlen(arg));
+	write(2, "': not a valid identifier\n", 26);
+	all->last_status = 1;
+}
+
+void	fatal_exit(const char *msg, int code)
 {
 	perror(msg);
 	exit(code);
@@ -20,70 +62,10 @@ void	exit_clean_af(t_shell *all, t_command *cmd_list, int code)
 	exit(code);
 }
 
-void	print_error_exec(char *cmd, char *msg)	// cas où commande inconnue / execve fail mais shell continue (bash ne quitte pas sur un ls raté par ex)
-{
-	write(2, cmd, ft_strlen(cmd));
-	write(2, ": ", 2);
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-}
-
-int	redir_error(char *file, char *msg)
-{
-	write(2, "minishell: ", 11);
-	if (file && *file)
-	{
-		write(2, file, ft_strlen(file));
-		write(2, ": ", 2);
-	}
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-	return (1);
-}
-
-int	exec_error(const char *cmd, const char *msg, int code)
-{
-	write(2, "minishell: ", 11);
-	if (cmd && *cmd)
-	{
-		write(2, cmd, ft_strlen(cmd));
-		write(2, ": ", 2);
-	}
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-	return (code);
-}
-
-void	print_invalid_identifier(char *arg, t_shell *all)
-{
-	ft_putstr_fd("minishell: export: `", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putendl_fd("': not a valid identifier", 2);
-	all->last_status = 1;
-}
-
-void	print_err(const char *prefix, const char *cmd, const char *msg)
-{
-	if (prefix)
-		write(2, prefix, ft_strlen(prefix));
-	if (cmd && *cmd)
-	{
-		write(2, cmd, ft_strlen(cmd));
-		write(2, ": ", 2);
-	}
-	if (msg)
-		write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-}
-
-int	error_with_code(const char *cmd, const char *msg, int code)
-{
-	print_err("minishell: ", cmd, msg);
-	return (code);
-}
-
-void	fatal_exit(const char *msg, int code)
-{
-	perror(msg);
-	exit(code);
-}
+// void clean_and_exit(t_shell *all, int status)
+// {
+// 	free_env(all->env);
+// 	free_history();
+// 	// si necessário: free cmd list
+// 	exit(status);
+// }

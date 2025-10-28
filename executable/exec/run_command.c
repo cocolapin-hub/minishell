@@ -8,17 +8,16 @@ static int	run_builtin_command(t_command *cmd)
 	int	ret;
 	int	redir_status;
 
-
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-    if (saved_stdin == -1 || saved_stdout == -1)
-    {
-        if (saved_stdin != -1)
-            close(saved_stdin);
-        if (saved_stdout != -1)
-            close(saved_stdout);
-        return (print_err(NULL, "dup", strerror(errno)), 1);
-    }
+	if (saved_stdin == -1 || saved_stdout == -1)
+	{
+		if (saved_stdin != -1)
+			close(saved_stdin);
+		if (saved_stdout != -1)
+			close(saved_stdout);
+		return (print_err(NULL, "dup", strerror(errno)), 1);
+	}
 	redir_status = apply_redir(cmd->elem, cmd->all);
 	if (redir_status == -2)
 		ret = 130;
@@ -30,85 +29,89 @@ static int	run_builtin_command(t_command *cmd)
 	return (ret);
 }
 
-static int handle_empty_command(t_shell *all, char *path_env)
+static int	handle_empty_command(t_shell *all, char *path_env)
 {
-    if (!path_env || path_env[0] == '\0')
-    {
-        ft_putendl_fd("minishell: : No such file or directory", 2);
-        all->last_status = 127;
-    }
-    else
-    {
-        ft_putendl_fd("minishell: : command not found", 2);
-        all->last_status = 127;
-    }
-    return (1);
+	if (!path_env || path_env[0] == '\0')
+	{
+		print_err("minishell: ", "", "No such file or directory");
+		all->last_status = 127;
+	}
+	else
+	{
+		print_err("minishell: ", "", "command not found");
+		all->last_status = 127;
+	}
+	return (1);
 }
 
-static int handle_dot_commands(char *cmd, t_shell *all, char *path_env)
+static int	handle_dot_commands(char *cmd, t_shell *all, char *path_env)
 {
-    if (ft_strcmp(cmd, "..") == 0)
-    {
-        if (!path_env || path_env[0] == '\0')
-        {
-            ft_putendl_fd("minishell: ..: Is a directory", 2);
-            all->last_status = 126;
-        }
-        else
-        {
-            ft_putendl_fd("minishell: ..: command not found", 2);
-            all->last_status = 127;
-        }
-        return (1);
-    }
-    if (ft_strcmp(cmd, ".") == 0)
-    {
-        ft_putstr_fd("minishell: .: filename argument required\n", 2);
-        ft_putstr_fd(".: usage: . filename [arguments]\n", 2);
-        all->last_status = 2;
-        return (1);
-    }
-    return (0);
+	if (ft_strcmp(cmd, "..") == 0)
+	{
+		if (!path_env || path_env[0] == '\0')
+		{
+			print_err("minishell: ", "..", "Is a directory");
+			all->last_status = 126;
+		}
+		else
+		{
+			print_err("minishell: ", "..", "command not found");
+			all->last_status = 127;
+		}
+		return (1);
+	}
+	if (ft_strcmp(cmd, ".") == 0)
+	{
+		write(2, "minishell: .: filename argument required\n", 41);
+		write(2, ".: usage: . filename [arguments]\n", 33);
+		all->last_status = 2;
+		return (1);
+	}
+	return (0);
 }
 
-int validate_command(t_command *cmd, t_shell *all)
+int	validate_command(t_command *cmd, t_shell *all)
 {
-    char *path_env;
+	char	*path_env;
 
-    path_env = get_env_value(all->env, "PATH");
-    if (cmd->args[0][0] == '\0')
-        return (handle_empty_command(all, path_env));
-    if (handle_dot_commands(cmd->args[0], all, path_env))
-        return (1);
-    return (0);
+	if (!cmd || !cmd->args || !cmd->args[0])
+	{
+		all->last_status = 127;
+		return (1);
+	}
+	path_env = get_env_value(all->env, "PATH");
+	if (cmd->args[0][0] == '\0')
+		return (handle_empty_command(all, path_env));
+	if (handle_dot_commands(cmd->args[0], all, path_env))
+		return (1);
+	return (0);
 }
 
-void run_command(t_command *cmd)
-{
-    pid_t pid;
+void	run_command(t_command *cmd)
+	{
+	pid_t	pid;
 
-    if (validate_command(cmd, cmd->all))
-        return ;
-    if (is_builtin(cmd->args[0]))
-    {
-        cmd->all->last_status = run_builtin_command(cmd);
-        return ;
-    }
-    pid = fork();
-    if (pid == -1)
-        return (print_err("minishell: ", cmd->args[0], 
-            "fork failed"), (void)0);
-    if (pid == 0)
-    {
-        restore_default_signals();
-        child_process(cmd, cmd->all->env);
-    }
-    else
-    {
-        ignore_signals();
-        run_parent(cmd, pid);
-        setup_sig();
-    }
+	if (validate_command(cmd, cmd->all))
+		return ;
+	if (is_builtin(cmd->args[0]))
+	{
+		cmd->all->last_status = run_builtin_command(cmd);
+		return ;
+	}
+	pid = fork();
+	if (pid == -1)
+		return (print_err("minishell: ", cmd->args[0], "fork failed"), (void)0);
+	if (pid == 0)
+	{
+		restore_default_signals();
+		child_process(cmd, cmd->all->env);
+	}
+	else
+	{
+		ignore_signals();
+		run_parent(cmd, pid);
+		setup_sig();
+	}
 }
 
 // void	run_command(t_command *cmd)			ANCIENNE VERSION QUI MARCHE

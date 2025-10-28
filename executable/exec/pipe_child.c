@@ -16,7 +16,7 @@ static void	setup_pipe_fds(int prev_fd, int *pipefd, int has_next)
 	}
 }
 
-static int	handle_empty_pipe_cmd(t_command *cmd, int prev_fd, int *pipefd)
+static int	handle_empty_cmd(t_command *cmd, int prev_fd, int *pipefd)
 {
 	int	redir_status;
 
@@ -28,7 +28,7 @@ static int	handle_empty_pipe_cmd(t_command *cmd, int prev_fd, int *pipefd)
 			exit(130);
 		if (redir_status != 0)
 			fatal_exit("redirection", 1);
-		error_with_code("", "command not found", 127);
+		error_code("", "command not found", 127);
 		exit(127);
 	}
 	return (0);
@@ -36,7 +36,7 @@ static int	handle_empty_pipe_cmd(t_command *cmd, int prev_fd, int *pipefd)
 
 void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
 {
-	if (handle_empty_pipe_cmd(cmd, prev_fd, pipefd))
+	if (handle_empty_cmd(cmd, prev_fd, pipefd))
 		return ;
 	setup_pipe_fds(prev_fd, pipefd, cmd->next != NULL);
 	if (is_builtin(cmd->args[0]))
