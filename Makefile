@@ -40,7 +40,6 @@ SRCS = \
 	executable/exec/pipe_child.c \
 	parsing/parsing.c \
 	parsing/check_input.c \
-	parsing/parsing.c \
 	parsing/set_cmd/fill_elements.c \
 	parsing/set_cmd/set_command.c \
 	parsing/set_cmd/create_args.c \
