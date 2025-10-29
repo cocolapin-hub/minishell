@@ -3,17 +3,18 @@
 
 int main(int argc, char **argv, char **envp)
 {
-    t_command  *cmd_list = NULL;
+    t_command  *cmd_list;
     char       *line;
     t_shell    all;
 
     (void)argc;
     (void)argv;
 
-    setup_shell(&all, envp);
-    all.last_status = 0;
+	cmd_list = NULL;
+	all.env = env_init(envp);
+	all.last_status = 0;
 	all.sig_type = 0;
-    setup_sig();
+	setup_sig();
 
     while (1)
     {
@@ -114,11 +115,11 @@ int main(int argc, char **argv, char **envp)
 // 	char		**split_cmds;
 // 	int			i;
 
-	// cmd_list = NULL;
-	// all.env = env_init(envp);
-	// all.last_status = 0;
-	// all.sig_type = 0;
-	// setup_sig();
+// 	cmd_list = NULL;
+// 	all.env = env_init(envp);
+// 	all.last_status = 0;
+// 	all.sig_type = 0;
+// 	setup_sig();
 
 // 	// === MODE TESTER : ./minishell -c "commandes" === //
 // 	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0 && argv[2])
