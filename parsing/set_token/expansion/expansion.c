@@ -29,28 +29,26 @@ static int	handle_special_expansion(int *x, char **str, int last_status)
 	return 1;
 }
 
-static int	handle_normal_expansion(int *x, char **str, t_local *env)
+static int handle_normal_expansion(int *x, char **str, t_local *env)
 {
-	char 	var_name[1024];
-	int 	var_len;
-	int 	start;
+    char    var_name[1024];
+    int     var_len;
+    int     start;
+    int     saved_x;  // <-- AJOUTEZ CECI
 
-	if (ft_isalnum((*str)[*x + 1]) || (*str)[*x + 1] == '_')
-	{
-		// Extract variable name before $
-		start = *x;
-
-		// Get the variable name (alphanumeric + underscore)
-		get_variable_name(*str, var_name, &var_len, x);
-
-		// Just a $ with nothing after
-		if (var_len == 0)
-			return (0);
-
-		// Search for this variable in the environment
-		*x = find_variable_in_env(env, start, str, var_name);
-	}
-	return (1);
+    if (ft_isalnum((*str)[*x + 1]) || (*str)[*x + 1] == '_')
+    {
+        start = *x;
+        saved_x = *x;
+        get_variable_name(*str, var_name, &var_len, x);
+        if (var_len == 0)
+            return (0);
+        *x = find_variable_in_env(env, start, str, var_name);
+        if (*x == start)
+            *x = start;
+        return (0);
+    }
+    return (1);
 }
 
 static int	handle_expansion(int *x, char **str, t_local *env, int last_status)
@@ -75,27 +73,28 @@ static char *wrap_up_expansion(char *expand, int expansion_done, char *quote, ch
 	return (expand);
 }
 
-char 	*expansion(t_local *env, int last_status, char *str, char *quote)
+char *expansion(t_local *env, int last_status, char *str, char *quote)
 {
-	int		expansion_done;
-	char	*expand = NULL;
-	int		x;
+    int     expansion_done;
+    char    *expand = NULL;
+    int     x;
 
-	expansion_done = 0;
+    expansion_done = 0;
     x = 0;
     while(str[x] && str[x] != 61)
     {
         if (str[x] == '$')
         {
-			expansion_done = 1;
-			if (handle_expansion(&x, &str, env, last_status) == 0)
-				continue ;
-			else
-				x++;
-		}
+            expansion_done = 1;
+            if (handle_expansion(&x, &str, env, last_status) == 0)
+                continue ;
+            else
+                x++;
+        }
         else
             x++;
     }
-	return (wrap_up_expansion(expand, expansion_done, quote, str));
+    expand = wrap_up_expansion(expand, expansion_done, quote, str);
+    return expand;
 }
 

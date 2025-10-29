@@ -87,7 +87,7 @@ typedef struct s_cmd_state
 
 
 
-/*_______________________________environnement_______________________________*/
+/*_______________________________environnement____________________________*/
 /*PARS*/ //--> on garde celui ci
 void		setup_shell(t_shell *all, char **envp);
 
@@ -105,7 +105,7 @@ void		sort_env_tab(char **tab);
 
 
 
-/*__________________________________signal__________________________________*/
+/*__________________________________signal________________________________*/
 void		handles_ctrl_d(char *line, t_shell all, t_command *cmd_list);
 int 		handles_ctrl_c(t_shell all, char *line);
 void 		setup_heredoc_signals(void);
@@ -118,7 +118,23 @@ void		setup_sig(void);
 
 
 
-/*_________________________________parsing_________________________________*/
+/*______________________________clean utils_______________________________*/
+
+void 		print_err(const char *prefix, const char *cmd, const char *msg);
+void		clean_exit(t_shell *all, t_command *cmd_list, int code);
+int 		error_code(const char *cmd, const char *msg, int code);
+void		print_invalid_id(char *arg, t_shell *all);
+void		fatal_exit(const char *msg, int code);
+int			redir_error(char *file, char *msg);
+void		free_command(t_command *cmd_list);
+void		free_tokens(t_token *list);
+void		free_split(char **array);
+void		free_env(t_shell *all);
+void		free_args(char **args);
+
+
+
+/*_________________________________parsing________________________________*/
 /*PARS*/
 void		parsing(char *line, t_shell *all, t_command **cmd);
 char		*check_input(char *line, t_shell **all);
@@ -155,16 +171,9 @@ t_command	*set_command(t_command **cmd, t_token *list, t_shell *all);
 void		fill_elements(t_token **list, t_token **elements);
 void		fill_args(t_token *list, char ***args);
 
-/*FREE & ERROR*/
-void		print_error(char *line, char *msg);
-void		free_tokens(t_token *list);
-void		end_code(t_command *cmd);
-void		free_args(char **args);
 
 
-
-
-/*________________________________executable________________________________*/
+/*_______________________________executable_______________________________*/
 /*EXEC*/
 void		exec_pipe(t_command *cmd_list, t_shell *all);
 void		child_process(t_command *cmd, t_local *env);
@@ -192,25 +201,10 @@ int			create_heredoc(char *limiter, t_shell *all);
 int			apply_redir(t_token *redir, t_shell *all);
 
 /*ERROR & FREE*/
-void		exit_clean_af(t_shell *all, t_command *cmd_list, int code);
-// int		exec_error(const char *cmd, const char *msg, int code);
-void		print_invalid_id(char *arg, t_shell *all);
-void		fatal_exit(const char *msg, int code);
-// void		print_error_exec(char *cmd, char *msg);
-int			redir_error(char *file, char *msg);
-void		free_command(t_command *cmd);
-void		free_split(char **array);
-void 		print_err(const char *prefix, const char *cmd, const char *msg);
-int 		error_code(const char *cmd, const char *msg, int code);
 
 
 
-/*_________________________________exit_________________________________*/
-void		free_env(t_shell *all);
-
-
-
-/*________________________________LIBFT________________________________*/
+/*__________________________________LIBFT_________________________________*/
 t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 size_t		ft_strlcpy(char *dst, const char *src, size_t size);

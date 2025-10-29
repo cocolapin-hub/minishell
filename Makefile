@@ -17,6 +17,14 @@ OBJ_DIR     = obj
 
 SRCS = \
 	main.c \
+	clean_utils/unified_error.c \
+	clean_utils/free_tokens.c \
+	clean_utils/clean_exit.c \
+	clean_utils/free_args.c \
+	clean_utils/free_cmd.c \
+	clean_utils/free_env.c \
+	clean_utils/error.c \
+	clean_utils/free.c \
 	env/setup_shell_pars.c \
 	executable/builtins/builtin.c \
 	executable/builtins/export.c \
@@ -34,9 +42,6 @@ SRCS = \
 	executable/exec/run_command.c \
 	executable/exec/pipe_child.c \
 	executable/exec/exec_pipe.c \
-	executable/free_errors/unified_error.c \
-	executable/free_errors/error.c \
-	executable/free_errors/free.c \
 	executable/redir/heredoc.c \
 	executable/redir/redir.c \
 	parsing/parsing.c \
@@ -46,11 +51,6 @@ SRCS = \
 	parsing/set_cmd/create_args.c \
 	parsing/set_cmd/create_cmd.c \
 	parsing/set_cmd/fill_args.c \
-	parsing/free_error_pars/free_tokens.c \
-	parsing/free_error_pars/print_error.c \
-	parsing/free_error_pars/free_args.c \
-	parsing/free_error_pars/end_code.c \
-	parsing/free_error_pars/free_env.c \
 	parsing/set_token/handles_special_char.c \
 	parsing/set_token/handles_command.c \
 	parsing/set_token/outside_quotes.c \

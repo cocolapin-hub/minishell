@@ -64,7 +64,7 @@ int	parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_toke
 		else
 			tmp = outside_quotes(line, &cmd_state->x, all, list);
 		if (!tmp)
-			return (-1);
+			return (free(tmp), -1);
 		if (tmp == SKIP_TOKEN)
 			continue;
 		cmd_state->cmd = ft_strjoin_free(cmd_state->cmd, tmp);
@@ -88,7 +88,7 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 		free(cmd_state.cmd);
 		return (-1);
 	}
-	if (status == 1)  // SKIP_TOKEN rencontré
+	if (status == 1)
 	{
 		free(cmd_state.cmd);
 		return (cmd_state.x);
@@ -97,5 +97,5 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 		token_flag_off(cmd_state.cmd, cmd_state.quote, list);
 	else
 		token_flag_on(cmd_state.cmd, cmd_state.quote, list);
-	return (cmd_state.x);
+	return (cmd_state.x); //<-- potentially free cmd_state.cmd too
 }
