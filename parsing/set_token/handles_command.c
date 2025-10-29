@@ -66,7 +66,7 @@ int	parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_toke
 		if (!tmp)
 			return (free(tmp), -1);
 		if (tmp == SKIP_TOKEN)
-			continue;
+			return (1);
 		cmd_state->cmd = ft_strjoin_free(cmd_state->cmd, tmp);
 		free(tmp);
 	}
