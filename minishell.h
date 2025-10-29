@@ -89,7 +89,8 @@ typedef struct s_cmd_state
 
 /*_______________________________environnement____________________________*/
 /*PARS*/ //--> on garde celui ci
-void		setup_shell(t_shell *all, char **envp);
+// void		setup_shell(t_shell *all, char **envp);
+t_local		*env_init(char **envp);
 
 /*EXEC*/
 //t_local			*env_init(char **envp);

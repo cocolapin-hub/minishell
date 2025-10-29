@@ -114,11 +114,11 @@ int main(int argc, char **argv, char **envp)
 // 	char		**split_cmds;
 // 	int			i;
 
-// 	cmd_list = NULL;
-// 	setup_shell(&all, envp);
-// 	all.last_status = 0;
-// 	all.sig_type = 0;
-// 	setup_sig();
+	// cmd_list = NULL;
+	// all.env = env_init(envp);
+	// all.last_status = 0;
+	// all.sig_type = 0;
+	// setup_sig();
 
 // 	// === MODE TESTER : ./minishell -c "commandes" === //
 // 	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0 && argv[2])

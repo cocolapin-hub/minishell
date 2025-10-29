@@ -25,7 +25,7 @@ SRCS = \
 	clean_utils/free_env.c \
 	clean_utils/error.c \
 	clean_utils/free.c \
-	env/setup_shell_pars.c \
+	env/setup_shell_exec.c \
 	executable/builtins/builtin.c \
 	executable/builtins/export.c \
 	executable/builtins/unset.c \
