@@ -200,6 +200,10 @@ int			is_builtin(char *cmd);
 /*REDIR*/
 int			create_heredoc(char *limiter, t_shell *all);
 int			apply_redir(t_token *redir, t_shell *all);
+int			check_ambiguous_redirect(char *value);
+int			check_redirections(t_command *cmd);
+int			handle_redir_only(t_command *cmd);
+
 
 /*ERROR & FREE*/
 

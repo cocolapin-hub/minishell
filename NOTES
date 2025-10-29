@@ -226,3 +226,8 @@ quote	omar	: export 'coucou&'=mdr		(syntax error near... exit code = 2)	devrait 
 			v	: < hey		segfault chez moi
 			V	: >> hey
 			V	: << hey
+
+
+BOSS ULTIME DU PARSING :
+				: cat < $123456				bash: 23456: No such file or directory
+				: cat < $ENORMECHIBRE		syntax error near unexpected token `newline'	-->		bash: $ENORMECHIBRE: ambiguous redirect

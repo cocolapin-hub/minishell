@@ -54,30 +54,6 @@ int	builtin_cd(char **args, t_local **env)
 	return (0);
 }
 
-// int	builtin_cd(char **args, t_shell *all)	version + propre
-// {
-// 	char	*path;
-
-// 	if (args[2])
-// 		return (print_err3("cd", NULL, "too many arguments"), 1);
-
-// 	path = args[1];
-// 	if (!path || path[0] == '\0')
-// 	{
-// 		path = get_env_value(all->env, "HOME");
-// 		if (!path)
-// 			return (print_err3("cd", NULL, "HOME not set"), 1);
-// 	}
-// 	if (chdir(path) == -1)
-// 		return (cd_error(path));
-
-// 	update_pwd(&all->env);
-// 	all->last_status = 0;
-// 	return (0);
-// }
-
-
-
 /*
 (chdir(path) == -1)	   // return 0 si succes, -1 si erreur
 Utilise la fonction chdir(const char *path) (autorisé par le sujet).

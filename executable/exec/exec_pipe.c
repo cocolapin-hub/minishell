@@ -3,43 +3,43 @@
 
 static void	pipe_parent(t_pipe *p, t_command *cmd)
 {
-	p->last_pid = p->pid;		// on met a jour le dernier PID
-	if (p->prev_fd != -1)		// on garde le pid du dernier lancé
-		close(p->prev_fd);		// ferme ancienne lecture qui n'est plus utile au parent
-	if (cmd->next)				// si on a créé un pipe
+	p->last_pid = p->pid;
+	if (p->prev_fd != -1)
+		close(p->prev_fd);
+	if (cmd->next)
 	{
-		close(p->pipefd[1]);		// parent ferme extrémité écriture (parent n'écrit pas)
-		p->prev_fd = p->pipefd[0];	// la sortie de ce pipe devient l'entrée de la prochaine cmd
+		close(p->pipefd[1]);
+		p->prev_fd = p->pipefd[0];
 	}
 }
 
-static void wait_pipeline(t_shell *all, pid_t last_pid)
+static void	wait_pipeline(t_shell *all, pid_t last_pid)
 {
-    int sig;
-    int status;
-    pid_t wpid;
+	int		sig;
+	int		status;
+	pid_t	wpid;
 
-    all->sig_type = 0;
-    while ((wpid = wait(&status)) > 0)
-    {
-        if (WIFSIGNALED(status))
-        {
-            sig = WTERMSIG(status);
-            if (sig == SIGINT)
-                all->sig_type = SIGINT;
-            else if (sig == SIGQUIT)
-                all->sig_type = SIGQUIT;
-        }
-        if (wpid == last_pid)
-        {
-            if (WIFEXITED(status))
-                all->last_status = WEXITSTATUS(status);
-            else if (WIFSIGNALED(status))
-                all->last_status = 128 + WTERMSIG(status);
-            else
-                all->last_status = 1;
-        }
-    }
+	all->sig_type = 0;
+	while ((wpid = wait(&status)) > 0)
+	{
+		if (WIFSIGNALED(status))
+		{
+			sig = WTERMSIG(status);
+			if (sig == SIGINT)
+				all->sig_type = SIGINT;
+			else if (sig == SIGQUIT)
+				all->sig_type = SIGQUIT;
+		}
+		if (wpid == last_pid)
+		{
+			if (WIFEXITED(status))
+				all->last_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				all->last_status = 128 + WTERMSIG(status);
+			else
+				all->last_status = 1;
+		}
+	}
 }
 static int	fork_and_execute(t_pipe *p, t_command *cmd)
 {
@@ -66,25 +66,37 @@ static void	print_signal_message(t_shell *all)
 
 void exec_pipe(t_command *cmd_list, t_shell *all)
 {
-    t_pipe 	p;
+	t_pipe 	p;
 
-    p.prev_fd = -1;
-    p.last_pid = -1;
+	p.prev_fd = -1;
+	p.last_pid = -1;
 	p.cmd_list = cmd_list;
 	ignore_signals();
- 	while (p.cmd_list)
-    {
+	while (p.cmd_list)
+	{
 		if (fork_and_execute(&p, p.cmd_list) == -1)
 			return ;
-        pipe_parent(&p, p.cmd_list);
-        p.cmd_list = p.cmd_list->next;
-    }
-    wait_pipeline(all, p.last_pid);
+		pipe_parent(&p, p.cmd_list);
+		p.cmd_list = p.cmd_list->next;
+	}
+	wait_pipeline(all, p.last_pid);
 	print_signal_message(all);
-    setup_sig();  // Restaurer les signaux du shell
+	setup_sig();
 }
 
 /*
+
+static void	pipe_parent(t_pipe *p, t_command *cmd)
+{
+	p->last_pid = p->pid;		// on met a jour le dernier PID
+	if (p->prev_fd != -1)		// on garde le pid du dernier lancé
+		close(p->prev_fd);		// ferme ancienne lecture qui n'est plus utile au parent
+	if (cmd->next)				// si on a créé un pipe
+	{
+		close(p->pipefd[1]);		// parent ferme extrémité écriture (parent n'écrit pas)
+		p->prev_fd = p->pipefd[0];	// la sortie de ce pipe devient l'entrée de la prochaine cmd
+	}
+}
 
 ___ ls -l | grep minishell | wc -l ___
 

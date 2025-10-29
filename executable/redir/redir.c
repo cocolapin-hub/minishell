@@ -95,31 +95,26 @@ static int	handle_redir_heredoc(t_token *redir, t_shell *all)	// << shell lit to
 	return (0);
 }
 
-
 int	apply_redir(t_token *redir, t_shell *all)
 {
 	int	ret;
 
-	// write(1, "ici\n", 4);
-	// if (redir->type == REDIR_IN) write(1, "redir.in\n", 9);
-	// if (redir->type == REDIR_OUT) write(1, "redir.out\n", 10);
 	while (redir)
 	{
-		if (!redir->value || redir->value[0] == '\0')
-			return (redir_error(redir->value, "ambiguous redirect"));
-		ret = 0;
+		if (check_ambiguous_redirect(redir->value))
+			return (1);
 		if (redir->type == REDIR_IN)
 			ret = handle_redir_in(redir);
 		else if (redir->type == REDIR_OUT)
 			ret = handle_redir_out(redir);
 		else if (redir->type == REDIR_APPEND)
 			ret = handle_redir_append(redir);
-		else if (redir->type == REDIR_HEREDOC)
+		else
 			ret = handle_redir_heredoc(redir, all);
-		if (ret == -2) 		// heredoc interrompu par ctrl-C
+		if (ret == -2)
 			return (-2);
 		if (ret != 0)
-			return (1);		// erreur réelle (si ret == 0 alors aucune erreur)
+			return (1);
 		redir = redir->next;
 	}
 	return (0);

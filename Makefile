@@ -40,6 +40,7 @@ SRCS = \
 	executable/env_and_path/find_path.c \
 	executable/exec/child_process.c \
 	executable/exec/run_command.c \
+	executable/exec/exec_utils.c \
 	executable/exec/pipe_child.c \
 	executable/exec/exec_pipe.c \
 	executable/redir/heredoc.c \
