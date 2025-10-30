@@ -3,7 +3,7 @@
 
 int 	handle_exit_status(char **str, int last_status, int x)
 {
-    char *status = ft_itoa(last_status);
+    char *status;
 	int len;
 
 	status = ft_itoa(last_status);
