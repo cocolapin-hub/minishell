@@ -110,18 +110,17 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 		*cmd = NULL;
 		return ;
 	}
-	else
-		error_handling(&all, &list);
 
+	error_handling(&all, &list);
 	if (!list)
+	{
+		free(cleaned_line);
 		*cmd = NULL;
-	else
-		set_command(cmd, list, all);
+		return;
+	}
 
+	set_command(cmd, list, all);
 	free(cleaned_line);
 	free_tokens(list);
-
 	// print_pipeline(*cmd);
-	// if(list)
-	// free(cleaned_line);
 }
