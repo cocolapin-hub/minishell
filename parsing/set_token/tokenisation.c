@@ -16,7 +16,7 @@ t_token *tokenisation(int x, char *line, t_token **list, t_shell **all)
             x = handles_command(line, x, list, all);
             if ((*all)->last_status == 258 || x == -1) //<- 258?
             {
-                free_tokens(*list);
+                // free_tokens(*list);
                 *list = NULL;
                 return (NULL);
             }

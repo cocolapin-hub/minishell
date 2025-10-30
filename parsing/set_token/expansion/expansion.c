@@ -71,7 +71,7 @@ static char *wrap_up_expansion(char *expand, int expansion_done, char *quote, ch
     else
 		expand = ft_strdup(str);
 
-	free(str);
+	// free(str);
 	return (expand);
 	}
 
@@ -89,15 +89,15 @@ static char *wrap_up_expansion(char *expand, int expansion_done, char *quote, ch
 			{
 				expansion_done = 1;
 				if (handle_expansion(&x, &str, env, last_status) == 0)
-                continue ;
+                	continue ;
 				else
-                x++;
+                	x++;
 			}
 			else
             x++;
 		}
 
     expand = wrap_up_expansion(expand, expansion_done, quote, str);
-    return expand;
+    return (expand);
 }
 

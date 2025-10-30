@@ -22,7 +22,7 @@ void	token_flag_off(char *cmd, int quote, t_token **list)
 		}
 		i++;
 	}
-    free_split(split);
+    //free_split(split); <-- si je laisse ce freesplit ca fait des double free dans le cas d une epansion avec des espaces dedans. mais pas si j'echo une expansion sans espace
 	free(cmd);
 }
 
