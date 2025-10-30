@@ -176,15 +176,16 @@ void		fill_args(t_token *list, char ***args);
 
 /*_______________________________executable_______________________________*/
 /*EXEC*/
+void		pipe_child(t_command *cmd, int prev_fd, int *pipefd);
+int			validate_command(t_command *cmd, t_shell *all);
+void		restore_std(int saved_stdin, int saved_stdout);
 void		exec_pipe(t_command *cmd_list, t_shell *all);
 void		child_process(t_command *cmd, t_local *env);
 char		*find_in_path(char *cmd, t_local *env);
+void		run_parent(t_command *cmd, pid_t pid);
+void		exec_child_or_parent(t_command *cmd);
 int			is_valid_identifier(const char *key);
 void		run_command(t_command *cmd);
-int			validate_command(t_command *cmd, t_shell *all);
-void		pipe_child(t_command *cmd, int prev_fd, int *pipefd);
-void		restore_std(int saved_stdin, int saved_stdout);
-void		run_parent(t_command *cmd, pid_t pid);
 
 /*BUILTINS*/
 int 		builtin_exit(char **args, t_shell *all, t_command *cmd_list);
@@ -198,11 +199,13 @@ int			builtin_pwd(t_shell *all);
 int			is_builtin(char *cmd);
 
 /*REDIR*/
+int			handle_redirections(t_command *cmd, int saved_stdin, int saved_stdout);
 int			create_heredoc(char *limiter, t_shell *all);
 int			apply_redir(t_token *redir, t_shell *all);
 int			check_ambiguous_redirect(char *value);
 int			check_redirections(t_command *cmd);
 int			handle_redir_only(t_command *cmd);
+
 
 
 /*ERROR & FREE*/

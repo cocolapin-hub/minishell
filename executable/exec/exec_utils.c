@@ -52,3 +52,44 @@ int	check_ambiguous_redirect(char *value)
 	}
 	return (0);
 }
+
+
+int	handle_redirections(t_command *cmd, int saved_stdin, int saved_stdout)
+{
+	int	redir_status;
+
+	redir_status = apply_redir(cmd->elem, cmd->all);
+	if (redir_status != 0)
+	{
+		restore_std(saved_stdin, saved_stdout);
+		if (redir_status == -2)
+			cmd->all->last_status = 130;
+		else
+			cmd->all->last_status = 1;
+		return (1);
+	}
+	return (0);
+}
+
+void	exec_child_or_parent(t_command *cmd)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		print_err(cmd->args[0], NULL, "fork failed");
+		return ;
+	}
+	if (pid == 0)
+	{
+		restore_default_signals();
+		child_process(cmd, cmd->all->env);
+	}
+	else
+	{
+		ignore_signals();
+		run_parent(cmd, pid);
+		setup_sig();
+	}
+}

@@ -84,44 +84,22 @@ int	validate_command(t_command *cmd, t_shell *all)
 
 void	run_command(t_command *cmd)
 {
-	pid_t	pid;
-	int		saved_stdin = dup(STDIN_FILENO);
-	int		saved_stdout = dup(STDOUT_FILENO);
-	int		redir_status;
+	int	saved_stdin;
+	int	saved_stdout;
 
 	if (handle_redir_only(cmd))
 		return ;
-
 	if (validate_command(cmd, cmd->all))
 		return ;
-
-	redir_status = apply_redir(cmd->elem, cmd->all);
-
-	if (redir_status != 0)
-	{
-		restore_std(saved_stdin, saved_stdout);
-		cmd->all->last_status = (redir_status == -2 ? 130 : 1);
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	if (handle_redirections(cmd, saved_stdin, saved_stdout))
 		return ;
-	}
-
 	if (is_builtin(cmd->args[0]))
 	{
 		cmd->all->last_status = run_builtin_command(cmd);
 		restore_std(saved_stdin, saved_stdout);
 		return ;
 	}
-	pid = fork();
-	if (pid == -1)
-		return (print_err(cmd->args[0], NULL, "fork failed"), (void)0);
-	if (pid == 0)
-	{
-		restore_default_signals();
-		child_process(cmd, cmd->all->env);
-	}
-	else
-	{
-		ignore_signals();
-		run_parent(cmd, pid);
-		setup_sig();
-	}
+	exec_child_or_parent(cmd);
 }
