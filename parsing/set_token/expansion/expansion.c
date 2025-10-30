@@ -53,11 +53,12 @@ static int handle_normal_expansion(int *x, char **str, t_local *env)
 
 static int	handle_expansion(int *x, char **str, t_local *env, int last_status)
 {
-	if (handle_normal_expansion(x, str, env) == 0)
+	if (handle_special_expansion(x, str, last_status) == 0)
 		return (0);
 
-	else if (handle_special_expansion(x, str, last_status) == 0)
+	else if (handle_normal_expansion(x, str, env) == 0)
 		return (0);
+
 
 	else
 		return (1);

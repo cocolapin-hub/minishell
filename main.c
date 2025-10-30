@@ -36,10 +36,10 @@ int main(int argc, char **argv, char **envp)
             continue;
 
         // Execute commands
-        // if (cmd_list->next) 			//cmd avec pipe
-        //     exec_pipe(cmd_list, &all);
-        // else
-        //     run_command(cmd_list);		//cmd sans pipe
+        if (cmd_list->next) 			//cmd avec pipe
+            exec_pipe(cmd_list, &all);
+        else
+            run_command(cmd_list);		//cmd sans pipe
 
 		free_command(cmd_list);
 		cmd_list = NULL;
