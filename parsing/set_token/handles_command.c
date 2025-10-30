@@ -22,7 +22,7 @@ void	token_flag_off(char *cmd, int quote, t_token **list)
 		}
 		i++;
 	}
-    free(split);
+    free_split(split);
 	free(cmd);
 }
 
@@ -37,8 +37,6 @@ void 	token_flag_on(char *cmd, int quote, t_token **list)
 		*list = new;
 	else
 		ft_lstadd_back(list, new);
-
-	// Don't free cmd - token owns it
 }
 
 void	set_values(char *line, char *quote, int *was_in_quotes, int x)
@@ -64,11 +62,11 @@ int	parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_toke
 		else
 			tmp = outside_quotes(line, &cmd_state->x, all, list);
 		if (!tmp)
-			return (free(tmp), -1);
+			return (-1); //free tmp ?
 		if (tmp == SKIP_TOKEN)
-			return (1);
+			return (1); //free tmp ?
 		cmd_state->cmd = ft_strjoin_free(cmd_state->cmd, tmp);
-		free(tmp);
+		//free(tmp);
 	}
 	return (0);
 }
@@ -97,5 +95,5 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 		token_flag_off(cmd_state.cmd, cmd_state.quote, list);
 	else
 		token_flag_on(cmd_state.cmd, cmd_state.quote, list);
-	return (cmd_state.x); //<-- potentially free cmd_state.cmd too
+	return (cmd_state.x);
 }

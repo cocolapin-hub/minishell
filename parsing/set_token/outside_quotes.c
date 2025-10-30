@@ -19,6 +19,7 @@ static int	find_word(int *y, int x, char *line, char **tmp)
 static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 {
 	t_token *last = NULL;
+	// char	*old;
 
 	if (*list)
 	{
@@ -28,8 +29,11 @@ static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 	}
 
 	if (!last || last->type != REDIR_HEREDOC)
+	// {
+	// 	old = *tmp;
 		*tmp = expansion((*all)->env, (*all)->last_status, *tmp, &quote);
-
+	// 	free(old);
+	// }
 }
 
 char		*outside_quotes(char *line, int *x, t_shell **all, t_token **list)

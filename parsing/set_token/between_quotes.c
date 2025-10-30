@@ -5,6 +5,7 @@
 static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 {
 	t_token *last = NULL;
+	// char	*old;
 
 	if (*list)
 	{
@@ -14,7 +15,11 @@ static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 	}
 
 	if (quote != 39 && (!last || last->type != REDIR_HEREDOC))
+	// {
+	// 	old = *tmp;
 		*tmp = expansion((*all)->env, (*all)->last_status, *tmp, &quote);
+// 		free(old);
+	// }
 }
 
 char		*between_quotes(char *line, int *x, t_shell **all, t_token **list)

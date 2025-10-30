@@ -7,7 +7,7 @@ t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all)
 
 	node = malloc(sizeof(t_command));
 	if (!node)
-		exit(1);
+		return NULL;
 	node->args = args;
 	node->elem = elements;
 	node->all = all;

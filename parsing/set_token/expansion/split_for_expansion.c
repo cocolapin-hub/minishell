@@ -45,7 +45,7 @@ char *split_for_expansion(char *str, char *key, int start, char *key_value)
     free(splits[1]);
     free(splits[2]);
     free(tmp);
-    free(str);
+    // free(str);
     free(splits);
     return (result);
 }

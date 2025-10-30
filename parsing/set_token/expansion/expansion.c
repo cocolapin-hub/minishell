@@ -31,10 +31,10 @@ static int	handle_special_expansion(int *x, char **str, int last_status)
 
 static int handle_normal_expansion(int *x, char **str, t_local *env)
 {
-    char    var_name[1024];
-    int     var_len;
+    char    var_name[1024] = {0};
+    int     var_len = 0;
     int     start;
-    int     saved_x;  // <-- AJOUTEZ CECI
+    int     saved_x;
 
     if (ft_isalnum((*str)[*x + 1]) || (*str)[*x + 1] == '_')
     {
@@ -70,30 +70,32 @@ static char *wrap_up_expansion(char *expand, int expansion_done, char *quote, ch
     else
 		expand = ft_strdup(str);
 
+	free(str);
 	return (expand);
-}
+	}
 
-char *expansion(t_local *env, int last_status, char *str, char *quote)
-{
-    int     expansion_done;
-    char    *expand = NULL;
-    int     x;
+	char *expansion(t_local *env, int last_status, char *str, char *quote)
+	{
+		int     expansion_done;
+		char    *expand = NULL;
+		int     x;
 
-    expansion_done = 0;
-    x = 0;
-    while(str[x] && str[x] != 61)
-    {
-        if (str[x] == '$')
-        {
-            expansion_done = 1;
-            if (handle_expansion(&x, &str, env, last_status) == 0)
+		expansion_done = 0;
+		x = 0;
+		while(str[x] && str[x] != 61)
+		{
+			if (str[x] == '$')
+			{
+				expansion_done = 1;
+				if (handle_expansion(&x, &str, env, last_status) == 0)
                 continue ;
-            else
+				else
                 x++;
-        }
-        else
+			}
+			else
             x++;
-    }
+		}
+
     expand = wrap_up_expansion(expand, expansion_done, quote, str);
     return expand;
 }

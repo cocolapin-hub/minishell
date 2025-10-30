@@ -105,6 +105,8 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 	tokenisation(0, cleaned_line, &list, &all);
 	if (!list)
 	{
+		free(cleaned_line);
+		free_tokens(list);
 		*cmd = NULL;
 		return ;
 	}
@@ -117,9 +119,9 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 		set_command(cmd, list, all);
 
 	free(cleaned_line);
+	free_tokens(list);
 
 	// print_pipeline(*cmd);
 	// if(list)
-	// 	free_tokens(list);
 	// free(cleaned_line);
 }

@@ -4,8 +4,10 @@
 
 void		create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
 {
-    // Only take a WORD that is NOT an option (-*) as the redirection target
-    t_token *target = (*tmp)->next;
+    t_token *target;
+
+	target = (*tmp)->next;
+
     while (target && target->type == WORD && target->value[0] == '-')
         target = target->next;  // skip option-like words
 
@@ -23,6 +25,6 @@ void		create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
             (*end)->next = *new;
         *end = *new;
 
-        *tmp = target; // consume only the actual filename
+        *tmp = target;
     }
 }

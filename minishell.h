@@ -218,7 +218,7 @@ void		ft_lstadd_back(t_token **lst, t_token *new);
 char		*ft_strdup_m(const char *s, int x, int len);
 t_token		*ft_lstnew_token(char *content, char quote);
 long long 	ft_strtoll(const char *nptr, int *is_long);
-char		*ft_strjoin_free(char *s1, char const *s2);
+char		*ft_strjoin_free(char *s1, char *s2);
 char		ft_strbrk(const char *s1, const char *s2);
 t_local		*ft_lstnew_env(char *value, char *key);
 void		*ft_calloc(size_t nmemb, size_t size);

@@ -3,7 +3,7 @@
 
 void	get_variable_name(char *str, char *var_name, int *var_len, int *x)
 {
-	char c;
+	char c = '\0';
 	*var_len = 0;
 	(*x)++; 			//skip the $
 

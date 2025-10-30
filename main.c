@@ -1,6 +1,9 @@
 
 #include "minishell.h"
 
+
+
+//leaks from any form of expansion: old new    au niveau de l'expansion
 int main(int argc, char **argv, char **envp)
 {
     t_command  *cmd_list;
@@ -10,12 +13,11 @@ int main(int argc, char **argv, char **envp)
     (void)argc;
     (void)argv;
 
-	cmd_list = NULL;
 	all.env = env_init(envp);
 	all.last_status = 0;
 	all.sig_type = 0;
+	cmd_list = NULL;
 	setup_sig();
-
     while (1)
     {
         line = readline("minishell$ ");
@@ -34,10 +36,10 @@ int main(int argc, char **argv, char **envp)
             continue;
 
         // Execute commands
-        if (cmd_list->next) 			//cmd avec pipe
-            exec_pipe(cmd_list, &all);
-        else
-            run_command(cmd_list);		//cmd sans pipe
+        // if (cmd_list->next) 			//cmd avec pipe
+        //     exec_pipe(cmd_list, &all);
+        // else
+        //     run_command(cmd_list);		//cmd sans pipe
 
 		free_command(cmd_list);
 		cmd_list = NULL;

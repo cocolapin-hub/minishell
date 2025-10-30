@@ -8,8 +8,9 @@ void	free_tokens(t_token *list)
 	while(list)
 	{
 		tmp = list->next;
-		free(list->value);
-		free (list);
+		if (list->value)
+			free(list->value);
+		free(list);
 		list = tmp;
 	}
 }

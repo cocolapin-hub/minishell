@@ -1,22 +1,6 @@
 
 #include "../../../minishell.h"
 
-// static int	handle_found_variable(t_local *env, char **str, char *var_name, int start)
-// {
-// 	int	x;
-
-// 	if (!env->value)
-// 	{
-// 		*str = split_for_expansion(*str, var_name, start, "");
-// 		x = start ;
-// 	}
-// 	else
-// 	{
-// 		*str = split_for_expansion(*str, var_name, start, env->value);
-// 		x = start + strlen(env->value);
-// 	}
-// 	return (start);
-// }
 
 static int handle_found_variable(t_local *env, char **str, char *var_name, int start)
 {
@@ -40,4 +24,3 @@ int find_variable_in_env(t_local *env, int start, char **str, char *var_name)
     *str = split_for_expansion(*str, var_name, start, "");
     return (start);
 }
-
