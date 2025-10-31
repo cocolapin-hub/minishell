@@ -1,12 +1,10 @@
 #include "../../minishell.h"
 
-t_token 	*check_char(t_token *list, t_shell **all)
+t_token	*check_char(t_token *list, t_shell **all)
 {
-	char c;
-	char s;
+	char	c;
+	char	s;
 
-
-	/*if it is many ; et &*/
 	c = list->value[0];
 	if (c == ';' || c == '&')
 	{
@@ -19,8 +17,6 @@ t_token 	*check_char(t_token *list, t_shell **all)
 			return (NULL);
 		}
 	}
-
-	/*if it is one ; et &*/
 	s = ft_strbrk(list->value, ":;&{}[]()*?!");
 	if (s)
 	{
@@ -30,6 +26,5 @@ t_token 	*check_char(t_token *list, t_shell **all)
 		(*all)->last_status = 2;
 		return (NULL);
 	}
-
 	return (list);
 }

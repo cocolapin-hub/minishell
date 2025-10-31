@@ -3,9 +3,9 @@
 
 void	token_flag_off(char *cmd, int quote, t_token **list)
 {
-	char 	**split;
-	t_token *new;
-	int 	i;
+	char	**split;
+	t_token	*new;
+	int		i;
 
 	i = 0;
 	split = ft_split(cmd, ' ');
@@ -22,17 +22,14 @@ void	token_flag_off(char *cmd, int quote, t_token **list)
 		}
 		i++;
 	}
-    //free_split(split); <-- si je laisse ce freesplit ca fait des double free dans le cas d une epansion avec des espaces dedans. mais pas si j'echo une expansion sans espace
 	free(cmd);
 }
 
-void 	token_flag_on(char *cmd, int quote, t_token **list)
+void	token_flag_on(char *cmd, int quote, t_token **list)
 {
-	t_token *new;;
-	// Keep as one token (was in quotes or no spaces)
+	t_token	*new;
 
 	new = ft_lstnew_token(cmd, quote);
-
 	if (!*list)
 		*list = new;
 	else
@@ -45,26 +42,28 @@ void	set_values(char *line, char *quote, int *was_in_quotes, int x)
 	*was_in_quotes = 1;
 }
 
-int	parse_command_loop(char *line, t_cmd_state *cmd_state, t_shell **all, t_token **list)
+int	parse(char *line, t_cmd_state *cmd_state, t_shell **all, t_token **list)
 {
 	char	*tmp;
 
 	while (line[cmd_state->x])
 	{
 		if (line[cmd_state->x] == 32 || line[cmd_state->x] == 9 ||
-			line[cmd_state->x] == 124 || line[cmd_state->x] == 60 || line[cmd_state->x] == 62)
-			break;
+			line[cmd_state->x] == 124 || line[cmd_state->x] == 60
+			|| line[cmd_state->x] == 62)
+			break ;
 		if (line[cmd_state->x] == 39 || line[cmd_state->x] == 34)
 		{
-			set_values(line, &cmd_state->quote, &cmd_state->was_in_quotes, cmd_state->x);
+			set_values(line, &cmd_state->quote, &cmd_state->was_in_quotes,
+				cmd_state->x);
 			tmp = between_quotes(line, &cmd_state->x, all, list);
 		}
 		else
 			tmp = outside_quotes(line, &cmd_state->x, all, list);
 		if (!tmp)
-			return (-1); //free tmp ?
+			return (-1);
 		if (tmp == SKIP_TOKEN)
-			return (1); //free tmp ?
+			return (1);
 		cmd_state->cmd = ft_strjoin_free(cmd_state->cmd, tmp);
 		// free(tmp);
 	}
@@ -80,7 +79,7 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 	cmd_state.x = x;
 	cmd_state.was_in_quotes = 0;
 	cmd_state.quote = 0;
-	status = parse_command_loop(line, &cmd_state, all, list);
+	status = parse(line, &cmd_state, all, list);
 	if (status == -1)
 	{
 		free(cmd_state.cmd);

@@ -93,9 +93,10 @@ void print_pipeline(t_command *cmd)
 
 void	parsing(char *line, t_shell *all, t_command **cmd)
 {
-	t_token 	*list = NULL;
-	char		*cleaned_line;
+	t_token	*list;
+	char	*cleaned_line;
 
+	list = NULL;
 	cleaned_line = check_input(line, &all);
 	if (!cleaned_line)
 	{
@@ -110,15 +111,13 @@ void	parsing(char *line, t_shell *all, t_command **cmd)
 		*cmd = NULL;
 		return ;
 	}
-
 	error_handling(&all, &list);
 	if (!list)
 	{
 		free(cleaned_line);
 		*cmd = NULL;
-		return;
+		return ;
 	}
-
 	set_command(cmd, list, all);
 	free(cleaned_line);
 	free_tokens(list);

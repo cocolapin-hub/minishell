@@ -4,25 +4,20 @@
 
 static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 {
-	t_token *last = NULL;
-	// char	*old;
+	t_token	*last;
 
+	last = NULL;
 	if (*list)
 	{
 		last = *list;
 		while (last->next)
 			last = last->next;
 	}
-
 	if (quote != 39 && (!last || last->type != REDIR_HEREDOC))
-	// {
-	// 	old = *tmp;
 		*tmp = expansion((*all)->env, (*all)->last_status, *tmp, &quote);
-// 		free(old);
-	// }
 }
 
-char		*between_quotes(char *line, int *x, t_shell **all, t_token **list)
+char	*between_quotes(char *line, int *x, t_shell **all, t_token **list)
 {
 	char	quote;
 	char	*tmp;
@@ -33,22 +28,18 @@ char		*between_quotes(char *line, int *x, t_shell **all, t_token **list)
 	if (line[y] == quote)
 	{
 		*x += 2;
-		return(tmp = ft_strdup(""));
+		return (tmp = ft_strdup(""));
 	}
-
-	while (line[y] && line[y] != quote) //in case i am too tight
+	while (line[y] && line[y] != quote)
 		y++;
-
 	if (line[y] == '\0')
 	{
-		write(2, "syntax error: unclosed quotes\n", 30); //<-- there is a function from coco i can use
+		write(2, "syntax error: unclosed quotes\n", 30);
 		(*all)->last_status = 258;
 		return (NULL);
 	}
-
 	tmp = ft_strdup_m(line, *x + 1, y - *x - 1);
 	expand_word(&tmp, quote, all, list);
 	*x = y + 1;
 	return (tmp);
 }
-

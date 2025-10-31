@@ -1,21 +1,22 @@
 #include "../../minishell.h"
 
 
-void		fill_elements(t_token **list, t_token **elements)
+void	fill_elements(t_token **list, t_token **elements)
 {
-	t_token	*start = NULL;
-	t_token	*tmp = *list;
-	t_token	*end = NULL;
-	t_token	*new = NULL;
+	t_token	*start;
+	t_token	*tmp;
+	t_token	*end;
+	t_token	*new;
 
+	start = NULL;
 	tmp = *list;
+	end = NULL;
+	new = NULL;
 	if (!(*list) || !list)
 	{
 		*elements = NULL;
 		return ;
 	}
-
-	/*fill element struct*/
 	while (tmp && tmp->type != PIPE)
 	{
 		if (tmp->type == REDIR_IN || tmp->type == REDIR_OUT
@@ -24,8 +25,6 @@ void		fill_elements(t_token **list, t_token **elements)
 		tmp = tmp->next;
 	}
 	*elements = start;
-
-	/*move after the pipe for next cmd*/
 	if (tmp && tmp->type == PIPE)
 		*list = tmp->next;
 	else
