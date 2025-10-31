@@ -151,6 +151,8 @@ char		*outside_quotes(char *line, int *x, t_shell **all, t_token **list);
 int			handles_command(char *line, int x, t_token **list, t_shell **all);
 t_token		*tokenisation(int x, char *line, t_token **list, t_shell **all);
 int			handles_special_char(char *line, int x, t_token **list);
+void		token_flag_off(char *cmd, int quote, t_token **list);
+void		token_flag_on(char *cmd, int quote, t_token **list);
 
 /*ERROR_HANDLING*/
 int			check_ambiguous(char *line, int x, t_token **list, t_shell **all);

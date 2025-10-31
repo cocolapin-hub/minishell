@@ -15,15 +15,17 @@ int	check_ambiguous(char *line, int x, t_token **list, t_shell **all)
 		while (last->next)
 			last = last->next;
 	}
-
-	if (last->type == REDIR_IN)
+	find_word(&y, x, line, &tmp);
+	if (last->type == REDIR_IN && ft_strcmp(tmp, "") != 0)
 	{
-		find_word(&y, x, line, &tmp);
 		write(1, tmp, ft_strlen(tmp));
 		write(1, ": ambiguous redirect\n", 21);
 		(*all)->last_status = 1;
+		free(tmp);
 		return (1);
 	}
 	free(tmp);
-	return 0;
+	return (0);
 }
+
+

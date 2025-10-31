@@ -57,6 +57,7 @@ SRCS = \
 	parsing/set_token/outside_quotes.c \
 	parsing/set_token/between_quotes.c \
 	parsing/set_token/tokenisation.c \
+	parsing/set_token/token_flag.c \
 	parsing/set_token/find_word.c \
 	parsing/set_token/expansion/clean_after_expansion.c \
 	parsing/set_token/expansion/handle_exit_status.c \
