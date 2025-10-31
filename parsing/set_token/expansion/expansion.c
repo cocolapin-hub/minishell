@@ -63,7 +63,7 @@ static char	*wrap_up(char *expand, int expansion_done, char *quote, char *str)
 		expand = clean_after_expansion(str);
 	else
 		expand = ft_strdup(str);
-	// free(str);
+	free(str);
 	return (expand);
 }
 

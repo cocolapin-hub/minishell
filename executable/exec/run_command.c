@@ -102,4 +102,5 @@ void	run_command(t_command *cmd)
 		return ;
 	}
 	exec_child_or_parent(cmd);
+	restore_std(saved_stdin, saved_stdout);
 }
