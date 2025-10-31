@@ -39,7 +39,7 @@ static int	handle_normal_expansion(int *x, char **str, t_local *env)
 		get_variable_name(*str, var_name, &var_len, x);
 		if (var_len == 0)
 			return (0);
-		*x = find_variable_in_env(env, start, str, var_name);
+		*x = find_variable(env, start, str, var_name);
 		if (*x == start)
 			*x = start;
 		return (0);

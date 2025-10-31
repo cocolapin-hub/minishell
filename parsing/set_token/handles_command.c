@@ -45,6 +45,7 @@ void	set_values(char *line, char *quote, int *was_in_quotes, int x)
 int	parse(char *line, t_cmd_state *cmd_state, t_shell **all, t_token **list)
 {
 	char	*tmp;
+	int		tmp_x;
 
 	while (line[cmd_state->x])
 	{
@@ -52,6 +53,7 @@ int	parse(char *line, t_cmd_state *cmd_state, t_shell **all, t_token **list)
 			line[cmd_state->x] == 124 || line[cmd_state->x] == 60
 			|| line[cmd_state->x] == 62)
 			break ;
+		tmp_x = cmd_state->x;
 		if (line[cmd_state->x] == 39 || line[cmd_state->x] == 34)
 		{
 			set_values(line, &cmd_state->quote, &cmd_state->was_in_quotes,
@@ -63,7 +65,11 @@ int	parse(char *line, t_cmd_state *cmd_state, t_shell **all, t_token **list)
 		if (!tmp)
 			return (-1);
 		if (tmp == SKIP_TOKEN)
+		{
+			if (check_ambiguous(line, tmp_x, list, all) == 1)
+				return (-1);
 			return (1);
+		}
 		cmd_state->cmd = ft_strjoin_free(cmd_state->cmd, tmp);
 		// free(tmp);
 	}

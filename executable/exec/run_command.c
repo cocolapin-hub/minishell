@@ -57,7 +57,7 @@ static int	handle_dot_commands(char *cmd, t_shell *all, char *path_env)
 	}
 	if (ft_strcmp(cmd, ".") == 0)
 	{
-		write(2, "minishell: .: filename argument required\n", 41);
+		write(2, ".: filename argument required\n", 30);
 		write(2, ".: usage: . filename [arguments]\n", 33);
 		all->last_status = 2;
 		return (1);

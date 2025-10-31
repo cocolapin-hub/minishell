@@ -90,7 +90,6 @@ void print_pipeline(t_command *cmd)
     }
 }
 
-
 void	parsing(char *line, t_shell *all, t_command **cmd)
 {
 	t_token	*list;

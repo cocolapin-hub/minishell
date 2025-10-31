@@ -19,7 +19,7 @@ int	builtin_pwd(t_shell *all)
 		all->last_status = 0;
 		return (0);
 	}
-	ft_putendl_fd("minishell: pwd: error retrieving current directory", 2);
+	ft_putendl_fd("pwd: error retrieving current directory", 2);
 	all->last_status = 1;
 	return (1);
 }

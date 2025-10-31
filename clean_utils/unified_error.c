@@ -3,7 +3,7 @@
 
 void	print_err(const char *cmd, const char *arg, const char *msg)
 {
-	write(2, "minishell: ", 11);
+	// write(2, "minishell: ", 11);
 	if (cmd && *cmd)
 	{
 		write(2, cmd, ft_strlen(cmd));

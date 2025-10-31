@@ -138,6 +138,7 @@ char		*split_expansion(char *str, char *key, int start, char *key_value);
 void		get_variable_name(char *str, char *var_name, int *var_len, int *x);
 char		*expansion(t_local *env, int last_status, char *str, char *quote);
 int			handle_exit_status(char **str, int last_status, int x);
+int			find_word(int *y, int x, char *line, char **tmp);
 int			handle_number_zero(char **str, int x);
 int			handle_numbers(char **str, int x);
 char		*clean_after_expansion(char *str);
@@ -152,6 +153,7 @@ t_token		*tokenisation(int x, char *line, t_token **list, t_shell **all);
 int			handles_special_char(char *line, int x, t_token **list);
 
 /*ERROR_HANDLING*/
+int			check_ambiguous(char *line, int x, t_token **list, t_shell **all);
 void		error_handling(t_shell **all, t_token **list);
 t_token		*check_redir(t_token *list, t_shell **all);
 t_token		*check_char(t_token *list, t_shell **all);

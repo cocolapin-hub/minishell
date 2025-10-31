@@ -13,7 +13,7 @@ static void	update_pwd(t_local **env)
 		unset_env_value(env, "OLDPWD");
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
-		ft_putendl_fd("minishell: cd: error retrieving current directory: \
+		ft_putendl_fd("cd: error retrieving current directory: \
 getcwd: cannot access parent directories: No such file or directory", 2);
 		unset_env_value(env, "PWD");
 		return ;

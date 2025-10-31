@@ -3,7 +3,7 @@
 
 static void	print_unset_error(char *arg)
 {
-	write(2, "minishell: unset: `", 19);
+	write(2, "unset: `", 8);
 	write(2, arg, ft_strlen(arg));
 	write(2, "': not a valid identifier\n", 26);
 }

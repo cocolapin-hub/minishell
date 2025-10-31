@@ -57,15 +57,17 @@ SRCS = \
 	parsing/set_token/outside_quotes.c \
 	parsing/set_token/between_quotes.c \
 	parsing/set_token/tokenisation.c \
+	parsing/set_token/find_word.c \
 	parsing/set_token/expansion/clean_after_expansion.c \
-	parsing/set_token/expansion/find_variable.c \
-	parsing/set_token/expansion/split_expansion.c \
 	parsing/set_token/expansion/handle_exit_status.c \
 	parsing/set_token/expansion/handle_number_zero.c \
 	parsing/set_token/expansion/get_variable_name.c \
+	parsing/set_token/expansion/split_expansion.c \
 	parsing/set_token/expansion/handle_numbers.c \
+	parsing/set_token/expansion/find_variable.c \
 	parsing/set_token/expansion/handle_pid.c \
 	parsing/set_token/expansion/expansion.c \
+	parsing/syntax/check_ambiguous.c \
 	parsing/syntax/error_handling.c \
 	parsing/syntax/check_redir.c \
 	parsing/syntax/check_char.c \
