@@ -121,6 +121,7 @@ int			error_code(const char *cmd, const char *msg, int code);
 void		print_invalid_id(char *arg, t_shell *all);
 void		fatal_exit(const char *msg, int code);
 int			redir_error(char *file, char *msg);
+void		print_signal_message(t_shell *all);
 void		free_command(t_command *cmd_list);
 void		free_tokens(t_token *list);
 void		free_split(char **array);

@@ -20,3 +20,11 @@ void	fatal_exit(const char *msg, int code)
 	perror(msg);
 	exit(code);
 }
+
+void	print_signal_message(t_shell *all)
+{
+	if (all->sig_type == SIGINT)
+		write(STDOUT_FILENO, "\n", 1);
+	else if (all->sig_type == SIGQUIT)
+		write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+}
