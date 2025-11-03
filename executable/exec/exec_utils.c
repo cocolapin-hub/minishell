@@ -42,7 +42,7 @@ int	check_ambiguous_redirect(char *value)
 	int	i;
 
 	if (!value || !value[0])
-		return (redir_error(value, "ambiguous redirect"), 1);
+		return (redir_error(value, " : No such file or directory"), 1);
 	i = 0;
 	while (value[i])
 	{
