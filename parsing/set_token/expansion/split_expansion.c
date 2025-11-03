@@ -1,6 +1,17 @@
 
 #include "../../../minishell.h"
 
+static void	free_splits(char **splits)
+{
+	if (splits)
+	{
+		free(splits[0]);
+		free(splits[1]);
+		free(splits[2]);
+		free(splits);
+	}
+}
+
 static char	**make_splits(char *str, char *key, int start, char *key_value)
 {
 	size_t	k_len;
@@ -24,6 +35,8 @@ static char	**make_splits(char *str, char *key, int start, char *key_value)
 		splits[2] = ft_strdup_m(str, start + k_len, s_len - (start + k_len));
 	else
 		splits[2] = ft_strdup("");
+	if (!splits[0] || !splits[1] || !splits[2])
+		return (free_splits(splits), NULL);
 	return (splits);
 }
 
@@ -37,11 +50,15 @@ char	*split_expansion(char *str, char *key, int start, char *key_value)
 	if (!splits)
 		return (NULL);
 	tmp = ft_strjoin(splits[0], splits[1]);
+	if (!tmp)
+	{
+		free_splits(splits);
+		return (NULL);
+	}
 	result = ft_strjoin(tmp, splits[2]);
-	free(splits[0]);
-	free(splits[1]);
-	free(splits[2]);
+	free_splits(splits);
 	free(tmp);
-	free(splits);
+	if (!result)
+		return (NULL);
 	return (result);
 }

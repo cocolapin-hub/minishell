@@ -1,4 +1,4 @@
-/* ========== parsing/set_token/handles_command.c ========== */
+/* ========== parsing/set_token/handles_command.c ========== */ ADDED
 #include "../../minishell.h"
 
 void	set_values(char *line, char *quote, int *was_in_quotes, int x)
@@ -69,7 +69,7 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 	return (cmd_state.x);
 }
 
-/* ========== parsing/set_token/token_flag.c ========== */
+/* ========== parsing/set_token/token_flag.c ========== */ added
 #include "../../minishell.h"
 
 static void	free_split_and_cmd(char **split, char *cmd)
@@ -138,8 +138,8 @@ void	token_flag_on(char *cmd, int quote, t_token **list)
 		ft_lstadd_back(list, new);
 }
 
-/* ========== parsing/set_token/expansion/split_expansion.c ========== */
-#include "../../../minishell.h"
+/* ========== parsing/set_token/expansion/split_expansion.c ========== */ ADDED
+#include "../../../minishell.h" ADDED
 
 static char	**make_splits(char *str, char *key, int start, char *key_value)
 {

@@ -38,6 +38,8 @@ char	*between_quotes(char *line, int *x, t_shell **all, t_token **list)
 		return (NULL);
 	}
 	tmp = ft_strdup_m(line, *x + 1, y - *x - 1);
+	if (!tmp)
+		return (NULL);
 	expand_word(&tmp, quote, all, list);
 	*x = y + 1;
 	return (tmp);

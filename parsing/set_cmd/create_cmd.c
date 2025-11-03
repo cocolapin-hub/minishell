@@ -15,6 +15,12 @@ void	create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
 			return ;
 		(*new)->type = (*tmp)->type;
 		(*new)->value = ft_strdup(target->value);
+		if (!(*new)->value)
+		{
+			free(*new);
+			*new = NULL;
+			return ;
+		}
 		(*new)->amount = target->amount;
 		(*new)->next = NULL;
 		if (!(*start))

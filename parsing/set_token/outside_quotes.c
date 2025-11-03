@@ -32,13 +32,16 @@ char	*outside_quotes(char *line, int *x, t_shell **all, t_token **list)
 	else
 	{
 		start = find_word(&y, *x, line, &tmp);
+		if (!tmp)
+			return (NULL);
 		expand_word(&tmp, 0, all, list);
+		if (!tmp)
+			return (NULL);
 	}
 	if (line[start] == '$' && ft_strcmp(tmp, "") == 0)
 	{
 		*x = y;
-		free(tmp);
-		return (SKIP_TOKEN);
+		return (free(tmp), SKIP_TOKEN);
 	}
 	*x = y;
 	return (tmp);

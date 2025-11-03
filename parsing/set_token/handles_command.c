@@ -32,6 +32,8 @@ int	parse(char *line, t_cmd_state *cmd, t_shell **all, t_token **list)
 		if (tmp == SKIP_TOKEN)
 			return (1);
 		cmd->cmd = ft_strjoin_free(cmd->cmd, tmp);
+		if (!cmd->cmd)
+			return (-1);
 	}
 	return (0);
 }
@@ -42,6 +44,8 @@ int	handles_command(char *line, int x, t_token **list, t_shell **all)
 	int			status;
 
 	cmd_state.cmd = ft_strdup("");
+	if (!cmd_state.cmd)
+		return (-1);
 	cmd_state.x = x;
 	cmd_state.was_in_quotes = 0;
 	cmd_state.quote = 0;
