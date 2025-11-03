@@ -12,25 +12,21 @@ static int	close_and_free(char *line, int fd1, int fd2, int ret)
 	return (ret);
 }
 
-// stocker le heredoc dans un pipe plutot que dans un fichier tmp : mieux
 int	create_heredoc(char *limiter, t_shell *all)
 {
-	int		pipefd[2];		// tab à deux cases car fd[0] et fd[1]
+	int		pipefd[2];
 	char	*line;
 
-	if (pipe(pipefd) == -1) // crée un tuyau unidirectionnel pipefd[0] = lecture / pipefd[1] = écriture
+	if (pipe(pipefd) == -1)
 		return (-1);
-	setup_heredoc_signals();// Ctrl-C annule heredoc, Ctrl-\ ignoré
+	setup_heredoc_signals();
 	while (1)
 	{
 		line = readline("> ");
-		if (g_in_heredoc == SIGINT) // CTRL-C
+		if (g_in_heredoc == SIGINT)
 			return (close_and_free(line, pipefd[0], pipefd[1], -2));
 		if (!line || ft_strcmp(line, limiter) == 0)
 			break ;
-		//ici on gere les cas d' expansion dans un heredoc
-			// -->mettre une condition -
-			// -> expansion uniquement si delimiter has no quotes
 		if (all->cmd_head->elem->amount == Q_NONE)
 			line = expansion(all->env, all->last_status, line, 0);
 		write(pipefd[1], line, ft_strlen(line));
@@ -38,45 +34,7 @@ int	create_heredoc(char *limiter, t_shell *all)
 		free(line);
 	}
 	free(line);
-	close(pipefd[1]);		// ferme le coté écriture
-	setup_sig();			// rétablir signaux du parent
+	close(pipefd[1]);
+	setup_sig();
 	return (pipefd[0]);
 }
-
-// flag pour la fonction open(O_WRONLY | O_CREAT | O_TRUNC, 0644)
-// WRONLY = ouvre le fichier en écriture seule
-// CREAT  = crée le fichier s'il n'existe pas
-// TRUNC  = si le fichier existe, on efface tout avant d'écrire (>)
-// APPEND = écrit a la fin sans écraser (>>)
-
-// 0644   = mode Unix
-// (permissions du fichier quand on le crée) droits par défaut -rw-r--r--
-			// En octal (0 au début = octal) :
-			// 	6 = lecture + écriture (rw-)
-			// 	4 = lecture (r--)
-			// 	4 = lecture (r--)
-			// Donc 0644 = propriétaire :	lecture + écriture
-			// 								groupe : lecture seule
-			//								autres : lecture seule
-
-/*
-
-lors d'un CTRL-C : bash arrete la saisie, heredoc canceled,
-la commande avant le heredoc n'est pas lancée et $? vaut 130
-
-On doit traiter le heredoc comme un mini-shell temporaire :
-
-	Quand tu rentres dans create_heredoc, tu changes les signaux :
-		SIGINT → tue le heredoc et stoppe l’exécution.
-		SIGQUIT → ignoré (comme dans Bash).
-
-	Si l’utilisateur fait Ctrl+C pendant le heredoc :
-		tu fermes le pipefd,
-		tu libères la mémoire,
-		tu retournes une erreur spéciale pour dire au parent : "heredoc annulé".
-
-	Le shell parent doit alors :
-		ne pas exécuter la commande,
-		mettre last_status = 130.
-
-*/
