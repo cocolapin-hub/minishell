@@ -124,6 +124,7 @@ void parsing(char *line, t_shell *all, t_command **cmd)
         return ;
     }
     set_command(cmd, list, all);
+	// print_pipeline(*cmd);
     end_parsing(cleaned_line, &list, cmd, 1);
 }
 
