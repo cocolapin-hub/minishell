@@ -1,16 +1,6 @@
 
 #include "../../minishell.h"
 
-// int	create_heredoc(const char *limiter)		// avec fichier tmp
-// {
-// 	char	*line;
-// 	int		fd;
-
-// 	fd = open("/tmp/minishell_heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd < 0)
-// 		return (-1);
-// }
-
 static int	close_and_free(char *line, int fd1, int fd2, int ret)
 {
 	if (line)
@@ -38,7 +28,6 @@ int	create_heredoc(char *limiter, t_shell *all)
 			return (close_and_free(line, pipefd[0], pipefd[1], -2));
 		if (!line || ft_strcmp(line, limiter) == 0)
 			break ;
-
 		//ici on gere les cas d' expansion dans un heredoc
 			// -->mettre une condition -
 			// -> expansion uniquement si delimiter has no quotes
@@ -54,15 +43,14 @@ int	create_heredoc(char *limiter, t_shell *all)
 	return (pipefd[0]);
 }
 
-
-
 // flag pour la fonction open(O_WRONLY | O_CREAT | O_TRUNC, 0644)
 // WRONLY = ouvre le fichier en écriture seule
 // CREAT  = crée le fichier s'il n'existe pas
 // TRUNC  = si le fichier existe, on efface tout avant d'écrire (>)
 // APPEND = écrit a la fin sans écraser (>>)
 
-// 0644   = mode Unix (permissions du fichier quand on le crée) droits par défaut -rw-r--r--
+// 0644   = mode Unix
+// (permissions du fichier quand on le crée) droits par défaut -rw-r--r--
 			// En octal (0 au début = octal) :
 			// 	6 = lecture + écriture (rw-)
 			// 	4 = lecture (r--)
@@ -71,10 +59,10 @@ int	create_heredoc(char *limiter, t_shell *all)
 			// 								groupe : lecture seule
 			//								autres : lecture seule
 
-
 /*
 
-lors d'un CTRL-C : bash arrete la saisie, heredoc canceled, la commande avant le heredoc n'est pas lancée et $? vaut 130
+lors d'un CTRL-C : bash arrete la saisie, heredoc canceled,
+la commande avant le heredoc n'est pas lancée et $? vaut 130
 
 On doit traiter le heredoc comme un mini-shell temporaire :
 

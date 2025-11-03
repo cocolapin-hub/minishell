@@ -33,7 +33,7 @@ t_token	*ft_lstnew_token(char *content, char quote)
 
 	node = (t_token *)malloc(sizeof(t_token));
 	if (!node)
-		exit(1);
+		return(NULL);
 	node->value = content;
 	type_assignation(content, &node->type);
 	quotes_assignation(quote, &node->amount);

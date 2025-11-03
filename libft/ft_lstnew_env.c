@@ -7,7 +7,7 @@ t_local	*ft_lstnew_env(char *value, char *key)
 
 	node = malloc(sizeof(t_local));
 	if (!node)
-		return NULL;
+		return (NULL);
 	node->value = value;
 	node->key = key;
 	node->next = NULL;

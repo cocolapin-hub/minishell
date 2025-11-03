@@ -25,6 +25,5 @@ char	*ft_strjoin(char *s1, char const *s2)
 		y++;
 	}
 	str[x + y] = 0;
-	//add free for s1
 	return (str);
 }

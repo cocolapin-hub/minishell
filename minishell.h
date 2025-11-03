@@ -75,9 +75,9 @@ typedef struct s_command
 
 typedef struct s_pipe
 {
-	int			prev_fd;		// stdin par défaut si pas de pipe avant ( -1 : valeur sentinelle)
+	int			prev_fd;
 	int			pipefd[2];
-	pid_t		last_pid;		// on garde le dernier enfant (dernier fork qui est la commande la plus à droite du pipe) on doit l'utiliser pour $?
+	pid_t		last_pid;
 	pid_t		pid;
 	t_command	*cmd_list;
 }	t_pipe;
@@ -100,7 +100,7 @@ t_local		*find_env_key(t_local *env, char *key);
 void		print_export_var(char *var);
 char		**env_to_tab(t_local *env);
 void		sort_env_tab(char **tab);
-t_local		*env_init(char **envp);
+t_local		*env_init(char **envp, t_shell *all);
 
 /*__________________________________signal________________________________*/
 void		handles_ctrl_d(char *line, t_shell all, t_command *cmd_list);

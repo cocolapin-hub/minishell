@@ -1,3 +1,4 @@
+
 #include "../../minishell.h"
 
 int	handles_special_char(char *line, int x, t_token **list)

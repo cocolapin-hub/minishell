@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-t_local	*new_env_node(char *key, char *value) 		// duplique key et value pour éviter de modifier l’original envp.
+t_local	*new_env_node(char *key, char *value)
 {
 	t_local	*node;
 
@@ -9,7 +9,7 @@ t_local	*new_env_node(char *key, char *value) 		// duplique key et value pour é
 		return (NULL);
 	node->key = ft_strdup(key);
 	node->value = ft_strdup(value);
-	node->next = NULL;						 		// next = NULL car c’est un maillon isolé pour l’instant.
+	node->next = NULL;
 	return (node);
 }
 
@@ -19,32 +19,34 @@ void	add_env_node(t_local **env, t_local *new_node)
 
 	if (!env || !new_node)
 		return ;
-	if (!*env) 			  							// Si la liste est vide
+	if (!*env)
 	{
-		*env = new_node;  							// le nouveau devient la tête.
+		*env = new_node;
 		return ;
 	}
 	tmp = *env;
-	while (tmp->next)	  							// on parcourt jusqu’au dernier
+	while (tmp->next)
 		tmp = tmp->next;
-	tmp->next = new_node; 							// et on relie
+	tmp->next = new_node;
 }
 
-t_local	*env_init(char **envp)
+t_local	*env_init(char **envp, t_shell *all)
 {
-	t_local	*env;
 	t_local	*node;
-	int		i;
+	t_local	*env;
 	char	*eq;
+	int		i;
 
+	all->last_status = 0;
+	all->sig_type = 0;
 	env = NULL;
 	i = 0;
 	while (envp[i])
 	{
-		eq = ft_strchr(envp[i], '='); 			  // strchr pointe vers sur '='
+		eq = ft_strchr(envp[i], '=');
 		if (eq)
 		{
-			*eq = '\0'; 						  // coupe la string "PATH=/bin" -> "PATH" et "/bin"
+			*eq = '\0'; 						  /* coupe la string "PATH=/bin" -> "PATH" et "/bin"*/
 			node = new_env_node(envp[i], eq + 1); // crée node {key=PATH, value=/bin}
 			*eq = '='; 							  // remet le '=' pour pas casser envp original
 			add_env_node(&env, node);

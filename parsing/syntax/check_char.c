@@ -1,3 +1,4 @@
+
 #include "../../minishell.h"
 
 t_token	*check_char(t_token *list, t_shell **all)
@@ -21,7 +22,7 @@ t_token	*check_char(t_token *list, t_shell **all)
 	if (s)
 	{
 		write(2, "syntax error near unexpected token `", 36);
-		write(2, &s , 1);
+		write(2, &s, 1);
 		write(2, "'\n", 2);
 		(*all)->last_status = 2;
 		return (NULL);

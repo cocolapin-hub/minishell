@@ -1,3 +1,4 @@
+
 #include "../../../minishell.h"
 
 void	get_variable_name(char *str, char *var_name, int *var_len, int *x)

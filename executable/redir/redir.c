@@ -120,8 +120,6 @@ int	apply_redir(t_token *redir, t_shell *all)
 	return (0);
 }
 
-
-
 /*
 	dup2
 	- duplique "oldfd" dans "newfd" apres les deux FD pointent vers le meme fichier/pipe

@@ -26,11 +26,12 @@ static int	handle_special_expansion(int *x, char **str, int last_status)
 
 static int	handle_normal_expansion(int *x, char **str, t_local *env)
 {
-	char	var_name[1024] = {0};
+	char	var_name[1024];
 	int		var_len;
-	int		start;
 	int		saved_x;
+	int		start;
 
+	ft_memset(var_name, 0, sizeof(var_name));
 	var_len = 0;
 	if (ft_isalnum((*str)[*x + 1]) || (*str)[*x + 1] == '_')
 	{
@@ -62,7 +63,14 @@ static char	*wrap_up(char *expand, int expansion_done, char *quote, char *str)
 	if (expansion_done == 1 && (!quote || *quote == 0))
 		expand = clean_after_expansion(str);
 	else
+	{
 		expand = ft_strdup(str);
+		if (!expand)
+		{
+			free(str);
+			return (NULL);
+		}
+	}
 	free(str);
 	return (expand);
 }

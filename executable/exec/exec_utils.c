@@ -53,7 +53,6 @@ int	check_ambiguous_redirect(char *value)
 	return (0);
 }
 
-
 int	handle_redirections(t_command *cmd, int saved_stdin, int saved_stdout)
 {
 	int	redir_status;

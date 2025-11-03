@@ -1,7 +1,6 @@
 
 #include "../../minishell.h"
 
-
 static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 {
 	t_token	*last;

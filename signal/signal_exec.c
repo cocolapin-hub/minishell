@@ -49,7 +49,7 @@ void setup_sig(void)
 	signal(SIGTSTP, SIG_IGN);
 }
 
-// on n’affiche pas ^\Quit dans le parent. Ça doit seulement se faire quand un enfant est tué par SIGQUIT.
-
+// on n’affiche pas ^\Quit dans le parent.
+	//Ça doit seulement se faire quand un enfant est tué par SIGQUIT.
 // à appeler au lancement de minishell dans main avant la boucle principale
 // signal(SIGQUIT, sigquit_handler);		// SIGQUIT (ctrl-\)

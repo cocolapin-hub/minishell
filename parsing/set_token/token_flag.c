@@ -1,3 +1,4 @@
+
 #include "../../minishell.h"
 
 void	token_flag_off(char *cmd, int quote, t_token **list)

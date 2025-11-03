@@ -1,7 +1,6 @@
 
 #include "../../minishell.h"
 
-
 void	set_values(char *line, char *quote, int *was_in_quotes, int x)
 {
 	*quote = line[x];
@@ -29,7 +28,7 @@ int	parse(char *line, t_cmd_state *cmd, t_shell **all, t_token **list)
 		if (!tmp)
 			return (-1);
 		if (tmp == SKIP_TOKEN && check_ambiguous(line, tmp_x, list, all) == 1)
-				return (-1);
+			return (-1);
 		if (tmp == SKIP_TOKEN)
 			return (1);
 		cmd->cmd = ft_strjoin_free(cmd->cmd, tmp);

@@ -1,6 +1,20 @@
 
 #include "minishell.h"
 
+static void	exec(t_command  **cmd_list, t_shell *all)
+{
+ 	if ((*cmd_list)->next)
+	{
+        exec_pipe(*cmd_list, all);
+	}
+    else
+	{
+        run_command(*cmd_list);
+	}
+	free_command(*cmd_list);
+	*cmd_list = NULL;
+}
+
 int main(int argc, char **argv, char **envp)
 {
     t_command  *cmd_list;
@@ -9,43 +23,32 @@ int main(int argc, char **argv, char **envp)
 
     (void)argc;
     (void)argv;
-
+	all.env = env_init(envp, &all);
 	cmd_list = NULL;
-	all.env = env_init(envp);
-	all.last_status = 0;
-	all.sig_type = 0;
 	setup_sig();
-
     while (1)
     {
         line = readline("minishell$ ");
 		handles_ctrl_d(line, all, cmd_list);
-
 		if (handles_ctrl_c(all, line) || line[0] == '\0')
 		{
 			free(line);
 			continue ;
 		}
-
-        add_history(line);
 		parsing(line, &all, &cmd_list);
-
         if (!cmd_list)
             continue;
-
-        // Execute commands
-        if (cmd_list->next) 			//cmd avec pipe
-            exec_pipe(cmd_list, &all);
-        else
-            run_command(cmd_list);		//cmd sans pipe
-
-		free_command(cmd_list);
-		cmd_list = NULL;
+		exec(&cmd_list, &all);
 	}
-
 	clean_exit(&all, cmd_list, all.last_status);
     return (0);
 }
+
+
+
+
+
+
 
 
 // int main(int argc, char **argv, char **envp)

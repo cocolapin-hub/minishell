@@ -1,6 +1,5 @@
 #include "../../minishell.h"
 
-
 void	fill_elements(t_token **list, t_token **elements)
 {
 	t_token	*start;

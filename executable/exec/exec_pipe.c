@@ -15,12 +15,13 @@ static void	pipe_parent(t_pipe *p, t_command *cmd)
 
 static void	wait_pipeline(t_shell *all, pid_t last_pid)
 {
-	int		sig;
 	int		status;
 	pid_t	wpid;
+	int		sig;
 
 	all->sig_type = 0;
-	while ((wpid = wait(&status)) > 0)
+	wpid = wait(&status);
+	while (wpid > 0)
 	{
 		if (WIFSIGNALED(status))
 		{
@@ -41,6 +42,7 @@ static void	wait_pipeline(t_shell *all, pid_t last_pid)
 		}
 	}
 }
+
 static int	fork_and_execute(t_pipe *p, t_command *cmd)
 {
 	if (cmd->next && pipe(p->pipefd) == -1)
@@ -64,9 +66,9 @@ static void	print_signal_message(t_shell *all)
 		write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
 }
 
-void exec_pipe(t_command *cmd_list, t_shell *all)
+void	exec_pipe(t_command *cmd_list, t_shell *all)
 {
-	t_pipe 	p;
+	t_pipe	p;
 
 	p.prev_fd = -1;
 	p.last_pid = -1;

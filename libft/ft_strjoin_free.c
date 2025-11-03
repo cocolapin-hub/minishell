@@ -3,7 +3,7 @@
 
 char	*ft_strjoin_free(char *s1, char *s2)
 {
-	char *result;
+	char	*result;
 
 	if (!s1 || !s2)
 		return (NULL);

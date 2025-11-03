@@ -1,5 +1,5 @@
-#include "../minishell.h"
 
+#include "../minishell.h"
 
 char	*handles_between_quotes(char *line, char *new_line, int *x, int *y)
 {
@@ -15,7 +15,6 @@ char	*handles_between_quotes(char *line, char *new_line, int *x, int *y)
 		if (line[*x] == quote)
 			new_line[(*y)++] = line[(*x)++];
 	}
-	//free(line);
 	return (new_line);
 }
 

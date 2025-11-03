@@ -11,6 +11,8 @@ void	create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
 	if (target && target->type == WORD)
 	{
 		*new = malloc(sizeof(t_token));
+		if (!new)
+			return;
 		(*new)->type = (*tmp)->type;
 		(*new)->value = ft_strdup(target->value);
 		(*new)->amount = target->amount;

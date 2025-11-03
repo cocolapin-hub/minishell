@@ -9,7 +9,7 @@ char	*ft_strdup_m(const char *s, int x, int len)
 	i = 0;
 	copy = (char *)malloc(sizeof(char) * (len + 1));
 	if (!copy)
-		exit (1);
+		return (NULL);
 	i = 0;
 	while (len != 0)
 	{

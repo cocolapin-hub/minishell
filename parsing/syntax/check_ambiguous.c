@@ -1,9 +1,10 @@
+
 #include "../../minishell.h"
 
 int	check_ambiguous(char *line, int x, t_token **list, t_shell **all)
 {
 	t_token	*last;
-	char 	*tmp;
+	char	*tmp;
 	int		y;
 
 	last = NULL;
@@ -27,5 +28,3 @@ int	check_ambiguous(char *line, int x, t_token **list, t_shell **all)
 	free(tmp);
 	return (0);
 }
-
-

@@ -1,11 +1,12 @@
 
 #include "../minishell.h"
 
-int		redir_error(char *file, char *msg)
+int	redir_error(char *file, char *msg)
 {
 	print_err(NULL, file, msg);
 	return (1);
 }
+
 void	print_invalid_id(char *arg, t_shell *all)
 {
 	write(2, "export: `", 9);

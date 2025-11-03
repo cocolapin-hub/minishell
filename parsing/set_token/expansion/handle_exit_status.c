@@ -1,5 +1,5 @@
-#include "../../../minishell.h"
 
+#include "../../../minishell.h"
 
 int	handle_exit_status(char **str, int last_status, int x)
 {

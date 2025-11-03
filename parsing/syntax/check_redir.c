@@ -1,3 +1,4 @@
+
 #include "../../minishell.h"
 
 static int	redir_without_file(t_token *list, t_shell **all)

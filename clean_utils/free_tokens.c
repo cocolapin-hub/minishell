@@ -5,7 +5,7 @@ void	free_tokens(t_token *list)
 {
 	t_token	*tmp;
 
-	while(list)
+	while (list)
 	{
 		tmp = list->next;
 		if (list->value)
