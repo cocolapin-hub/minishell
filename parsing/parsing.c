@@ -89,43 +89,41 @@ void print_pipeline(t_command *cmd)
     }
 }
 
-
-void end_parsing(char *cleaned_line, t_token **list, t_command **cmd, int flag)
+void	end_parsing(char *line, t_token **list, t_command **cmd, int flag)
 {
-    free(cleaned_line);
-    free_tokens(*list);
+	free(line);
+	free_tokens(*list);
 	if (flag == 0)
-	*cmd = NULL;
+		*cmd = NULL;
 }
 
-void parsing(char *line, t_shell *all, t_command **cmd)
+void	parsing(char *line, t_shell *all, t_command **cmd)
 {
-	char    *cleaned_line;
-    t_token *list;
+	char	*cleaned_line;
+	t_token	*list;
 
-    list = NULL;
+	list = NULL;
 	add_history(line);
-    cleaned_line = check_input(line, &all);
-    if (!cleaned_line)
-    {
-        end_parsing(cleaned_line, &list, cmd, 0);
-        return ;
-    }
-    tokenisation(0, cleaned_line, &list, &all);
-    if (!list)
-    {
-        end_parsing(cleaned_line, &list, cmd, 0);
-        return ;
-    }
-    error_handling(&all, &list);
-    if (!list)
-    {
+	cleaned_line = check_input(line, &all);
+	if (!cleaned_line)
+	{
 		end_parsing(cleaned_line, &list, cmd, 0);
-        return ;
-    }
-    set_command(cmd, list, all);
-	// print_pipeline(*cmd);
-    end_parsing(cleaned_line, &list, cmd, 1);
+		return ;
+	}
+	tokenisation(0, cleaned_line, &list, &all);
+	if (!list)
+	{
+		end_parsing(cleaned_line, &list, cmd, 0);
+		return ;
+	}
+	error_handling(&all, &list);
+	if (!list)
+	{
+		end_parsing(cleaned_line, &list, cmd, 0);
+		return ;
+	}
+	set_command(cmd, list, all);
+	end_parsing(cleaned_line, &list, cmd, 1);
 }
 
 // void	parsing(char *line, t_shell *all, t_command **cmd)

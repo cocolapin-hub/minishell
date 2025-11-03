@@ -12,7 +12,7 @@ void	create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end)
 	{
 		*new = malloc(sizeof(t_token));
 		if (!new)
-			return;
+			return ;
 		(*new)->type = (*tmp)->type;
 		(*new)->value = ft_strdup(target->value);
 		(*new)->amount = target->amount;

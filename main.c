@@ -49,8 +49,6 @@ int main(int argc, char **argv, char **envp)
 
 
 
-
-
 // int main(int argc, char **argv, char **envp)
 // {
 //     t_shell 	all;

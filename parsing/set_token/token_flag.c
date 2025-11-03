@@ -30,6 +30,11 @@ void	token_flag_on(char *cmd, int quote, t_token **list)
 	t_token	*new;
 
 	new = ft_lstnew_token(cmd, quote);
+	if(!new)
+	{
+		free(cmd);
+		return ;
+	}
 	if (!*list)
 		*list = new;
 	else
