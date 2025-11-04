@@ -18,7 +18,7 @@ void	print_invalid_id(char *arg, t_shell *all)
 void	fatal_exit(const char *msg, int code)
 {
 	perror(msg);
-	exit(code);
+	_exit(code);
 }
 
 void	print_signal_message(t_shell *all)

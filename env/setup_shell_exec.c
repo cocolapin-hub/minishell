@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-t_local	*new_env_node(char *key, char *value)
+static t_local	*new_env_node(char *key, char *value)
 {
 	t_local	*node;
 
@@ -13,7 +13,7 @@ t_local	*new_env_node(char *key, char *value)
 	return (node);
 }
 
-void	add_env_node(t_local **env, t_local *new_node)
+static void	add_env_node(t_local **env, t_local *new_node)
 {
 	t_local	*tmp;
 

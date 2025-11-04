@@ -1,18 +1,6 @@
 
 #include "../../minishell.h"
 
-static void	pipe_parent(t_pipe *p, t_command *cmd)
-{
-	p->last_pid = p->pid;
-	if (p->prev_fd != -1)
-		close(p->prev_fd);
-	if (cmd->next)
-	{
-		close(p->pipefd[1]);
-		p->prev_fd = p->pipefd[0];
-	}
-}
-
 static int	fork_and_execute(t_pipe *p, t_command *cmd)
 {
 	if (cmd->next && pipe(p->pipefd) == -1)
@@ -28,39 +16,55 @@ static int	fork_and_execute(t_pipe *p, t_command *cmd)
 	return (0);
 }
 
-static void	update_status(t_shell *all, int status, pid_t wpid, pid_t last_pid)
+static int	pipe_loop_step(t_pipe *p, t_shell *all)
 {
-	int	sig;
-
-	if (WIFSIGNALED(status))
+	if (handle_heredoc_and_errors(p, all) == -1)
+		return (-1);
+	if (fork_and_execute(p, p->cmd_list) == -1)
 	{
-		sig = WTERMSIG(status);
-		if (sig == SIGINT)
-			all->sig_type = SIGINT;
-		else if (sig == SIGQUIT)
-			all->sig_type = SIGQUIT;
+		all->last_status = 1;
+		if (p->prev_fd != -1)
+			close(p->prev_fd);
+		return (-1);
 	}
-	if (wpid == last_pid)
+	p->last_pid = p->pid;
+	if (p->prev_fd != -1)
+		close(p->prev_fd);
+	if (p->cmd_list->next)
 	{
-		if (WIFEXITED(status))
-			all->last_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			all->last_status = 128 + WTERMSIG(status);
-		else
-			all->last_status = 1;
+		close(p->pipefd[1]);
+		p->prev_fd = p->pipefd[0];
+	}
+	return (0);
+}
+
+static void	pipe_loop(t_pipe *p, t_shell *all)
+{
+	while (p->cmd_list)
+	{
+		if (pipe_loop_step(p, all) == -1)
+			return ;
+		p->cmd_list = p->cmd_list->next;
 	}
 }
 
-static void	wait_pipeline(t_shell *all, pid_t last_pid)
+static void	exec_wait_pipeline(t_shell *all, pid_t last_pid)
 {
 	int		status;
 	pid_t	wpid;
 
-	all->sig_type = 0;
 	wpid = wait(&status);
 	while (wpid > 0)
 	{
-		update_status(all, status, wpid, last_pid);
+		if (wpid == last_pid)
+		{
+			if (WIFEXITED(status))
+				all->last_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				all->last_status = 128 + WTERMSIG(status);
+			else
+				all->last_status = 1;
+		}
 		wpid = wait(&status);
 	}
 }
@@ -73,14 +77,8 @@ void	exec_pipe(t_command *cmd_list, t_shell *all)
 	p.last_pid = -1;
 	p.cmd_list = cmd_list;
 	ignore_signals();
-	while (p.cmd_list)
-	{
-		if (fork_and_execute(&p, p.cmd_list) == -1)
-			return ;
-		pipe_parent(&p, p.cmd_list);
-		p.cmd_list = p.cmd_list->next;
-	}
-	wait_pipeline(all, p.last_pid);
+	pipe_loop(&p, all);
+	exec_wait_pipeline(all, p.last_pid);
 	print_signal_message(all);
 	setup_sig();
 }

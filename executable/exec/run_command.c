@@ -18,7 +18,7 @@ static int	run_builtin_command(t_command *cmd)
 			close(saved_stdout);
 		return (print_err(NULL, "dup", strerror(errno)), 1);
 	}
-	redir_status = apply_redir(cmd->elem, cmd->all);
+	redir_status = apply_redir(cmd->elem);
 	if (redir_status == -2)
 		ret = 130;
 	else if (redir_status != 0)
@@ -93,6 +93,12 @@ void	run_command(t_command *cmd)
 		return ;
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
+	if (process_heredocs_before_exec(cmd) == -2)
+	{
+		cmd->all->last_status = 130;
+		restore_std(saved_stdin, saved_stdout);
+		return ;
+	}
 	if (handle_redirections(cmd, saved_stdin, saved_stdout))
 		return ;
 	if (is_builtin(cmd->args[0]))

@@ -72,30 +72,18 @@ static int	handle_redir_append(t_token *redir)
 	return (0);
 }
 
-static int	handle_redir_heredoc(t_token *redir, t_shell *all)
+static int	handle_redir_heredoc(t_token *redir)
 {
-	int	fd;
-
-	if (!redir->value || redir->value[0] == '\0')
-		return (redir_error(redir->value, "ambiguous redirect"));
-	fd = create_heredoc(redir->value, all);
-	if (fd == -2)
+	if (dup2(redir->heredoc_fd, STDIN_FILENO) == -1)
 	{
-		all->last_status = 130;
-		return (-2);
-	}
-	if (fd < 0)
-		return (redir_error("heredoc", "failed"));
-	if (dup2(fd, STDIN_FILENO) == -1)
-	{
-		close(fd);
+		close(redir->heredoc_fd);
 		return (redir_error("heredoc", strerror(errno)));
 	}
-	close(fd);
+	close(redir->heredoc_fd);
 	return (0);
 }
 
-int	apply_redir(t_token *redir, t_shell *all)
+int	apply_redir(t_token *redir)
 {
 	int	ret;
 
@@ -109,12 +97,10 @@ int	apply_redir(t_token *redir, t_shell *all)
 			ret = handle_redir_out(redir);
 		else if (redir->type == REDIR_APPEND)
 			ret = handle_redir_append(redir);
-		else
-			ret = handle_redir_heredoc(redir, all);
-		if (ret == -2)
-			return (-2);
+		else if (redir->type == REDIR_HEREDOC)
+			ret = handle_redir_heredoc(redir);
 		if (ret != 0)
-			return (1);
+			return (ret);
 		redir = redir->next;
 	}
 	return (0);
