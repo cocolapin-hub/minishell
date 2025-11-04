@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/11/04 13:37:30 by ochkaoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -184,7 +195,6 @@ int			is_valid_identifier(const char *key);
 void		run_command(t_command *cmd);
 int			process_heredocs_before_exec(t_command *cmd_list);
 
-
 /*BUILTINS*/
 int			builtin_exit(char **args, t_shell *all, t_command *cmd_list);
 int			builtin_export(char **args, t_local **env, t_shell *all);
@@ -205,7 +215,6 @@ int			check_ambiguous_redirect(char *value);
 int			check_redirections(t_command *cmd);
 int			handle_redir_only(t_command *cmd);
 int			handle_heredoc_and_errors(t_pipe *p, t_shell *all);
-
 
 /*__________________________________LIBFT_________________________________*/
 t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all);
