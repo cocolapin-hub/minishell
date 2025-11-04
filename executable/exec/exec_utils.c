@@ -22,7 +22,7 @@ int	handle_redir_only(t_command *cmd)
 		return (0);
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	redir_status = apply_redir(cmd->elem, cmd->all);
+	redir_status = apply_redir(cmd->elem);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
@@ -40,7 +40,7 @@ int	check_redirections(t_command *cmd)
 {
 	int	status;
 
-	status = apply_redir(cmd->elem, cmd->all);
+	status = apply_redir(cmd->elem);
 	if (status == -2)
 		return (cmd->all->last_status = 130, -1);
 	if (status != 0)
@@ -68,7 +68,7 @@ int	handle_redirections(t_command *cmd, int saved_stdin, int saved_stdout)
 {
 	int	redir_status;
 
-	redir_status = apply_redir(cmd->elem, cmd->all);
+	redir_status = apply_redir(cmd->elem);
 	if (redir_status != 0)
 	{
 		restore_std(saved_stdin, saved_stdout);

@@ -57,19 +57,19 @@ static int	validate_path(char *path, char *cmd, char **envp)
 	{
 		free_split(envp);
 		free(path);
-		exit(error_code(cmd, "No such file or directory", 127));
+		_exit(error_code(cmd, "No such file or directory", 127));
 	}
 	if (S_ISDIR(st.st_mode))
 	{
 		free_split(envp);
 		free(path);
-		exit(error_code(cmd, "Is a directory", 126));
+		_exit(error_code(cmd, "Is a directory", 126));
 	}
 	if (access(path, X_OK) != 0)
 	{
 		free_split(envp);
 		free(path);
-		exit(error_code(cmd, "Permission denied", 126));
+		_exit(error_code(cmd, "Permission denied", 126));
 	}
 	return (0);
 }
@@ -86,12 +86,12 @@ void	child_process(t_command *cmd, t_local *env)
 	if (!path)
 	{
 		if (!get_env_value(env, "PATH"))
-			exit(error_code(cmd->args[0], "No such file or directory", 127));
-		exit(error_code(cmd->args[0], "command not found", 127));
+			_exit(error_code(cmd->args[0], "No such file or directory", 127));
+		_exit(error_code(cmd->args[0], "command not found", 127));
 	}
 	validate_path(path, cmd->args[0], envp);
 	execve(path, cmd->args, envp);
 	free_split(envp);
 	free(path);
-	exit(error_code(cmd->args[0], strerror(errno), 126));
+	_exit(error_code(cmd->args[0], strerror(errno), 126));
 }

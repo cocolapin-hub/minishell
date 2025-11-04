@@ -34,13 +34,13 @@ static int	handle_empty_cmd(t_command *cmd, int prev_fd, int *pipefd)
 	if ((!cmd->args || !cmd->args[0] || !*cmd->args[0]) && cmd->elem)
 	{
 		setup_pipe_fds(prev_fd, pipefd, cmd->next != NULL);
-		redir_status = apply_redir(cmd->elem, cmd->all);
+		redir_status = apply_redir(cmd->elem);
 		if (redir_status == -2)
-			exit(130);
+			_exit(130);
 		if (redir_status != 0)
 			fatal_exit("redirection", 1);
 		error_code("", "command not found", 127);
-		exit(127);
+		_exit(127);
 	}
 	return (0);
 }
@@ -54,14 +54,14 @@ void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
 	setup_pipe_fds(prev_fd, pipefd, cmd->next != NULL);
 	if (cmd->elem)
 	{
-		r = apply_redir(cmd->elem, cmd->all);
+		r = apply_redir(cmd->elem);
 		if (r == -2)
-			exit(130);
+			_exit(130);
 		if (r != 0)
-			exit(1);
+			_exit(1);
 	}
 	if (is_builtin(cmd->args[0]))
-		exit(exec_builtin(cmd, cmd->all));
+		_exit(exec_builtin(cmd, cmd->all));
 	else
 		child_process(cmd, cmd->all->env);
 }
