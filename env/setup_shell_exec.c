@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   setup_shell_exec.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/11/04 11:43:37 by ochkaoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 t_local	*new_env_node(char *key, char *value)
@@ -46,9 +58,9 @@ t_local	*env_init(char **envp, t_shell *all)
 		eq = ft_strchr(envp[i], '=');
 		if (eq)
 		{
-			*eq = '\0'; 						  /* coupe la string "PATH=/bin" -> "PATH" et "/bin"*/
-			node = new_env_node(envp[i], eq + 1); // crée node {key=PATH, value=/bin}
-			*eq = '='; 							  // remet le '=' pour pas casser envp original
+			*eq = '\0';
+			node = new_env_node(envp[i], eq + 1);
+			*eq = '=';
 			add_env_node(&env, node);
 		}
 		i++;

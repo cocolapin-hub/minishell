@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   outside_quotes.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/11/04 11:53:36 by ochkaoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../minishell.h"
 
@@ -35,13 +46,11 @@ char	*outside_quotes(char *line, int *x, t_shell **all, t_token **list)
 		if (!tmp)
 			return (NULL);
 		expand_word(&tmp, 0, all, list);
-		if (!tmp)
-			return (NULL);
 	}
 	if (line[start] == '$' && ft_strcmp(tmp, "") == 0)
 	{
 		*x = y;
-		return (free(tmp), SKIP_TOKEN);
+		return (free(tmp), skip());
 	}
 	*x = y;
 	return (tmp);

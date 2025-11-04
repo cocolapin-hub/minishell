@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handles_command.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/11/04 11:53:30 by ochkaoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../minishell.h"
 
@@ -9,7 +20,7 @@ void	set_values(char *line, char *quote, int *was_in_quotes, int x)
 
 int	parse(char *line, t_cmd_state *cmd, t_shell **all, t_token **list)
 {
-	int		tmp_x;
+	int		y;
 	char	*tmp;
 
 	while (line[cmd->x])
@@ -17,7 +28,7 @@ int	parse(char *line, t_cmd_state *cmd, t_shell **all, t_token **list)
 		if (line[cmd->x] == 32 || line[cmd->x] == 9 || line[cmd->x] == 124
 			|| line[cmd->x] == 60 || line[cmd->x] == 62)
 			break ;
-		tmp_x = cmd->x;
+		y = cmd->x;
 		if (line[cmd->x] == 39 || line[cmd->x] == 34)
 		{
 			set_values(line, &cmd->quote, &cmd->was_in_quotes, cmd->x);
@@ -25,11 +36,9 @@ int	parse(char *line, t_cmd_state *cmd, t_shell **all, t_token **list)
 		}
 		else
 			tmp = outside_quotes(line, &cmd->x, all, list);
-		if (!tmp)
+		if ((tmp == skip() && check_ambiguous(line, y, list, all) == 1) || !tmp)
 			return (-1);
-		if (tmp == SKIP_TOKEN && check_ambiguous(line, tmp_x, list, all) == 1)
-			return (-1);
-		if (tmp == SKIP_TOKEN)
+		if (tmp == skip())
 			return (1);
 		cmd->cmd = ft_strjoin_free(cmd->cmd, tmp);
 		if (!cmd->cmd)

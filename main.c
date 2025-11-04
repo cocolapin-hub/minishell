@@ -1,34 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/11/04 11:56:54 by ochkaoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	exec(t_command  **cmd_list, t_shell *all)
+static void	exec(t_command **cmd_list, t_shell *all)
 {
- 	if ((*cmd_list)->next)
+	if ((*cmd_list)->next)
 	{
-        exec_pipe(*cmd_list, all);
+		exec_pipe(*cmd_list, all);
 	}
-    else
+	else
 	{
-        run_command(*cmd_list);
+		run_command(*cmd_list);
 	}
 	free_command(*cmd_list);
 	*cmd_list = NULL;
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-    t_command  *cmd_list;
-    char       *line;
-    t_shell    all;
+	t_command	*cmd_list;
+	char		*line;
+	t_shell		all;
 
-    (void)argc;
-    (void)argv;
+	(void)argc;
+	(void)argv;
 	all.env = env_init(envp, &all);
 	cmd_list = NULL;
 	setup_sig();
-    while (1)
-    {
-        line = readline("minishell$ ");
+	while (1)
+	{
+		line = readline("minishell$ ");
 		handles_ctrl_d(line, all, cmd_list);
 		if (handles_ctrl_c(all, line) || line[0] == '\0')
 		{
@@ -36,19 +47,13 @@ int main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		parsing(line, &all, &cmd_list);
-        if (!cmd_list)
-            continue;
+		if (!cmd_list)
+			continue ;
 		exec(&cmd_list, &all);
 	}
 	clean_exit(&all, cmd_list, all.last_status);
-    return (0);
+	return (0);
 }
-
-
-
-
-
-
 // int main(int argc, char **argv, char **envp)
 // {
 //     t_shell 	all;
@@ -97,16 +102,14 @@ int main(int argc, char **argv, char **envp)
 //         else
 //             run_command(cmd_list);
 
-//         //free_command(cmd_list);			// <--------------handle free later
+//         //free_command(cmd_list);
 //         cmd_list = NULL;
 //     }
-
 
 //  //   clear_history();
 //  //   free_env(all.env);
 //     return (0);
 // }
-
 
 // int	main(int argc, char **argv, char **envp)
 // {

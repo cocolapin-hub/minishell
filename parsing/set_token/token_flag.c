@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_flag.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/11/04 11:53:38 by ochkaoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../minishell.h"
 
@@ -26,10 +37,7 @@ void	token_flag_off(char *cmd, int quote, t_token **list)
 
 	split = ft_split(cmd, ' ');
 	if (!split)
-	{
-		free(cmd);
-		return ;
-	}
+		return (free(cmd));
 	i = 0;
 	while (split[i])
 	{
@@ -37,10 +45,7 @@ void	token_flag_off(char *cmd, int quote, t_token **list)
 		{
 			new = ft_lstnew_token(split[i], quote);
 			if (!new)
-			{
-				free_split_and_cmd(split, cmd);
-				return ;
-			}
+				break ;
 			if (!*list)
 				*list = new;
 			else

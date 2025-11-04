@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_args.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/11/04 11:52:41 by ochkaoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	create_args(t_token *list, int token_count, int skip_next, char ***args)
+void	create_args(t_token *list, int token_count, int skip, char ***args)
 {
 	t_token	*tmp;
 
@@ -10,11 +21,11 @@ void	create_args(t_token *list, int token_count, int skip_next, char ***args)
 	{
 		if (tmp->type == REDIR_IN || tmp->type == REDIR_OUT
 			|| tmp->type == REDIR_APPEND || tmp->type == REDIR_HEREDOC)
-			skip_next = 1;
+			skip = 1;
 		else if (tmp->type == WORD)
 		{
-			if (skip_next)
-				skip_next = 0;
+			if (skip)
+				skip = 0;
 			else
 				token_count++;
 		}

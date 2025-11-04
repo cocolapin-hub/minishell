@@ -1,8 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/11/04 12:36:50 by ochkaoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define SKIP_TOKEN ((char *)1)
 # define MAX_LINE_LEN 4096
 
 # include <readline/readline.h>
@@ -21,7 +31,9 @@
 # include <fcntl.h>
 # include <errno.h>
 
-extern int		g_in_heredoc;
+typedef struct s_command	t_command;
+
+extern int					g_in_heredoc;
 
 typedef struct s_local
 {
@@ -29,8 +41,6 @@ typedef struct s_local
 	char			*value;
 	struct s_local	*next;
 }	t_local;
-
-typedef struct s_command t_command;
 
 typedef struct s_shell
 {
@@ -163,8 +173,9 @@ t_token		*check_char(t_token *list, t_shell **all);
 t_token		*check_pipe(t_token *list, t_shell **all);
 
 /*SET_COMMAND*/
-void		create_args(t_token *list, int token_count, int skip_next, char ***args);
-void		create_cmd(t_token **tmp, t_token **new, t_token **start, t_token **end);
+void		create_args(t_token *list, int token_count, int skip, char ***args);
+void		create_cmd(t_token **tmp, t_token **new, t_token **start,
+				t_token **end);
 t_command	*set_command(t_command **cmd, t_token *list, t_shell *all);
 void		fill_elements(t_token **list, t_token **elements);
 void		fill_args(t_token *list, char ***args);
@@ -194,7 +205,8 @@ int			builtin_pwd(t_shell *all);
 int			is_builtin(char *cmd);
 
 /*REDIR*/
-int			handle_redirections(t_command *cmd, int saved_stdin, int saved_stdout);
+int			handle_redirections(t_command *cmd, int saved_stdin,
+				int saved_stdout);
 int			create_heredoc(char *limiter, t_shell *all);
 int			apply_redir(t_token *redir, t_shell *all);
 int			check_ambiguous_redirect(char *value);
@@ -239,6 +251,7 @@ int			ft_isalnum(int c);
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
 char		*ft_itoa(int n);
+char		*skip(void);
 
 #endif
 

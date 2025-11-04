@@ -114,7 +114,8 @@ SRCS = \
 	libft/ft_split.c \
 	libft/ft_atol.c \
 	libft/ft_itoa.c \
-	libft/ft_atoi.c
+	libft/ft_atoi.c \
+	libft/ft_skip.c
 
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 

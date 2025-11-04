@@ -1,23 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fill_args.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
+/*   Updated: 2025/11/04 11:52:48 by ochkaoul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../minishell.h"
 
 void	fill_args(t_token *list, char ***args)
 {
-	int		skip_next;
+	int		skip;
 	int		x;
 
 	create_args(list, 0, 0, args);
-	skip_next = 0;
+	skip = 0;
 	x = 0;
 	while (*args && list && list->type != PIPE)
 	{
 		if (list->type == REDIR_IN || list->type == REDIR_OUT
 			|| list->type == REDIR_APPEND || list->type == REDIR_HEREDOC)
-			skip_next = 1;
+			skip = 1;
 		else if (list->type == WORD)
 		{
-			if (skip_next == 1 && ft_strcmp(list->value, "-n"))
-				skip_next = 0;
+			if (skip == 1 && ft_strcmp(list->value, "-n"))
+				skip = 0;
 			else
 				(*args)[x++] = ft_strdup(list->value);
 		}
