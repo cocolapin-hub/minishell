@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   between_quotes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 18:44:30 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 18:50:14 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 	expanded = expansion((*all)->env, (*all)->last_status, tmp, &quote);
 	if (!expanded)
 	{
-		free(*tmp);
 		*tmp = NULL;
 		return ;
 	}

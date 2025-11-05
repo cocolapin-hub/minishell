@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 15:52:54 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 18:34:35 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,91 +54,7 @@
 // 	clean_exit(&all, cmd_list, all.last_status);
 // 	return (0);
 // }
-// int main(int argc, char **argv, char **envp)
-// {
-//     t_shell 	all;
-//     t_command 	*cmd_list = NULL;
-//     char 		*line;
 
-//     (void)argc;
-//     (void)argv;
-
-// 	setup_shell(&all, envp);
-
-//     all.last_status = 0;
-//     setup_sig();
-
-//     while (1)
-//     {
-//         line = readline("minishell$ ");
-// 		if (!line)
-// 		{
-// 			// if (g_in_heredoc == SIGINT)
-// 			// {
-// 			// 	g_in_heredoc = 0;
-// 			// 	continue ;
-// 			// }
-// 			printf("exit\n");
-// 			exit_clean_af(&all, cmd_list, all.last_status);
-// 		}
-// 		if (line[0] != '\0')
-// 			add_history(line);
-// 		else
-// 		{
-// 			free(line);
-// 			continue ;
-// 		}
-
-//         cmd_list = parsing(line, &all);
-//        //free(line);						// <-------------handle free later
-
-//         if (!cmd_list)
-//             continue ;
-
-//         // Exécution
-
-//         if (cmd_list->next) // il y a un pipe
-//             exec_pipe(cmd_list, &all);
-//         else
-//             run_command(cmd_list);
-
-//         //free_command(cmd_list);
-//         cmd_list = NULL;
-//     }
-
-//  //   clear_history();
-//  //   free_env(all.env);
-//     return (0);
-// }
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_command	*cmd_list;
-// 	char		*line;
-// 	t_shell		all;
-
-// 	(void)argc;
-// 	(void)argv;
-// 	all.env = env_init(envp, &all);
-// 	cmd_list = NULL;
-// 	setup_sig();
-// 	while (1)
-// 	{
-// 		line = readline("minishell$ ");
-// 		handles_ctrl_d(line, all, cmd_list);
-// 		if (handles_ctrl_c(all, line) || line[0] == '\0')
-// 		{
-// 			free(line);
-// 			continue ;
-// 		}
-// 		parsing(line, &all, &cmd_list);
-// 		if (!cmd_list)
-// 			continue;
-// 		exec(&cmd_list, &all);
-// 	}
-// 	clean_exit(&all, cmd_list, all.last_status);
-// 	return (0);
-// }
 int	main(int argc, char **argv, char **envp)
 {
 	t_command	*cmd_list;
