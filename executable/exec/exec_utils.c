@@ -3,22 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 20:39:28 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 20:56:03 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+// int	handle_redir_only(t_command *cmd)
+// {
+// 	int	redir_status;
+// 	int	saved_stdin;
+// 	int	saved_stdout;
+
+// 	if (!cmd->elem || (cmd->args && cmd->args[0]))
+// 		return (0);
+// 	saved_stdin = dup(STDIN_FILENO);
+// 	saved_stdout = dup(STDOUT_FILENO);
+// 	redir_status = apply_redir(cmd->elem);
+// 	dup2(saved_stdin, STDIN_FILENO);
+// 	dup2(saved_stdout, STDOUT_FILENO);
+// 	close(saved_stdin);
+// 	close(saved_stdout);
+// 	if (redir_status == 0)
+// 	{
+// 		cmd->all->last_status = 0;
+// 		return (1);
+// 	}
+// 	cmd->all->last_status = 1;
+// 	return (1);
+// }
+
 int	handle_redir_only(t_command *cmd)
 {
-	int	status;
 	int	saved_stdin;
 	int	saved_stdout;
+	int	status;
+	int	no_cmd;
 
-	if (!cmd->elem || (cmd->args && cmd->args[0]))
+	no_cmd = (!cmd->args || cmd->args[0] == NULL || cmd->args[0][0] == '\0');
+	if (!cmd->elem || !no_cmd)
 		return (0);
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
@@ -27,8 +53,19 @@ int	handle_redir_only(t_command *cmd)
 	{
 		restore_std(saved_stdin, saved_stdout);
 		cmd->all->last_status = 130;
+	status = process_heredocs_before_exec(cmd);
+	if (status == -2)
+	{
+		restore_std(saved_stdin, saved_stdout);
+		cmd->all->last_status = 130;
 		return (1);
 	}
+	status = apply_redir(cmd->elem);
+	restore_std(saved_stdin, saved_stdout);
+	if (status == 0)
+		cmd->all->last_status = 0;
+	else
+		cmd->all->last_status = 1;
 	status = apply_redir(cmd->elem);
 	restore_std(saved_stdin, saved_stdout);
 	if (status == 0)

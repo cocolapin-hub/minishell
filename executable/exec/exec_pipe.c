@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 20:34:57 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 20:55:38 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ static void	exec_wait_pipeline(t_shell *all, pid_t last_pid)
 			if (WIFEXITED(status))
 				all->last_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
+			{
 				all->last_status = 128 + WTERMSIG(status);
+				all->sig_type = WTERMSIG(status);
+			}
 			else
 				all->last_status = 1;
 		}
@@ -86,16 +89,42 @@ static void	exec_wait_pipeline(t_shell *all, pid_t last_pid)
 		all->last_status = 130;
 }
 
-void	exec_pipe(t_command *cmd_list, t_shell *all)
-{
-	t_pipe	p;
+// void	exec_pipe(t_command *cmd_list, t_shell *all)
+// {
+// 	t_pipe	p;
 
-	p.prev_fd = -1;
-	p.last_pid = -1;
-	p.cmd_list = cmd_list;
-	ignore_signals();
-	pipe_loop(&p, all);
-	exec_wait_pipeline(all, p.last_pid);
-	print_signal_message(all);
-	setup_sig();
+// 	p.prev_fd = -1;
+// 	p.last_pid = -1;
+// 	p.cmd_list = cmd_list;
+// 	ignore_signals();
+// 	pipe_loop(&p, all);
+// 	exec_wait_pipeline(all, p.last_pid);
+// 	if (all->sig_type == SIGINT)
+// 		write(STDOUT_FILENO, "\n", 1);
+// 	print_signal_message(all);
+// 	setup_sig();
+// }
+
+void exec_pipe(t_command *cmd_list, t_shell *all)
+{
+    t_pipe p;
+
+    p.prev_fd = -1;
+    p.last_pid = -1;
+    p.cmd_list = cmd_list;
+
+    // Parent : gérer SIGINT et SIGQUIT pour le shell interactif
+    setup_sig();
+
+    pipe_loop(&p, all);
+
+    exec_wait_pipeline(all, p.last_pid);
+
+    if (all->sig_type == SIGINT)
+        write(STDOUT_FILENO, "\n", 1);
+    else if (all->sig_type == SIGQUIT)
+        write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+
+    // Remettre les handlers classiques pour le shell
+    setup_sig();
 }
