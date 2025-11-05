@@ -3,17 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   outside_quotes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:53:36 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:09:24 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+// static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
+// {
+// 	t_token	*last;
+
+// 	last = NULL;
+// 	if (*list)
+// 	{
+// 		last = *list;
+// 		while (last->next)
+// 			last = last->next;
+// 	}
+// 	if (!last || last->type != REDIR_HEREDOC)
+// 		*tmp = expansion((*all)->env, (*all)->last_status, *tmp, &quote);
+// }
+
 static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 {
+	char	*expanded;
 	t_token	*last;
 
 	last = NULL;
@@ -23,8 +39,18 @@ static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 		while (last->next)
 			last = last->next;
 	}
-	if (!last || last->type != REDIR_HEREDOC)
-		*tmp = expansion((*all)->env, (*all)->last_status, *tmp, &quote);
+	if (quote == 39 || (last && last->type == REDIR_HEREDOC))
+		return ;
+	expanded = expansion((*all)->env, (*all)->last_status, *tmp, &quote);
+	if (!expanded)
+	{
+		free(*tmp);
+		*tmp = NULL;
+		return ;
+	}
+	// if (il y a eu expansion  + string avec espaces)
+	free(*tmp);
+	*tmp = expanded;
 }
 
 char	*outside_quotes(char *line, int *x, t_shell **all, t_token **list)
