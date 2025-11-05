@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 14:12:59 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 17:57:04 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ char		*check_input(char *line, t_shell **all);
 int			find_variable(t_local *env, int start, char **str, char *var_name);
 char		*split_expansion(char *str, char *key, int start, char *key_value);
 void		get_variable_name(char *str, char *var_name, int *var_len, int *x);
-char		*expansion(t_local *env, int last_status, char *str, char *quote);
+char		*expansion(t_local *env, int last_status, char **str, char *quote);
 int			handle_exit_status(char **str, int last_status, int x);
 int			find_word(int *y, int x, char *line, char **tmp);
 int			handle_number_zero(char **str, int x);

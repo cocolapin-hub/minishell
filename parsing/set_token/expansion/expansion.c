@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 15:07:35 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 18:37:25 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,11 @@ static char	*wrap_up(char *expand, int expansion_done, char *quote, char *str)
 		}
 	}
 	free(str);
+	str = NULL;
 	return (expand);
 }
 
-char	*expansion(t_local *env, int last_status, char *str, char *quote)
+char	*expansion(t_local *env, int last_status, char **str, char *quote)
 {
 	int		expansion_done;
 	char	*expand;
@@ -95,12 +96,12 @@ char	*expansion(t_local *env, int last_status, char *str, char *quote)
 	expand = NULL;
 	expansion_done = 0;
 	x = 0;
-	while (str[x] && str[x] != 61)
+	while ((*str)[x] && (*str)[x] != 61)
 	{
-		if (str[x] == '$')
+		if ((*str)[x] == '$')
 		{
 			expansion_done = 1;
-			if (handle_expansion(&x, &str, env, last_status) == 0)
+			if (handle_expansion(&x, str, env, last_status) == 0)
 				continue ;
 			else
 				x++;
@@ -108,6 +109,9 @@ char	*expansion(t_local *env, int last_status, char *str, char *quote)
 		else
 			x++;
 	}
-	expand = wrap_up(expand, expansion_done, quote, str);
+	if (expansion_done == 0)
+		return (*str);
+	expand = wrap_up(expand, expansion_done, quote, *str);
+
 	return (expand);
 }

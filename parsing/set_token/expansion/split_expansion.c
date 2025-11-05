@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 11:24:37 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 18:36:38 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ char	*split_expansion(char *str, char *key, int start, char *key_value)
 	result = ft_strjoin(tmp, splits[2]);
 	free_splits(splits);
 	free(tmp);
+	tmp = NULL;
+	free(str);
 	if (!result)
 		return (NULL);
 	return (result);

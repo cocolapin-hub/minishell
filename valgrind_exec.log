@@ -1,31 +1,145 @@
-==78505== Memcheck, a memory error detector
-==78505== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==78505== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==78505== Command: ./minishell
-==78505== Parent PID: 72129
-==78505== 
-==78505== 
-==78505== HEAP SUMMARY:
-==78505==     in use at exit: 208,186 bytes in 223 blocks
-==78505==   total heap usage: 731 allocs, 508 frees, 234,101 bytes allocated
-==78505== 
-==78505== 5 bytes in 1 blocks are definitely lost in loss record 1 of 64
-==78505==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==78505==    by 0x40889B: ft_strdup_m (ft_strdup_m.c:21)
-==78505==    by 0x4067F7: find_word (find_word.c:24)
-==78505==    by 0x405F5F: outside_quotes (outside_quotes.c:69)
-==78505==    by 0x405CE6: parse (handles_command.c:38)
-==78505==    by 0x405E16: handles_command (handles_command.c:61)
-==78505==    by 0x40646F: tokenisation (tokenisation.c:27)
-==78505==    by 0x404F8B: parsing (parsing.c:36)
-==78505==    by 0x4015B0: main (main.c:204)
-==78505== 
-==78505== LEAK SUMMARY:
-==78505==    definitely lost: 5 bytes in 1 blocks
-==78505==    indirectly lost: 0 bytes in 0 blocks
-==78505==      possibly lost: 0 bytes in 0 blocks
-==78505==    still reachable: 0 bytes in 0 blocks
-==78505==         suppressed: 208,181 bytes in 222 blocks
-==78505== 
-==78505== For lists of detected and suppressed errors, rerun with: -s
-==78505== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==105995== Memcheck, a memory error detector
+==105995== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==105995== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==105995== Command: ./minishell
+==105995== Parent PID: 95890
+==105995==
+==105995== Invalid read of size 1
+==105995==    at 0x4093C8: ft_strlen (ft_strlen.c:20)
+==105995==    by 0x408DA8: ft_strjoin (ft_strjoin.c:23)
+==105995==    by 0x40839F: ft_strjoin_free (ft_strjoin_free.c:21)
+==105995==    by 0x405D74: parse (handles_command.c:43)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==  Address 0x4b65d60 is 0 bytes inside a block of size 5 free'd
+==105995==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4060E1: expand_word (outside_quotes.c:37)
+==105995==    by 0x405F8D: outside_quotes (outside_quotes.c:60)
+==105995==    by 0x405CE6: parse (handles_command.c:38)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==  Block was alloc'd at
+==105995==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4088DB: ft_strdup_m (ft_strdup_m.c:21)
+==105995==    by 0x406807: find_word (find_word.c:25)
+==105995==    by 0x405F5F: outside_quotes (outside_quotes.c:57)
+==105995==    by 0x405CE6: parse (handles_command.c:38)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==
+==105995== Invalid read of size 1
+==105995==    at 0x408E25: ft_strjoin (ft_strjoin.c:33)
+==105995==    by 0x40839F: ft_strjoin_free (ft_strjoin_free.c:21)
+==105995==    by 0x405D74: parse (handles_command.c:43)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==  Address 0x4b65d60 is 0 bytes inside a block of size 5 free'd
+==105995==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4060E1: expand_word (outside_quotes.c:37)
+==105995==    by 0x405F8D: outside_quotes (outside_quotes.c:60)
+==105995==    by 0x405CE6: parse (handles_command.c:38)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==  Block was alloc'd at
+==105995==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4088DB: ft_strdup_m (ft_strdup_m.c:21)
+==105995==    by 0x406807: find_word (find_word.c:25)
+==105995==    by 0x405F5F: outside_quotes (outside_quotes.c:57)
+==105995==    by 0x405CE6: parse (handles_command.c:38)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==
+==105995==
+
+==105995==    at 0x408E37: ft_strjoin (ft_strjoin.c:35)
+==105995==    by 0x40839F: ft_strjoin_free (ft_strjoin_free.c:21)
+==105995==    by 0x405D74: parse (handles_command.c:43)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==  Address 0x4b65d60 is 0 bytes inside a block of size 5 free'd
+==105995==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4060E1: expand_word (outside_quotes.c:37)
+==105995==    by 0x405F8D: outside_quotes (outside_quotes.c:60)
+==105995==    by 0x405CE6: parse (handles_command.c:38)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==  Block was alloc'd at
+==105995==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4088DB: ft_strdup_m (ft_strdup_m.c:21)
+==105995==    by 0x406807: find_word (find_word.c:25)
+==105995==    by 0x405F5F: outside_quotes (outside_quotes.c:57)
+==105995==    by 0x405CE6: parse (handles_command.c:38)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==
+==105995== Invalid free() / delete / delete[] / realloc()
+==105995==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4083B5: ft_strjoin_free (ft_strjoin_free.c:23)
+==105995==    by 0x405D74: parse (handles_command.c:43)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==  Address 0x4b65d60 is 0 bytes inside a block of size 5 free'd
+==105995==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4060E1: expand_word (outside_quotes.c:37)
+==105995==    by 0x405F8D: outside_quotes (outside_quotes.c:60)
+==105995==    by 0x405CE6: parse (handles_command.c:38)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==  Block was alloc'd at
+==105995==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4088DB: ft_strdup_m (ft_strdup_m.c:21)
+==105995==    by 0x406807: find_word (find_word.c:25)
+==105995==    by 0x405F5F: outside_quotes (outside_quotes.c:57)
+==105995==    by 0x405CE6: parse (handles_command.c:38)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==
+==105995==
+==105995== HEAP SUMMARY:
+==105995==     in use at exit: 208,187 bytes in 223 blocks
+==105995==   total heap usage: 671 allocs, 449 frees, 233,408 bytes allocated
+==105995==
+==105995== 6 bytes in 1 blocks are definitely lost in loss record 1 of 64
+==105995==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==105995==    by 0x4088DB: ft_strdup_m (ft_strdup_m.c:21)
+==105995==    by 0x406807: find_word (find_word.c:25)
+==105995==    by 0x405F5F: outside_quotes (outside_quotes.c:57)
+==105995==    by 0x405CE6: parse (handles_command.c:38)
+==105995==    by 0x405E16: handles_command (handles_command.c:61)
+==105995==    by 0x40647F: tokenisation (tokenisation.c:27)
+==105995==    by 0x404F8B: parsing (parsing.c:36)
+==105995==    by 0x4015B0: main (main.c:204)
+==105995==
+==105995== LEAK SUMMARY:
+==105995==    definitely lost: 6 bytes in 1 blocks
+==105995==    indirectly lost: 0 bytes in 0 blocks
+==105995==      possibly lost: 0 bytes in 0 blocks
+==105995==    still reachable: 0 bytes in 0 blocks
+==105995==         suppressed: 208,181 bytes in 222 blocks
+==105995==
+==105995== For lists of detected and suppressed errors, rerun with: -s
+==105995== ERROR SUMMARY: 16 errors from 5 contexts (suppressed: 0 from 0)
