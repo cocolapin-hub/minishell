@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:42:47 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 20:31:48 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	fatal_exit(const char *msg, int code)
 
 void	print_signal_message(t_shell *all)
 {
-	if (all->sig_type == SIGINT)
+	if (all->last_status == 128 + SIGINT)
 		write(STDOUT_FILENO, "\n", 1);
-	else if (all->sig_type == SIGQUIT)
+	else if (all->last_status == 128 + SIGQUIT)
 		write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
 }

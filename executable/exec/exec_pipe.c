@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:44:37 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 20:34:57 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,14 @@ static void	exec_wait_pipeline(t_shell *all, pid_t last_pid)
 {
 	int		status;
 	pid_t	wpid;
+	int		sigint_seen;
 
+	sigint_seen = 0;
 	wpid = wait(&status);
 	while (wpid > 0)
 	{
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			sigint_seen = 1;
 		if (wpid == last_pid)
 		{
 			if (WIFEXITED(status))
@@ -78,6 +82,8 @@ static void	exec_wait_pipeline(t_shell *all, pid_t last_pid)
 		}
 		wpid = wait(&status);
 	}
+	if (sigint_seen && all->last_status != 130)
+		all->last_status = 130;
 }
 
 void	exec_pipe(t_command *cmd_list, t_shell *all)

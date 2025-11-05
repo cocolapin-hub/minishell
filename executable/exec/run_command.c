@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 16:50:46 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 20:17:36 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,9 @@ int	validate_command(t_command *cmd, t_shell *all)
 	}
 	path_env = get_env_value(all->env, "PATH");
 	if (cmd->args[0][0] == '\0')
+	{
 		return (handle_empty_command(all, path_env));
+	}
 	if (handle_dot_commands(cmd->args[0], all, path_env))
 		return (1);
 	return (0);
