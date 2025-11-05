@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 18:51:04 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 18:54:03 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,32 +47,32 @@ int	parse(char *line, t_cmd_state *cmd, t_shell **all, t_token **list)
 	return (0);
 }
 
-int parse(char *line, t_cmd_state *cmd, t_shell **all, t_token **list)
-{
-    int     y;
-    char    *tmp;
+// int parse(char *line, t_cmd_state *cmd, t_shell **all, t_token **list)
+// {
+//     int     y;
+//     char    *tmp;
 
-    while (line[cmd->x])
-    {
-        if (line[cmd->x] == ' ' || line[cmd->x] == '\t'
-            || line[cmd->x] == '|' || line[cmd->x] == '<'
-            || line[cmd->x] == '>')
-            break ;
-        y = cmd->x;
-        if (line[cmd->x] == '\'' || line[cmd->x] == '\"')
-            tmp = between_quotes(line, &cmd->x, all, list);
-        else
-            tmp = outside_quotes(line, &cmd->x, all, list);
-        if (!tmp)
-            return (-1);
-        if (tmp == skip())
-            return (1);
-        cmd->cmd = ft_strjoin_free(cmd->cmd, tmp);
-        if (!cmd->cmd)
-            return (-1);
-    }
-    return (0);
-}
+//     while (line[cmd->x])
+//     {
+//         if (line[cmd->x] == ' ' || line[cmd->x] == '\t'
+//             || line[cmd->x] == '|' || line[cmd->x] == '<'
+//             || line[cmd->x] == '>')
+//             break ;
+//         y = cmd->x;
+//         if (line[cmd->x] == '\'' || line[cmd->x] == '\"')
+//             tmp = between_quotes(line, &cmd->x, all, list);
+//         else
+//             tmp = outside_quotes(line, &cmd->x, all, list);
+//         if (!tmp)
+//             return (-1);
+//         if (tmp == skip())
+//             return (1);
+//         cmd->cmd = ft_strjoin_free(cmd->cmd, tmp);
+//         if (!cmd->cmd)
+//             return (-1);
+//     }
+//     return (0);
+// }
 
 
 int	handles_command(char *line, int x, t_token **list, t_shell **all)

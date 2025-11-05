@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 18:51:39 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 19:23:49 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ char *outside_quotes(char *line, int *x, t_shell **all, t_token **list)
 		*x = y;
 		return (skip());
 	}
-
 	*x = y;
 	return (tmp);
 }
