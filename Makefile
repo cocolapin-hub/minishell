@@ -5,7 +5,7 @@
 
 NAME        = minishell
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g -Iminishell -fsanitize=address
+CFLAGS      = -Wall -Wextra -Werror -g -Iminishell
 
 OBJ_DIR     = obj
 
