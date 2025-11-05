@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 11:30:34 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 15:52:54 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,3 +217,16 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (all.last_status);
 }
+
+/*
+
+valgrind \         
+--leak-check=full \
+--show-leak-kinds=all \
+--track-origins=yes \
+--trace-children=no \
+--suppressions=readline.supp \
+--log-file=valgrind_exec.log \
+./minishell
+
+*/
