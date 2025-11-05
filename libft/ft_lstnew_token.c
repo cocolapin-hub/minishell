@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:50:52 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:17:55 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_token	*ft_lstnew_token(char *content, char quote)
 	node = (t_token *)malloc(sizeof(t_token));
 	if (!node)
 		return (NULL);
-	node->value = content;
+	node->value = strdup(content);
 	type_assignation(content, &node->type);
 	quotes_assignation(quote, &node->amount);
 	node->next = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handles_special_char.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:53:33 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:42:03 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	handles_special_char(char *line, int x, t_token **list)
 			cmd = ft_strdup_m(line, x, 1);
 	}
 	new = ft_lstnew_token(cmd, 0);
+	free(cmd);
 	if (!*list)
 		*list = new;
 	else
