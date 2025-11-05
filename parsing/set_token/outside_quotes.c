@@ -6,14 +6,13 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 18:44:58 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:00:05 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-
-static void expand_word(char **tmp, char quote, t_shell **all, t_token **list)
+static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 {
 	char	*expanded;
 	t_token	*last;
@@ -65,4 +64,3 @@ char	*outside_quotes(char *line, int *x, t_shell **all, t_token **list)
 	*x = y;
 	return (tmp);
 }
-

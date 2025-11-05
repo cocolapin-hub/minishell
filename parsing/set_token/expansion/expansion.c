@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 18:37:25 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:02:45 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,5 @@ char	*expansion(t_local *env, int last_status, char **str, char *quote)
 	if (expansion_done == 0)
 		return (*str);
 	expand = wrap_up(expand, expansion_done, quote, *str);
-
 	return (expand);
 }
