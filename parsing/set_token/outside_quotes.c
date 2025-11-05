@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outside_quotes.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 15:09:24 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 16:05:34 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 		*tmp = NULL;
 		return ;
 	}
-	// if (il y a eu expansion  + string avec espaces)
-	free(*tmp);
 	*tmp = expanded;
 }
 
