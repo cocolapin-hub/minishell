@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 20:56:03 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/05 20:58:42 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	handle_redir_only(t_command *cmd)
 	int	saved_stdout;
 	int	status;
 	int	no_cmd;
-
+	
 	no_cmd = (!cmd->args || cmd->args[0] == NULL || cmd->args[0][0] == '\0');
 	if (!cmd->elem || !no_cmd)
 		return (0);
@@ -53,19 +53,8 @@ int	handle_redir_only(t_command *cmd)
 	{
 		restore_std(saved_stdin, saved_stdout);
 		cmd->all->last_status = 130;
-	status = process_heredocs_before_exec(cmd);
-	if (status == -2)
-	{
-		restore_std(saved_stdin, saved_stdout);
-		cmd->all->last_status = 130;
 		return (1);
 	}
-	status = apply_redir(cmd->elem);
-	restore_std(saved_stdin, saved_stdout);
-	if (status == 0)
-		cmd->all->last_status = 0;
-	else
-		cmd->all->last_status = 1;
 	status = apply_redir(cmd->elem);
 	restore_std(saved_stdin, saved_stdout);
 	if (status == 0)
