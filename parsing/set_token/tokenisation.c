@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 19:16:42 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 19:08:41 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_token	*tokenisation(int x, char *line, t_token **list, t_shell **all)
 		else
 		{
 			x = handles_command(line, x, list, all);
-			if ((*all)->last_status == 258 || x == -1)
+			if (x == -1)
 			{
 				free_tokens(*list);
 				*list = NULL;

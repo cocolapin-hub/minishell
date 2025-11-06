@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:53:58 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 19:12:46 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ t_token	*check_char(t_token *list, t_shell **all)
 			return (NULL);
 		}
 	}
-	s = ft_strbrk(list->value, ":;&{}[]()*?!");
-	if (s)
+	s = ft_strbrk(list->value, ";&{}[]()*?!");
+	if (s && list->amount == Q_NONE)
 	{
 		write(2, "syntax error near unexpected token `", 36);
 		write(2, &s, 1);
