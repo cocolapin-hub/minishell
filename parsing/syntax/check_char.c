@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 20:40:01 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 21:41:48 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	check_special(t_command *cmd, t_shell *all)
 
 	if (!cmd)
 		return (1);
-	while(cmd)
+	while (cmd)
 	{
 		has_echo = (cmd->args && cmd->args[0]
 				&& ft_strcmp(cmd->args[0], "echo") == 0);
