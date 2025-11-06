@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 12:28:02 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:40:52 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ int	process_heredocs_before_exec(t_command *cmd)
 		{
 			fd = create_heredoc(redir->value, cmd);
 			if (fd < 0)
-				return (fd);
+				return (-2);
 			redir->heredoc_fd = fd;
 		}
 		redir = redir->next;
 	}
-	return (0);
+	return 0;
 }
 
 int	handle_heredoc_and_errors(t_pipe *p, t_shell *all)
@@ -59,8 +59,8 @@ static void	heredoc_child(int write_fd, char *limiter, t_command *cmd)
 	char	*line;
 	char	*expd;
 
-	setup_heredoc_signals();
 	close(write_fd - 1);
+	signal(SIGINT, sigint_heredoc);
 	while (1)
 	{
 		line = readline("> ");
@@ -89,7 +89,13 @@ static int	heredoc_parent(pid_t pid, int read_fd, int write_fd)
 	close(write_fd);
 	waitpid(pid, &status, 0);
 	setup_sig();
+
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		close(read_fd);
+		return (-2);
+	}
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
 	{
 		close(read_fd);
 		return (-2);
@@ -104,14 +110,19 @@ int	create_heredoc(char *limiter, t_command *cmd)
 
 	if (pipe(pipefd) == -1)
 		return (-1);
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 	{
+		setup_sig();
 		close(pipefd[0]);
 		close(pipefd[1]);
 		return (-1);
 	}
 	if (pid == 0)
+	{
+		signal(SIGINT, sigint_heredoc);
 		heredoc_child(pipefd[1], limiter, cmd);
+	}
 	return (heredoc_parent(pid, pipefd[0], pipefd[1]));
 }

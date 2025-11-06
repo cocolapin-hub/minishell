@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 20:17:36 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:50:01 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ static int	run_builtin_command(t_command *cmd)
 static int	handle_empty_command(t_shell *all, char *path_env)
 {
 	if (!path_env || path_env[0] == '\0')
-		print_err(NULL, NULL, "No such file or directory");
+		print_err(" ", NULL, "No such file or directory");
 	else
-		print_err(NULL, NULL, "command not found");
+		print_err(" ", NULL, "command not found");
 	all->last_status = 127;
 	return (1);
 }
@@ -99,27 +99,36 @@ void	run_command(t_command *cmd)
 {
 	int	saved_stdin;
 	int	saved_stdout;
+	int	heredoc_status;
 
+	has_pipe = 0;
 	if (handle_redir_only(cmd))
 		return ;
 	if (validate_command(cmd, cmd->all))
 		return ;
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	if (process_heredocs_before_exec(cmd) == -2)
-	{
+	heredoc_status = process_heredocs_before_exec(cmd);
+	if (heredoc_status == -2)
+	{ 
 		cmd->all->last_status = 130;
-		restore_std(saved_stdin, saved_stdout);
+		write(1, "\n", 1);
 		return ;
 	}
+	ignore_signals();
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
 	if (handle_redirections(cmd, saved_stdin, saved_stdout))
+	{
+		setup_sig();
 		return ;
+	}
 	if (is_builtin(cmd->args[0]))
 	{
 		cmd->all->last_status = run_builtin_command(cmd);
 		restore_std(saved_stdin, saved_stdout);
+		setup_sig();
 		return ;
 	}
 	exec_child_or_parent(cmd);
 	restore_std(saved_stdin, saved_stdout);
+	setup_sig();
 }

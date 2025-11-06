@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 21:03:45 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:29:30 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ static void	pipe_loop(t_pipe *p, t_shell *all)
 
 static void	exec_wait_pipeline(t_shell *all, pid_t last_pid)
 {
+	int		sigint_seen;
 	int		status;
 	pid_t	wpid;
-	int		sigint_seen;
 
 	sigint_seen = 0;
 	wpid = wait(&status);
@@ -85,22 +85,20 @@ static void	exec_wait_pipeline(t_shell *all, pid_t last_pid)
 		}
 		wpid = wait(&status);
 	}
-	if (sigint_seen && all->last_status != 130)
-		all->last_status = 130;
+	sigint_exec(all, sigint_seen);
 }
 
 void	exec_pipe(t_command *cmd_list, t_shell *all)
 {
 	t_pipe	p;
 
+	has_pipe = 1;
 	p.prev_fd = -1;
 	p.last_pid = -1;
 	p.cmd_list = cmd_list;
 	ignore_signals();
 	pipe_loop(&p, all);
 	exec_wait_pipeline(all, p.last_pid);
-	if (all->sig_type == SIGINT)
-		write(STDOUT_FILENO, "\n", 1);
 	print_signal_message(all);
 	setup_sig();
 }

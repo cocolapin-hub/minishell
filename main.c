@@ -6,11 +6,13 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 12:57:55 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:53:29 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int has_pipe = 0;
 
 static void	exec(t_command **cmd_list, t_shell *all)
 {
@@ -41,11 +43,6 @@ int	main(int argc, char **argv, char **envp)
 	{
 		line = readline("minishell$ ");
 		handles_ctrl_d(line, all, cmd_list);
-		if (handles_ctrl_c(all, line) || line[0] == '\0')
-		{
-			free(line);
-			continue ;
-		}
 		parsing(line, &all, &cmd_list);
 		if (!cmd_list)
 			continue ;
@@ -139,7 +136,7 @@ int	main(int argc, char **argv, char **envp)
 // 	}
 // 	clean_exit(&all, cmd_list, all.last_status);
 // 	return (0);
-// }
+// // }
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_command	*cmd_list;
@@ -195,11 +192,11 @@ int	main(int argc, char **argv, char **envp)
 // 		line = readline("minishell$ ");
 // 		handles_ctrl_d(line, all, cmd_list);
 
-// 		if (handles_ctrl_c(all, line) || line[0] == '\0')
-// 		{
-// 			free(line);
-// 			continue ;
-// 		}
+// 		// if (handles_ctrl_c(all, line) || line[0] == '\0')
+// 		// {
+// 		// 	free(line);
+// 		// 	continue ;
+// 		// }
 
 // 		add_history(line);
 // 		parsing(line, &all, &cmd_list);

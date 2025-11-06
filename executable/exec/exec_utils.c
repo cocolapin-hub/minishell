@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 12:55:36 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:54:03 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	handle_redir_only(t_command *cmd)
 	int	saved_stdout;
 	int	status;
 	int	no_cmd;
+
 
 	no_cmd = (!cmd->args || cmd->args[0] == NULL || cmd->args[0][0] == '\0');
 	if (!cmd->elem || !no_cmd)
@@ -38,18 +39,6 @@ int	handle_redir_only(t_command *cmd)
 	else
 		cmd->all->last_status = 1;
 	return (1);
-}
-
-int	check_redirections(t_command *cmd)
-{
-	int	status;
-
-	status = apply_redir(cmd->elem);
-	if (status == -2)
-		return (cmd->all->last_status = 130, -1);
-	if (status != 0)
-		return (cmd->all->last_status = 1, -1);
-	return (0);
 }
 
 int	check_ambiguous_redirect(char *value)

@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 12:56:33 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:54:54 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,76 +61,76 @@ const char *redir_type_to_str(t_type type)
     return "unknown";
 }
 
-void print_command(t_command *cmd, int index)
-{
-    int i;
-    t_token *elem;
+// void print_command(t_command *cmd, int index)
+// {
+//     int i;
+//     t_token *elem;
 
-    if (!cmd)
-    {
-        printf("//cmd%d: NULL command pointer\n\n", index);
-        return;
-    }
+//     if (!cmd)
+//     {
+//         printf("//cmd%d: NULL command pointer\n\n", index);
+//         return;
+//     }
 
-    printf("//cmd%d:\n", index);
+//     printf("//cmd%d:\n", index);
 
-    // print args safely
-    printf("//  args    = [");
-    if (cmd->args)
-    {
-        for (i = 0; cmd->args[i]; i++)
-        {
-            printf("\"%s\"", cmd->args[i] ? cmd->args[i] : "(null)");
-            if (cmd->args[i + 1])
-                printf(", ");
-        }
-    }
-    else
-        printf("NULL");
-    printf("]\n");
+//     // print args safely
+//     printf("//  args    = [");
+//     if (cmd->args)
+//     {
+//         for (i = 0; cmd->args[i]; i++)
+//         {
+//             printf("\"%s\"", cmd->args[i] ? cmd->args[i] : "(null)");
+//             if (cmd->args[i + 1])
+//                 printf(", ");
+//         }
+//     }
+//     else
+//         printf("NULL");
+//     printf("]\n");
 
-    // print redirection elements safely
-    printf("//  element = ");
-    if (!cmd->elem)
-        printf("NULL\n");
-    else
-    {
-        elem = cmd->elem;
-        printf("[");
-        while (elem)
-        {
-            printf("type: %s, value: %s",
-                   redir_type_to_str(elem->type),
-                   elem->value ? elem->value : "(null)");
-            elem = elem->next;
-            if (elem)
-                printf(" | ");
-        }
-        printf("]\n");
-    }
+//     // print redirection elements safely
+//     printf("//  element = ");
+//     if (!cmd->elem)
+//         printf("NULL\n");
+//     else
+//     {
+//         elem = cmd->elem;
+//         printf("[");
+//         while (elem)
+//         {
+//             printf("type: %s, value: %s",
+//                    redir_type_to_str(elem->type),
+//                    elem->value ? elem->value : "(null)");
+//             elem = elem->next;
+//             if (elem)
+//                 printf(" | ");
+//         }
+//         printf("]\n");
+//     }
 
-    // show environment placeholder
-    printf("//  all     = all env\n");
+//     // show environment placeholder
+//     printf("//  all     = all env\n");
 
-    // show next command
-    if (cmd->next)
-        printf("//  next    = cmd%d\n", index + 1);
-    else
-        printf("//  next    = NULL\n");
+//     // show next command
+//     if (cmd->next)
+//         printf("//  next    = cmd%d\n", index + 1);
+//     else
+//         printf("//  next    = NULL\n");
 
-    printf("\n");
-}
+//     printf("\n");
+// }
 
-void print_pipeline(t_command *cmd)
-{
-    int index = 1;
+// void print_pipeline(t_command *cmd)
+// {
+//     int index = 1;
 
-    while (cmd)
-    {
-        // debug pointers to catch invalid memory
-        printf("DEBUG: cmd=%p next=%p args=%p elem=%p\n",
-               (void*)cmd, (void*)cmd->next,
-               (void*)cmd->args, (void*)cmd->elem);
+//     while (cmd)
+//     {
+//         // debug pointers to catch invalid memory
+//         printf("DEBUG: cmd=%p next=%p args=%p elem=%p\n",
+//                (void*)cmd, (void*)cmd->next,
+//                (void*)cmd->args, (void*)cmd->elem);
 
         print_command(cmd, index);
         cmd = cmd->next;
