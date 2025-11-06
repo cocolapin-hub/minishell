@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 17:09:31 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 21:43:21 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,9 @@ typedef struct s_token
 typedef struct s_command
 {
 	char				**args;
-	int					empty_cmd_after_heredoc;
 	t_token				*elem;
 	t_shell				*all;
 	struct s_command	*next;
-	struct s_command	*prev;
 }	t_command;
 
 typedef struct s_pipe
@@ -213,7 +211,6 @@ int			handle_redirections(t_command *cmd, int saved_stdin,
 int			create_heredoc(char *limiter, t_command *cmd);
 int			apply_redir(t_token *redir);
 int			check_ambiguous_redirect(char *value);
-// int			check_redirections(t_command *cmd);
 int			handle_redir_only(t_command *cmd);
 int			handle_heredoc_and_errors(t_pipe *p, t_shell *all);
 

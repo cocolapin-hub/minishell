@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 17:58:16 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 18:14:39 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ static char	*wrap_up(char *expand, int expansion_done, char *quote, char *str)
 {
 	if (expansion_done == 1 && (!quote || *quote == 0))
 		expand = clean_after_expansion(str);
-	
 	else
 	{
 		expand = ft_strdup(str);
