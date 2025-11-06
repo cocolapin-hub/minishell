@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 16:39:32 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 13:07:41 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,31 +27,17 @@ static void	setup_pipe_fds(int prev_fd, int *pipefd, int has_next)
 	}
 }
 
-static int	handle_empty_cmd(t_command *cmd, int prev_fd, int *pipefd)
-{
-	int	redir_status;
-
-	if ((!cmd->args || !cmd->args[0] || !*cmd->args[0]) && cmd->elem)
-	{
-		setup_pipe_fds(prev_fd, pipefd, cmd->next != NULL);
-		redir_status = apply_redir(cmd->elem);
-		if (redir_status == -2)
-			_exit(130);
-		if (redir_status != 0)
-			fatal_exit("redirection", 1);
-		error_code("", "command not found", 127);
-		_exit(127);
-	}
-	return (0);
-}
-
 void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
 {
 	int	r;
 
-	if (handle_empty_cmd(cmd, prev_fd, pipefd))
-		return ;
 	setup_pipe_fds(prev_fd, pipefd, cmd->next != NULL);
+	if ((!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+		&& cmd->elem && cmd->elem->value && cmd->elem->value[0] == '\0')
+	{
+		error_code("", "command not found", 127);
+		_exit(127);
+	}
 	if (cmd->elem)
 	{
 		r = apply_redir(cmd->elem);
@@ -60,8 +46,12 @@ void	pipe_child(t_command *cmd, int prev_fd, int *pipefd)
 		if (r != 0)
 			_exit(1);
 	}
+	if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+	{
+		error_code("", "command not found", 127);
+		_exit(127);
+	}
 	if (is_builtin(cmd->args[0]))
 		_exit(exec_builtin(cmd, cmd->all));
-	else
-		child_process(cmd, cmd->all->env);
+	child_process(cmd, cmd->all->env);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 12:28:51 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:38:26 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,11 @@ typedef struct s_token
 typedef struct s_command
 {
 	char				**args;
+	int					empty_cmd_after_heredoc;
 	t_token				*elem;
 	t_shell				*all;
 	struct s_command	*next;
+	struct s_command	*prev;
 }	t_command;
 
 typedef struct s_pipe
@@ -118,11 +120,13 @@ void		handles_ctrl_d(char *line, t_shell all, t_command *cmd_list);
 int			handles_ctrl_c(t_shell all, char *line);
 void		restore_default_signals(void);
 void		setup_heredoc_signals(void);
+void		sigint_exec(t_shell *all, int sigint_seen);
 void		sigquit_handler(int sig);
 void		sigint_handler(int sig);
 void		sigint_heredoc(int sig);
 void		ignore_signals(void);
 void		setup_sig(void);
+
 
 /*______________________________clean utils_______________________________*/
 

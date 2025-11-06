@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 20:17:36 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:38:44 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ static int	run_builtin_command(t_command *cmd)
 static int	handle_empty_command(t_shell *all, char *path_env)
 {
 	if (!path_env || path_env[0] == '\0')
-		print_err(NULL, NULL, "No such file or directory");
+		print_err(" ", NULL, "No such file or directory");
 	else
-		print_err(NULL, NULL, "command not found");
+		print_err(" ", NULL, "command not found");
 	all->last_status = 127;
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ctrl_c.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 20:23:01 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:25:37 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ int	handles_ctrl_c(t_shell all, char *line)
 		return (1);
 	}
 	return (0);
+}
+
+void	sigint_exec(t_shell *all, int sigint_seen)
+{
+	if (sigint_seen && all->last_status != 130)
+		all->last_status = 130;
+	return ;
 }
 
 /*
