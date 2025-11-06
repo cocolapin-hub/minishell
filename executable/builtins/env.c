@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:43:51 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 17:08:07 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	builtin_env(t_local *env)
 }
 
 /*
-if (tmp->value) // afficher uniquement les variables avec une valeur
+if (tmp->value)  afficher uniquement les variables avec une valeur
 
 Afficher toutes les variables d’environnement actuelles
  dans la liste chaînée t_env.

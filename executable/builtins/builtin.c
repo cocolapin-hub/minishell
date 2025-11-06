@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:43:43 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 17:07:48 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-// *cmd = utilisée pour acceder a la structure entière
 int	exec_builtin(t_command *cmd, t_shell *all)
 {
 	if (!cmd || !cmd->args || !cmd->args[0])

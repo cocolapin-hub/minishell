@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 16:41:51 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 16:59:23 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ void	sigint_handler(int sig)
 void	sigint_heredoc(int sig)
 {
 	(void)sig;
-	// if (!has_pipe)
-	// 	write(STDOUT_FILENO, "\n", 1);
 	_exit(130);
 }
 

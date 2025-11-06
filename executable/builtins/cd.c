@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:43:47 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 17:08:02 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ int	builtin_cd(char **args, t_local **env)
 }
 
 /*
-(chdir(path) == -1)	   // return 0 si succes, -1 si erreur
+(chdir(path) == -1)	   return 0 si succes, -1 si erreur
 Utilise la fonction chdir(const char *path) (autorisé par le sujet).
 Si l’appel échoue → afficher une erreur (perror est autorisé).
-
 */

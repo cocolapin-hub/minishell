@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 16:29:30 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 16:59:08 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void	exec_pipe(t_command *cmd_list, t_shell *all)
 {
 	t_pipe	p;
 
-	has_pipe = 1;
 	p.prev_fd = -1;
 	p.last_pid = -1;
 	p.cmd_list = cmd_list;

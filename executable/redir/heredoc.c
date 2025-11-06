@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 16:40:52 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 17:01:32 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	process_heredocs_before_exec(t_command *cmd)
 		}
 		redir = redir->next;
 	}
-	return 0;
+	return (0);
 }
 
 int	handle_heredoc_and_errors(t_pipe *p, t_shell *all)
@@ -89,7 +89,6 @@ static int	heredoc_parent(pid_t pid, int read_fd, int write_fd)
 	close(write_fd);
 	waitpid(pid, &status, 0);
 	setup_sig();
-
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
 		close(read_fd);

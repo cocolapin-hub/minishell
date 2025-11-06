@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 16:27:23 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 17:09:31 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@
 # include <errno.h>
 
 typedef struct s_command	t_command;
-
-extern int					has_pipe;
 
 typedef struct s_local
 {
@@ -128,9 +126,7 @@ void		ignore_signals(void);
 void		setup_sig(void);
 void		sigint_heredoc(int sig);
 
-
 /*______________________________clean utils_______________________________*/
-
 void		print_err(const char *prefix, const char *cmd, const char *msg);
 void		clean_exit(t_shell *all, t_command *cmd_list, int code);
 int			error_code(const char *cmd, const char *msg, int code);
@@ -262,30 +258,3 @@ char		*ft_itoa(int n);
 char		*skip(void);
 
 #endif
-
-// /*_______________EXEMPLE_________________________*/
-
-// /*Ligne de commande*/
-// cat -n < in.txt | grep hello > out.txt
-
-// /* Liste de tokens (t_token) */
-// t_token *tokens = [
-//     { type: WORD,      quote: Q_NONE, value: "cat" },
-//     { type: WORD,      quote: Q_NONE, value: "-n" },
-//     { type: REDIR_IN,  quote: Q_NONE, value: "in.txt" },
-//     { type: PIPE,      quote: Q_NONE, value: "|" },
-//     { type: WORD,      quote: Q_NONE, value: "grep" },
-//     { type: WORD,      quote: Q_NONE, value: "hello" },
-//     { type: REDIR_OUT, quote: Q_NONE, value: "out.txt" }
-// ]
-
-// /* Construction des commandes (t_command) */
-// cmd = "cat"
-// args = ["cat", "-n", NULL]
-// redir = [ { type: REDIR_IN, quote: Q_NONE, value: "in.txt" } ]
-// next = cmd2
-
-// cmd2 = "grep"
-// args = ["grep", "hello", NULL]
-// redir = [ { type: REDIR_OUT, quote: Q_NONE, value: "out.txt" } ]
-// next = NULL

@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/04 11:45:16 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 17:08:11 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ int main()
 
 	test = NULL;
 	test = ft_calloc(4294967295, 4294967295);
-	// printf("%s\n", test);
+	printf("%s\n", test);
 	return 0;
 }*/
