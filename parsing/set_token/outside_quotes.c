@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 19:31:35 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:39:14 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	expand_word(char **tmp, char quote, t_shell **all, t_token **list)
 		while (last->next)
 			last = last->next;
 	}
-	if (quote == 39 || (last && last->type == REDIR_HEREDOC))
+	if ((quote == 39) || (last && last->type == REDIR_HEREDOC))
 		return ;
 	expanded = expansion((*all)->env, (*all)->last_status, tmp, &quote);
 	if (!expanded)

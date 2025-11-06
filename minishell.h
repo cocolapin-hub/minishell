@@ -6,7 +6,7 @@
 /*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 17:57:04 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 12:28:51 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ int			is_builtin(char *cmd);
 /*REDIR*/
 int			handle_redirections(t_command *cmd, int saved_stdin,
 				int saved_stdout);
-int			create_heredoc(char *limiter);
+int			create_heredoc(char *limiter, t_command *cmd);
 int			apply_redir(t_token *redir);
 int			check_ambiguous_redirect(char *value);
 int			check_redirections(t_command *cmd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
+/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/05 10:24:32 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 12:28:02 by ochkaoul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	process_heredocs_before_exec(t_command *cmd)
 	{
 		if (redir->type == REDIR_HEREDOC)
 		{
-			fd = create_heredoc(redir->value);
+			fd = create_heredoc(redir->value, cmd);
 			if (fd < 0)
 				return (fd);
 			redir->heredoc_fd = fd;
@@ -54,9 +54,10 @@ int	handle_heredoc_and_errors(t_pipe *p, t_shell *all)
 	return (0);
 }
 
-static void	heredoc_child(int write_fd, char *limiter)
+static void	heredoc_child(int write_fd, char *limiter, t_command *cmd)
 {
 	char	*line;
+	char	*expd;
 
 	setup_heredoc_signals();
 	close(write_fd - 1);
@@ -65,11 +66,18 @@ static void	heredoc_child(int write_fd, char *limiter)
 		line = readline("> ");
 		if (!line || ft_strcmp(line, limiter) == 0)
 			break ;
+		if (cmd->elem->amount == Q_NONE)
+		{
+			expd = expansion(cmd->all->env, cmd->all->last_status, &line, NULL);
+			if (expd)
+				line = expd;
+		}
 		write(write_fd, line, ft_strlen(line));
 		write(write_fd, "\n", 1);
 		free(line);
 	}
-	free(line);
+	if (line)
+		free(line);
 	close(write_fd);
 	_exit(0);
 }
@@ -89,7 +97,7 @@ static int	heredoc_parent(pid_t pid, int read_fd, int write_fd)
 	return (read_fd);
 }
 
-int	create_heredoc(char *limiter)
+int	create_heredoc(char *limiter, t_command *cmd)
 {
 	int		pipefd[2];
 	pid_t	pid;
@@ -104,6 +112,6 @@ int	create_heredoc(char *limiter)
 		return (-1);
 	}
 	if (pid == 0)
-		heredoc_child(pipefd[1], limiter);
+		heredoc_child(pipefd[1], limiter, cmd);
 	return (heredoc_parent(pid, pipefd[0], pipefd[1]));
 }
