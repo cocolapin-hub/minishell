@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 13:38:26 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 16:27:23 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 
 typedef struct s_command	t_command;
 
-extern int					g_in_heredoc;
+extern int					has_pipe;
 
 typedef struct s_local
 {
@@ -117,15 +117,16 @@ t_local		*env_init(char **envp, t_shell *all);
 
 /*__________________________________signal________________________________*/
 void		handles_ctrl_d(char *line, t_shell all, t_command *cmd_list);
-int			handles_ctrl_c(t_shell all, char *line);
+// int			handles_ctrl_c(t_shell all, char *line);
 void		restore_default_signals(void);
-void		setup_heredoc_signals(void);
+// void		setup_heredoc_signals(void);
 void		sigint_exec(t_shell *all, int sigint_seen);
-void		sigquit_handler(int sig);
+// void		sigquit_handler(int sig);
 void		sigint_handler(int sig);
-void		sigint_heredoc(int sig);
+// void		sigint_heredoc(int sig);
 void		ignore_signals(void);
 void		setup_sig(void);
+void		sigint_heredoc(int sig);
 
 
 /*______________________________clean utils_______________________________*/
@@ -216,7 +217,7 @@ int			handle_redirections(t_command *cmd, int saved_stdin,
 int			create_heredoc(char *limiter, t_command *cmd);
 int			apply_redir(t_token *redir);
 int			check_ambiguous_redirect(char *value);
-int			check_redirections(t_command *cmd);
+// int			check_redirections(t_command *cmd);
 int			handle_redir_only(t_command *cmd);
 int			handle_heredoc_and_errors(t_pipe *p, t_shell *all);
 

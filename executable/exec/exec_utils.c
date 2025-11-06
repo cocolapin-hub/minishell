@@ -6,35 +6,11 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 13:31:47 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/06 16:40:45 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-// int	handle_redir_only(t_command *cmd)
-// {
-// 	int	redir_status;
-// 	int	saved_stdin;
-// 	int	saved_stdout;
-
-// 	if (!cmd->elem || (cmd->args && cmd->args[0]))
-// 		return (0);
-// 	saved_stdin = dup(STDIN_FILENO);
-// 	saved_stdout = dup(STDOUT_FILENO);
-// 	redir_status = apply_redir(cmd->elem);
-// 	dup2(saved_stdin, STDIN_FILENO);
-// 	dup2(saved_stdout, STDOUT_FILENO);
-// 	close(saved_stdin);
-// 	close(saved_stdout);
-// 	if (redir_status == 0)
-// 	{
-// 		cmd->all->last_status = 0;
-// 		return (1);
-// 	}
-// 	cmd->all->last_status = 1;
-// 	return (1);
-// }
 
 int	handle_redir_only(t_command *cmd)
 {
@@ -62,18 +38,6 @@ int	handle_redir_only(t_command *cmd)
 	else
 		cmd->all->last_status = 1;
 	return (1);
-}
-
-int	check_redirections(t_command *cmd)
-{
-	int	status;
-
-	status = apply_redir(cmd->elem);
-	if (status == -2)
-		return (cmd->all->last_status = 130, -1);
-	if (status != 0)
-		return (cmd->all->last_status = 1, -1);
-	return (0);
 }
 
 int	check_ambiguous_redirect(char *value)
