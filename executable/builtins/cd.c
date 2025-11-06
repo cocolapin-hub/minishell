@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 17:08:02 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:48:32 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,34 @@ static int	cd_error(char *path)
 	return (1);
 }
 
+static int	cd_oldpwd(t_local **env)
+{
+	char	*oldpwd;
+	char	*newpwd;
+
+	oldpwd = get_env_value(*env, "OLDPWD");
+	if (!oldpwd)
+		return (print_err("cd", NULL, "OLDPWD not set"), 1);
+	if (chdir(oldpwd) == -1)
+		return (cd_error(oldpwd), 1);
+	update_pwd(env);
+	newpwd = get_env_value(*env, "PWD");
+	if (newpwd)
+		ft_putendl_fd(newpwd, 1);
+	return (0);
+}
+
 int	builtin_cd(char **args, t_local **env)
 {
 	char	*path;
+	int		argc;
 
-	if (args[2] && args[2][0] != '\0')
+	argc = 0;
+	while (args[argc])
+		argc++;
+	if (argc > 2)
 		return (print_err("cd", NULL, "too many arguments"), 1);
-	if (!args[1] || args[1][0] == '\0')
+	if (argc == 1 || (argc == 2 && args[1][0] == '\0'))
 	{
 		path = get_env_value(*env, "HOME");
 		if (!path)
@@ -57,6 +78,8 @@ int	builtin_cd(char **args, t_local **env)
 		if (path[0] == '\0')
 			return (0);
 	}
+	else if (ft_strcmp(args[1], "-") == 0)
+		return (cd_oldpwd(env));
 	else
 		path = args[1];
 	if (chdir(path) == -1)
@@ -64,9 +87,3 @@ int	builtin_cd(char **args, t_local **env)
 	update_pwd(env);
 	return (0);
 }
-
-/*
-(chdir(path) == -1)	   return 0 si succes, -1 si erreur
-Utilise la fonction chdir(const char *path) (autorisé par le sujet).
-Si l’appel échoue → afficher une erreur (perror est autorisé).
-*/
