@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 21:40:01 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/11 18:31:20 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ static void	heredoc_child(int write_fd, char *limiter, t_command *cmd)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strcmp(line, limiter) == 0)
-			break ;
+		if (!line || !ft_strcmp(line, limiter))
+			heredoc_exit(write_fd, limiter, line, cmd);
 		if (cmd->elem->amount == Q_NONE)
 		{
 			expd = expansion(cmd->all->env, cmd->all->last_status, &line, NULL);
@@ -76,10 +76,6 @@ static void	heredoc_child(int write_fd, char *limiter, t_command *cmd)
 		write(write_fd, "\n", 1);
 		free(line);
 	}
-	if (line)
-		free(line);
-	close(write_fd);
-	_exit(0);
 }
 
 static int	heredoc_parent(pid_t pid, int read_fd, int write_fd)
