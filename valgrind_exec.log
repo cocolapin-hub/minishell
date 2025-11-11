@@ -1,0 +1,764 @@
+==863893== Memcheck, a memory error detector
+==863893== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==863893== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==863893== Command: ./minishell
+==863893== Parent PID: 857879
+==863893== 
+==863915== 
+==863915== FILE DESCRIPTORS: 10 open (3 std) at exit.
+==863915== Open file descriptor 5: /dev/pts/1
+==863915==    at 0x49DA05B: dup (syscall-template.S:120)
+==863915==    by 0x403CAD: run_command (run_command.c:113)
+==863915==    by 0x401442: exec (main.c:23)
+==863915==    by 0x4013F2: main (main.c:47)
+==863915== 
+==863915== Open file descriptor 4: /dev/pts/1
+==863915==    at 0x49DA05B: dup (syscall-template.S:120)
+==863915==    by 0x403CA0: run_command (run_command.c:112)
+==863915==    by 0x401442: exec (main.c:23)
+==863915==    by 0x4013F2: main (main.c:47)
+==863915== 
+==863915== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==863915==    <inherited from parent>
+==863915== 
+==863915== Open AF_UNIX socket 39: <unknown>
+==863915==    <inherited from parent>
+==863915== 
+==863915== Open file descriptor 38: /home/claffut/.config/Code/logs/20251111T102831/ptyhost.log
+==863915==    <inherited from parent>
+==863915== 
+==863915== Open file descriptor 37: /dev/ptmx
+==863915==    <inherited from parent>
+==863915== 
+==863915== Open file descriptor 3: /home/claffut/Documents/minish/valgrind_exec.log
+==863915==    <inherited from parent>
+==863915== 
+==863915== 
+==863915== HEAP SUMMARY:
+==863915==     in use at exit: 218,891 bytes in 526 blocks
+==863915==   total heap usage: 773 allocs, 247 frees, 240,046 bytes allocated
+==863915== 
+==863915== 3 bytes in 1 blocks are still reachable in loss record 3 of 75
+==863915==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863915==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==863915==    by 0x405A6E: fill_args (fill_args.c:33)
+==863915==    by 0x4055C3: set_command (set_command.c:35)
+==863915==    by 0x40505F: parsing (parsing.c:48)
+==863915==    by 0x4013D5: main (main.c:44)
+==863915== 
+==863915== 16 bytes in 1 blocks are still reachable in loss record 14 of 75
+==863915==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863915==    by 0x4095BC: ft_calloc (ft_calloc.c:25)
+==863915==    by 0x405794: create_args (create_args.c:34)
+==863915==    by 0x405990: fill_args (fill_args.c:20)
+==863915==    by 0x4055C3: set_command (set_command.c:35)
+==863915==    by 0x40505F: parsing (parsing.c:48)
+==863915==    by 0x4013D5: main (main.c:44)
+==863915== 
+==863915== 32 bytes in 1 blocks are still reachable in loss record 19 of 75
+==863915==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863915==    by 0x40849D: ft_lstnew_cmd (ft_lstnew_cmd.c:19)
+==863915==    by 0x4055FD: set_command (set_command.c:42)
+==863915==    by 0x40505F: parsing (parsing.c:48)
+==863915==    by 0x4013D5: main (main.c:44)
+==863915== 
+==863915== 600 bytes in 1 blocks are still reachable in loss record 30 of 75
+==863915==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863915==    by 0x402E33: env_to_tab (env_to_tab.c:55)
+==863915==    by 0x4036F8: child_process (child_process.c:82)
+==863915==    by 0x404102: exec_child_or_parent (exec_utils.c:89)
+==863915==    by 0x403D1E: run_command (run_command.c:122)
+==863915==    by 0x401442: exec (main.c:23)
+==863915==    by 0x4013F2: main (main.c:47)
+==863915== 
+==863915== 1,046 bytes in 74 blocks are still reachable in loss record 43 of 75
+==863915==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863915==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==863915==    by 0x401A7E: new_env_node (setup_shell_exec.c:22)
+==863915==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==863915==    by 0x401376: main (main.c:37)
+==863915== 
+==863915== 1,776 bytes in 74 blocks are still reachable in loss record 46 of 75
+==863915==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863915==    by 0x401A59: new_env_node (setup_shell_exec.c:19)
+==863915==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==863915==    by 0x401376: main (main.c:37)
+==863915== 
+==863915== 3,076 bytes in 74 blocks are still reachable in loss record 49 of 75
+==863915==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863915==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==863915==    by 0x401A91: new_env_node (setup_shell_exec.c:23)
+==863915==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==863915==    by 0x401376: main (main.c:37)
+==863915== 
+==863915== 4,122 bytes in 74 blocks are still reachable in loss record 61 of 75
+==863915==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863915==    by 0x40301D: ft_strjoin3 (env_to_tab.c:27)
+==863915==    by 0x402E8E: env_to_tab (env_to_tab.c:63)
+==863915==    by 0x4036F8: child_process (child_process.c:82)
+==863915==    by 0x404102: exec_child_or_parent (exec_utils.c:89)
+==863915==    by 0x403D1E: run_command (run_command.c:122)
+==863915==    by 0x401442: exec (main.c:23)
+==863915==    by 0x4013F2: main (main.c:47)
+==863915== 
+==863915== LEAK SUMMARY:
+==863915==    definitely lost: 0 bytes in 0 blocks
+==863915==    indirectly lost: 0 bytes in 0 blocks
+==863915==      possibly lost: 0 bytes in 0 blocks
+==863915==    still reachable: 10,671 bytes in 300 blocks
+==863915==         suppressed: 208,220 bytes in 226 blocks
+==863915== 
+==863915== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+--863915-- 
+--863915-- used_suppression:     67 ignore_libreadline_leaks readline.supp:2 suppressed: 208,220 bytes in 226 blocks
+==863915== 
+==863915== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==863997== 
+==863997== FILE DESCRIPTORS: 8 open (3 std) at exit.
+==863997== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==863997==    <inherited from parent>
+==863997== 
+==863997== Open AF_UNIX socket 39: <unknown>
+==863997==    <inherited from parent>
+==863997== 
+==863997== Open file descriptor 38: /home/claffut/.config/Code/logs/20251111T102831/ptyhost.log
+==863997==    <inherited from parent>
+==863997== 
+==863997== Open file descriptor 37: /dev/ptmx
+==863997==    <inherited from parent>
+==863997== 
+==863997== Open file descriptor 3: /home/claffut/Documents/minish/valgrind_exec.log
+==863997==    <inherited from parent>
+==863997== 
+==863997== 
+==863997== HEAP SUMMARY:
+==863997==     in use at exit: 214,310 bytes in 460 blocks
+==863997==   total heap usage: 726 allocs, 266 frees, 235,597 bytes allocated
+==863997== 
+==863997== 4 bytes in 1 blocks are still reachable in loss record 4 of 76
+==863997==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863997==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==863997==    by 0x4058C0: create_cmd (create_cmd.c:28)
+==863997==    by 0x405536: fill_elements (fill_elements.c:32)
+==863997==    by 0x4055EC: set_command (set_command.c:41)
+==863997==    by 0x40505F: parsing (parsing.c:48)
+==863997==    by 0x4013D5: main (main.c:44)
+==863997== 
+==863997== 8 bytes in 2 blocks are still reachable in loss record 7 of 76
+==863997==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863997==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==863997==    by 0x405A6E: fill_args (fill_args.c:33)
+==863997==    by 0x4055C3: set_command (set_command.c:35)
+==863997==    by 0x40505F: parsing (parsing.c:48)
+==863997==    by 0x4013D5: main (main.c:44)
+==863997== 
+==863997== 32 bytes in 1 blocks are still reachable in loss record 19 of 76
+==863997==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863997==    by 0x405884: create_cmd (create_cmd.c:24)
+==863997==    by 0x405536: fill_elements (fill_elements.c:32)
+==863997==    by 0x4055EC: set_command (set_command.c:41)
+==863997==    by 0x40505F: parsing (parsing.c:48)
+==863997==    by 0x4013D5: main (main.c:44)
+==863997== 
+==863997== 32 bytes in 2 blocks are still reachable in loss record 20 of 76
+==863997==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863997==    by 0x4095BC: ft_calloc (ft_calloc.c:25)
+==863997==    by 0x405794: create_args (create_args.c:34)
+==863997==    by 0x405990: fill_args (fill_args.c:20)
+==863997==    by 0x4055C3: set_command (set_command.c:35)
+==863997==    by 0x40505F: parsing (parsing.c:48)
+==863997==    by 0x4013D5: main (main.c:44)
+==863997== 
+==863997== 64 bytes in 2 blocks are still reachable in loss record 25 of 76
+==863997==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863997==    by 0x40849D: ft_lstnew_cmd (ft_lstnew_cmd.c:19)
+==863997==    by 0x4055FD: set_command (set_command.c:42)
+==863997==    by 0x40505F: parsing (parsing.c:48)
+==863997==    by 0x4013D5: main (main.c:44)
+==863997== 
+==863997== 1,046 bytes in 74 blocks are still reachable in loss record 45 of 76
+==863997==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863997==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==863997==    by 0x401A7E: new_env_node (setup_shell_exec.c:22)
+==863997==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==863997==    by 0x401376: main (main.c:37)
+==863997== 
+==863997== 1,776 bytes in 74 blocks are still reachable in loss record 48 of 76
+==863997==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863997==    by 0x401A59: new_env_node (setup_shell_exec.c:19)
+==863997==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==863997==    by 0x401376: main (main.c:37)
+==863997== 
+==863997== 3,076 bytes in 74 blocks are still reachable in loss record 51 of 76
+==863997==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==863997==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==863997==    by 0x401A91: new_env_node (setup_shell_exec.c:23)
+==863997==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==863997==    by 0x401376: main (main.c:37)
+==863997== 
+==863997== LEAK SUMMARY:
+==863997==    definitely lost: 0 bytes in 0 blocks
+==863997==    indirectly lost: 0 bytes in 0 blocks
+==863997==      possibly lost: 0 bytes in 0 blocks
+==863997==    still reachable: 6,038 bytes in 230 blocks
+==863997==         suppressed: 208,272 bytes in 230 blocks
+==863997== 
+==863997== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+--863997-- 
+--863997-- used_suppression:     68 ignore_libreadline_leaks readline.supp:2 suppressed: 208,272 bytes in 230 blocks
+==863997== 
+==863997== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+==864104== 
+==864104== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==864104== Open file descriptor 4:
+==864104==    at 0x49DA0ED: pipe (pipe.c:29)
+==864104==    by 0x404798: create_heredoc (heredoc.c:110)
+==864104==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864104==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==864104==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==864104==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==864104==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==864104==    by 0x401431: exec (main.c:19)
+==864104==    by 0x4013F2: main (main.c:47)
+==864104== 
+==864104== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==864104==    <inherited from parent>
+==864104== 
+==864104== Open AF_UNIX socket 39: <unknown>
+==864104==    <inherited from parent>
+==864104== 
+==864104== Open file descriptor 38: /home/claffut/.config/Code/logs/20251111T102831/ptyhost.log
+==864104==    <inherited from parent>
+==864104== 
+==864104== Open file descriptor 37: /dev/ptmx
+==864104==    <inherited from parent>
+==864104== 
+==864104== Open file descriptor 3: /home/claffut/Documents/minish/valgrind_exec.log
+==864104==    <inherited from parent>
+==864104== 
+==864104== 
+==864104== HEAP SUMMARY:
+==864104==     in use at exit: 214,673 bytes in 469 blocks
+==864104==   total heap usage: 787 allocs, 318 frees, 236,631 bytes allocated
+==864104== 
+==864104== 7 bytes in 2 blocks are still reachable in loss record 4 of 82
+==864104==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864104==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864104==    by 0x4058C0: create_cmd (create_cmd.c:28)
+==864104==    by 0x405536: fill_elements (fill_elements.c:32)
+==864104==    by 0x4055EC: set_command (set_command.c:41)
+==864104==    by 0x40505F: parsing (parsing.c:48)
+==864104==    by 0x4013D5: main (main.c:44)
+==864104== 
+==864104== 8 bytes in 2 blocks are still reachable in loss record 7 of 82
+==864104==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864104==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864104==    by 0x405A6E: fill_args (fill_args.c:33)
+==864104==    by 0x4055C3: set_command (set_command.c:35)
+==864104==    by 0x40505F: parsing (parsing.c:48)
+==864104==    by 0x4013D5: main (main.c:44)
+==864104== 
+==864104== 32 bytes in 2 blocks are still reachable in loss record 23 of 82
+==864104==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864104==    by 0x4095BC: ft_calloc (ft_calloc.c:25)
+==864104==    by 0x405794: create_args (create_args.c:34)
+==864104==    by 0x405990: fill_args (fill_args.c:20)
+==864104==    by 0x4055C3: set_command (set_command.c:35)
+==864104==    by 0x40505F: parsing (parsing.c:48)
+==864104==    by 0x4013D5: main (main.c:44)
+==864104== 
+==864104== 64 bytes in 2 blocks are still reachable in loss record 28 of 82
+==864104==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864104==    by 0x40849D: ft_lstnew_cmd (ft_lstnew_cmd.c:19)
+==864104==    by 0x4055FD: set_command (set_command.c:42)
+==864104==    by 0x40505F: parsing (parsing.c:48)
+==864104==    by 0x4013D5: main (main.c:44)
+==864104== 
+==864104== 64 bytes in 2 blocks are still reachable in loss record 29 of 82
+==864104==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864104==    by 0x405884: create_cmd (create_cmd.c:24)
+==864104==    by 0x405536: fill_elements (fill_elements.c:32)
+==864104==    by 0x4055EC: set_command (set_command.c:41)
+==864104==    by 0x40505F: parsing (parsing.c:48)
+==864104==    by 0x4013D5: main (main.c:44)
+==864104== 
+==864104== 1,046 bytes in 74 blocks are still reachable in loss record 51 of 82
+==864104==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864104==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864104==    by 0x401A7E: new_env_node (setup_shell_exec.c:22)
+==864104==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864104==    by 0x401376: main (main.c:37)
+==864104== 
+==864104== 1,776 bytes in 74 blocks are still reachable in loss record 54 of 82
+==864104==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864104==    by 0x401A59: new_env_node (setup_shell_exec.c:19)
+==864104==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864104==    by 0x401376: main (main.c:37)
+==864104== 
+==864104== 3,076 bytes in 74 blocks are still reachable in loss record 57 of 82
+==864104==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864104==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864104==    by 0x401A91: new_env_node (setup_shell_exec.c:23)
+==864104==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864104==    by 0x401376: main (main.c:37)
+==864104== 
+==864104== LEAK SUMMARY:
+==864104==    definitely lost: 0 bytes in 0 blocks
+==864104==    indirectly lost: 0 bytes in 0 blocks
+==864104==      possibly lost: 0 bytes in 0 blocks
+==864104==    still reachable: 6,073 bytes in 232 blocks
+==864104==         suppressed: 208,600 bytes in 237 blocks
+==864104== 
+==864104== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+--864104-- 
+--864104-- used_suppression:     74 ignore_libreadline_leaks readline.supp:2 suppressed: 208,600 bytes in 237 blocks
+==864104== 
+==864104== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+==864141== 
+==864141== FILE DESCRIPTORS: 10 open (3 std) at exit.
+==864141== Open file descriptor 5:
+==864141==    at 0x49DA0ED: pipe (pipe.c:29)
+==864141==    by 0x404798: create_heredoc (heredoc.c:110)
+==864141==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864141==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==864141==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==864141==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==864141==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==864141==    by 0x401431: exec (main.c:19)
+==864141==    by 0x4013F2: main (main.c:47)
+==864141== 
+==864141== Open file descriptor 4:
+==864141==    at 0x49DA0ED: pipe (pipe.c:29)
+==864141==    by 0x404798: create_heredoc (heredoc.c:110)
+==864141==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864141==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==864141==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==864141==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==864141==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==864141==    by 0x401431: exec (main.c:19)
+==864141==    by 0x4013F2: main (main.c:47)
+==864141== 
+==864141== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==864141==    <inherited from parent>
+==864141== 
+==864141== Open AF_UNIX socket 39: <unknown>
+==864141==    <inherited from parent>
+==864141== 
+==864141== Open file descriptor 38: /home/claffut/.config/Code/logs/20251111T102831/ptyhost.log
+==864141==    <inherited from parent>
+==864141== 
+==864141== Open file descriptor 37: /dev/ptmx
+==864141==    <inherited from parent>
+==864141== 
+==864141== Open file descriptor 3: /home/claffut/Documents/minish/valgrind_exec.log
+==864141==    <inherited from parent>
+==864141== 
+==864141== 
+==864141== HEAP SUMMARY:
+==864141==     in use at exit: 214,673 bytes in 469 blocks
+==864141==   total heap usage: 789 allocs, 320 frees, 236,714 bytes allocated
+==864141== 
+==864141== 7 bytes in 2 blocks are still reachable in loss record 4 of 82
+==864141==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864141==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864141==    by 0x4058C0: create_cmd (create_cmd.c:28)
+==864141==    by 0x405536: fill_elements (fill_elements.c:32)
+==864141==    by 0x4055EC: set_command (set_command.c:41)
+==864141==    by 0x40505F: parsing (parsing.c:48)
+==864141==    by 0x4013D5: main (main.c:44)
+==864141== 
+==864141== 8 bytes in 2 blocks are still reachable in loss record 7 of 82
+==864141==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864141==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864141==    by 0x405A6E: fill_args (fill_args.c:33)
+==864141==    by 0x4055C3: set_command (set_command.c:35)
+==864141==    by 0x40505F: parsing (parsing.c:48)
+==864141==    by 0x4013D5: main (main.c:44)
+==864141== 
+==864141== 32 bytes in 2 blocks are still reachable in loss record 23 of 82
+==864141==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864141==    by 0x4095BC: ft_calloc (ft_calloc.c:25)
+==864141==    by 0x405794: create_args (create_args.c:34)
+==864141==    by 0x405990: fill_args (fill_args.c:20)
+==864141==    by 0x4055C3: set_command (set_command.c:35)
+==864141==    by 0x40505F: parsing (parsing.c:48)
+==864141==    by 0x4013D5: main (main.c:44)
+==864141== 
+==864141== 64 bytes in 2 blocks are still reachable in loss record 28 of 82
+==864141==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864141==    by 0x40849D: ft_lstnew_cmd (ft_lstnew_cmd.c:19)
+==864141==    by 0x4055FD: set_command (set_command.c:42)
+==864141==    by 0x40505F: parsing (parsing.c:48)
+==864141==    by 0x4013D5: main (main.c:44)
+==864141== 
+==864141== 64 bytes in 2 blocks are still reachable in loss record 29 of 82
+==864141==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864141==    by 0x405884: create_cmd (create_cmd.c:24)
+==864141==    by 0x405536: fill_elements (fill_elements.c:32)
+==864141==    by 0x4055EC: set_command (set_command.c:41)
+==864141==    by 0x40505F: parsing (parsing.c:48)
+==864141==    by 0x4013D5: main (main.c:44)
+==864141== 
+==864141== 1,046 bytes in 74 blocks are still reachable in loss record 51 of 82
+==864141==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864141==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864141==    by 0x401A7E: new_env_node (setup_shell_exec.c:22)
+==864141==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864141==    by 0x401376: main (main.c:37)
+==864141== 
+==864141== 1,776 bytes in 74 blocks are still reachable in loss record 54 of 82
+==864141==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864141==    by 0x401A59: new_env_node (setup_shell_exec.c:19)
+==864141==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864141==    by 0x401376: main (main.c:37)
+==864141== 
+==864141== 3,076 bytes in 74 blocks are still reachable in loss record 57 of 82
+==864141==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864141==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864141==    by 0x401A91: new_env_node (setup_shell_exec.c:23)
+==864141==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864141==    by 0x401376: main (main.c:37)
+==864141== 
+==864141== LEAK SUMMARY:
+==864141==    definitely lost: 0 bytes in 0 blocks
+==864141==    indirectly lost: 0 bytes in 0 blocks
+==864141==      possibly lost: 0 bytes in 0 blocks
+==864141==    still reachable: 6,073 bytes in 232 blocks
+==864141==         suppressed: 208,600 bytes in 237 blocks
+==864141== 
+==864141== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+--864141-- 
+--864141-- used_suppression:     74 ignore_libreadline_leaks readline.supp:2 suppressed: 208,600 bytes in 237 blocks
+==864141== 
+==864141== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+==864297== 
+==864297== FILE DESCRIPTORS: 11 open (3 std) at exit.
+==864297== Open file descriptor 6:
+==864297==    at 0x49DA0ED: pipe (pipe.c:29)
+==864297==    by 0x404798: create_heredoc (heredoc.c:110)
+==864297==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864297==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==864297==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==864297==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==864297==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==864297==    by 0x401431: exec (main.c:19)
+==864297==    by 0x4013F2: main (main.c:47)
+==864297== 
+==864297== Open file descriptor 5:
+==864297==    at 0x49DA0ED: pipe (pipe.c:29)
+==864297==    by 0x404798: create_heredoc (heredoc.c:110)
+==864297==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864297==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==864297==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==864297==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==864297==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==864297==    by 0x401431: exec (main.c:19)
+==864297==    by 0x4013F2: main (main.c:47)
+==864297== 
+==864297== Open file descriptor 4:
+==864297==    at 0x49DA0ED: pipe (pipe.c:29)
+==864297==    by 0x404798: create_heredoc (heredoc.c:110)
+==864297==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864297==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==864297==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==864297==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==864297==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==864297==    by 0x401431: exec (main.c:19)
+==864297==    by 0x4013F2: main (main.c:47)
+==864297== 
+==864297== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==864297==    <inherited from parent>
+==864297== 
+==864297== Open AF_UNIX socket 39: <unknown>
+==864297==    <inherited from parent>
+==864297== 
+==864297== Open file descriptor 38: /home/claffut/.config/Code/logs/20251111T102831/ptyhost.log
+==864297==    <inherited from parent>
+==864297== 
+==864297== Open file descriptor 37: /dev/ptmx
+==864297==    <inherited from parent>
+==864297== 
+==864297== Open file descriptor 3: /home/claffut/Documents/minish/valgrind_exec.log
+==864297==    <inherited from parent>
+==864297== 
+==864297== 
+==864297== HEAP SUMMARY:
+==864297==     in use at exit: 214,644 bytes in 468 blocks
+==864297==   total heap usage: 802 allocs, 334 frees, 236,844 bytes allocated
+==864297== 
+==864297== 4 bytes in 1 blocks are still reachable in loss record 4 of 82
+==864297==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864297==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864297==    by 0x405A6E: fill_args (fill_args.c:33)
+==864297==    by 0x4055C3: set_command (set_command.c:35)
+==864297==    by 0x40505F: parsing (parsing.c:48)
+==864297==    by 0x4013D5: main (main.c:44)
+==864297== 
+==864297== 4 bytes in 1 blocks are still reachable in loss record 5 of 82
+==864297==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864297==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864297==    by 0x4058C0: create_cmd (create_cmd.c:28)
+==864297==    by 0x405536: fill_elements (fill_elements.c:32)
+==864297==    by 0x4055EC: set_command (set_command.c:41)
+==864297==    by 0x40505F: parsing (parsing.c:48)
+==864297==    by 0x4013D5: main (main.c:44)
+==864297== 
+==864297== 16 bytes in 1 blocks are still reachable in loss record 14 of 82
+==864297==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864297==    by 0x4095BC: ft_calloc (ft_calloc.c:25)
+==864297==    by 0x405794: create_args (create_args.c:34)
+==864297==    by 0x405990: fill_args (fill_args.c:20)
+==864297==    by 0x4055C3: set_command (set_command.c:35)
+==864297==    by 0x40505F: parsing (parsing.c:48)
+==864297==    by 0x4013D5: main (main.c:44)
+==864297== 
+==864297== 32 bytes in 1 blocks are still reachable in loss record 21 of 82
+==864297==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864297==    by 0x40849D: ft_lstnew_cmd (ft_lstnew_cmd.c:19)
+==864297==    by 0x4055FD: set_command (set_command.c:42)
+==864297==    by 0x40505F: parsing (parsing.c:48)
+==864297==    by 0x4013D5: main (main.c:44)
+==864297== 
+==864297== 32 bytes in 1 blocks are still reachable in loss record 22 of 82
+==864297==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864297==    by 0x405884: create_cmd (create_cmd.c:24)
+==864297==    by 0x405536: fill_elements (fill_elements.c:32)
+==864297==    by 0x4055EC: set_command (set_command.c:41)
+==864297==    by 0x40505F: parsing (parsing.c:48)
+==864297==    by 0x4013D5: main (main.c:44)
+==864297== 
+==864297== 1,046 bytes in 74 blocks are still reachable in loss record 51 of 82
+==864297==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864297==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864297==    by 0x401A7E: new_env_node (setup_shell_exec.c:22)
+==864297==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864297==    by 0x401376: main (main.c:37)
+==864297== 
+==864297== 1,776 bytes in 74 blocks are still reachable in loss record 54 of 82
+==864297==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864297==    by 0x401A59: new_env_node (setup_shell_exec.c:19)
+==864297==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864297==    by 0x401376: main (main.c:37)
+==864297== 
+==864297== 3,076 bytes in 74 blocks are still reachable in loss record 57 of 82
+==864297==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864297==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864297==    by 0x401A91: new_env_node (setup_shell_exec.c:23)
+==864297==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864297==    by 0x401376: main (main.c:37)
+==864297== 
+==864297== LEAK SUMMARY:
+==864297==    definitely lost: 0 bytes in 0 blocks
+==864297==    indirectly lost: 0 bytes in 0 blocks
+==864297==      possibly lost: 0 bytes in 0 blocks
+==864297==    still reachable: 5,986 bytes in 227 blocks
+==864297==         suppressed: 208,658 bytes in 241 blocks
+==864297== 
+==864297== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+--864297-- 
+--864297-- used_suppression:     74 ignore_libreadline_leaks readline.supp:2 suppressed: 208,658 bytes in 241 blocks
+==864297== 
+==864297== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+==864361== 
+==864361== FILE DESCRIPTORS: 12 open (3 std) at exit.
+==864361== Open file descriptor 8:
+==864361==    at 0x49DA0ED: pipe (pipe.c:29)
+==864361==    by 0x404798: create_heredoc (heredoc.c:110)
+==864361==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864361==    by 0x403C5A: run_command (run_command.c:108)
+==864361==    by 0x401442: exec (main.c:23)
+==864361==    by 0x4013F2: main (main.c:47)
+==864361== 
+==864361== Open file descriptor 6:
+==864361==    at 0x49DA0ED: pipe (pipe.c:29)
+==864361==    by 0x404798: create_heredoc (heredoc.c:110)
+==864361==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864361==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==864361==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==864361==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==864361==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==864361==    by 0x401431: exec (main.c:19)
+==864361==    by 0x4013F2: main (main.c:47)
+==864361== 
+==864361== Open file descriptor 5:
+==864361==    at 0x49DA0ED: pipe (pipe.c:29)
+==864361==    by 0x404798: create_heredoc (heredoc.c:110)
+==864361==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864361==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==864361==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==864361==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==864361==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==864361==    by 0x401431: exec (main.c:19)
+==864361==    by 0x4013F2: main (main.c:47)
+==864361== 
+==864361== Open file descriptor 4:
+==864361==    at 0x49DA0ED: pipe (pipe.c:29)
+==864361==    by 0x404798: create_heredoc (heredoc.c:110)
+==864361==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==864361==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==864361==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==864361==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==864361==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==864361==    by 0x401431: exec (main.c:19)
+==864361==    by 0x4013F2: main (main.c:47)
+==864361== 
+==864361== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==864361==    <inherited from parent>
+==864361== 
+==864361== Open AF_UNIX socket 39: <unknown>
+==864361==    <inherited from parent>
+==864361== 
+==864361== Open file descriptor 38: /home/claffut/.config/Code/logs/20251111T102831/ptyhost.log
+==864361==    <inherited from parent>
+==864361== 
+==864361== Open file descriptor 37: /dev/ptmx
+==864361==    <inherited from parent>
+==864361== 
+==864361== Open file descriptor 3: /home/claffut/Documents/minish/valgrind_exec.log
+==864361==    <inherited from parent>
+==864361== 
+==864361== 
+==864361== HEAP SUMMARY:
+==864361==     in use at exit: 214,702 bytes in 472 blocks
+==864361==   total heap usage: 830 allocs, 358 frees, 237,186 bytes allocated
+==864361== 
+==864361== 4 bytes in 1 blocks are still reachable in loss record 4 of 82
+==864361==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864361==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864361==    by 0x405A6E: fill_args (fill_args.c:33)
+==864361==    by 0x4055C3: set_command (set_command.c:35)
+==864361==    by 0x40505F: parsing (parsing.c:48)
+==864361==    by 0x4013D5: main (main.c:44)
+==864361== 
+==864361== 4 bytes in 1 blocks are still reachable in loss record 5 of 82
+==864361==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864361==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864361==    by 0x4058C0: create_cmd (create_cmd.c:28)
+==864361==    by 0x405536: fill_elements (fill_elements.c:32)
+==864361==    by 0x4055EC: set_command (set_command.c:41)
+==864361==    by 0x40505F: parsing (parsing.c:48)
+==864361==    by 0x4013D5: main (main.c:44)
+==864361== 
+==864361== 16 bytes in 1 blocks are still reachable in loss record 14 of 82
+==864361==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864361==    by 0x4095BC: ft_calloc (ft_calloc.c:25)
+==864361==    by 0x405794: create_args (create_args.c:34)
+==864361==    by 0x405990: fill_args (fill_args.c:20)
+==864361==    by 0x4055C3: set_command (set_command.c:35)
+==864361==    by 0x40505F: parsing (parsing.c:48)
+==864361==    by 0x4013D5: main (main.c:44)
+==864361== 
+==864361== 32 bytes in 1 blocks are still reachable in loss record 21 of 82
+==864361==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864361==    by 0x40849D: ft_lstnew_cmd (ft_lstnew_cmd.c:19)
+==864361==    by 0x4055FD: set_command (set_command.c:42)
+==864361==    by 0x40505F: parsing (parsing.c:48)
+==864361==    by 0x4013D5: main (main.c:44)
+==864361== 
+==864361== 32 bytes in 1 blocks are still reachable in loss record 22 of 82
+==864361==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864361==    by 0x405884: create_cmd (create_cmd.c:24)
+==864361==    by 0x405536: fill_elements (fill_elements.c:32)
+==864361==    by 0x4055EC: set_command (set_command.c:41)
+==864361==    by 0x40505F: parsing (parsing.c:48)
+==864361==    by 0x4013D5: main (main.c:44)
+==864361== 
+==864361== 1,046 bytes in 74 blocks are still reachable in loss record 51 of 82
+==864361==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864361==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864361==    by 0x401A7E: new_env_node (setup_shell_exec.c:22)
+==864361==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864361==    by 0x401376: main (main.c:37)
+==864361== 
+==864361== 1,776 bytes in 74 blocks are still reachable in loss record 54 of 82
+==864361==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864361==    by 0x401A59: new_env_node (setup_shell_exec.c:19)
+==864361==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864361==    by 0x401376: main (main.c:37)
+==864361== 
+==864361== 3,076 bytes in 74 blocks are still reachable in loss record 57 of 82
+==864361==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==864361==    by 0x409290: ft_strdup (ft_strdup.c:20)
+==864361==    by 0x401A91: new_env_node (setup_shell_exec.c:23)
+==864361==    by 0x401A0C: env_init (setup_shell_exec.c:62)
+==864361==    by 0x401376: main (main.c:37)
+==864361== 
+==864361== LEAK SUMMARY:
+==864361==    definitely lost: 0 bytes in 0 blocks
+==864361==    indirectly lost: 0 bytes in 0 blocks
+==864361==      possibly lost: 0 bytes in 0 blocks
+==864361==    still reachable: 5,986 bytes in 227 blocks
+==864361==         suppressed: 208,716 bytes in 245 blocks
+==864361== 
+==864361== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+--864361-- 
+--864361-- used_suppression:     74 ignore_libreadline_leaks readline.supp:2 suppressed: 208,716 bytes in 245 blocks
+==864361== 
+==864361== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+==863893== 
+==863893== FILE DESCRIPTORS: 11 open (3 std) at exit.
+==863893== Open file descriptor 6:
+==863893==    at 0x49DA0ED: pipe (pipe.c:29)
+==863893==    by 0x404798: create_heredoc (heredoc.c:110)
+==863893==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==863893==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==863893==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==863893==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==863893==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==863893==    by 0x401431: exec (main.c:19)
+==863893==    by 0x4013F2: main (main.c:47)
+==863893== 
+==863893== Open file descriptor 5:
+==863893==    at 0x49DA0ED: pipe (pipe.c:29)
+==863893==    by 0x404798: create_heredoc (heredoc.c:110)
+==863893==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==863893==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==863893==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==863893==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==863893==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==863893==    by 0x401431: exec (main.c:19)
+==863893==    by 0x4013F2: main (main.c:47)
+==863893== 
+==863893== Open file descriptor 4:
+==863893==    at 0x49DA0ED: pipe (pipe.c:29)
+==863893==    by 0x404798: create_heredoc (heredoc.c:110)
+==863893==    by 0x404730: process_heredocs_before_exec (heredoc.c:25)
+==863893==    by 0x40485C: handle_heredoc_and_errors (heredoc.c:39)
+==863893==    by 0x40454C: pipe_loop_step (exec_pipe.c:32)
+==863893==    by 0x4043EB: pipe_loop (exec_pipe.c:56)
+==863893==    by 0x404397: exec_pipe (exec_pipe.c:99)
+==863893==    by 0x401431: exec (main.c:19)
+==863893==    by 0x4013F2: main (main.c:47)
+==863893== 
+==863893== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==863893==    <inherited from parent>
+==863893== 
+==863893== Open AF_UNIX socket 39: <unknown>
+==863893==    <inherited from parent>
+==863893== 
+==863893== Open file descriptor 38: /home/claffut/.config/Code/logs/20251111T102831/ptyhost.log
+==863893==    <inherited from parent>
+==863893== 
+==863893== Open file descriptor 37: /dev/ptmx
+==863893==    <inherited from parent>
+==863893== 
+==863893== Open file descriptor 3: /home/claffut/Documents/minish/valgrind_exec.log
+==863893==    <inherited from parent>
+==863893== 
+==863893== 
+==863893== HEAP SUMMARY:
+==863893==     in use at exit: 208,500 bytes in 230 blocks
+==863893==   total heap usage: 854 allocs, 624 frees, 237,600 bytes allocated
+==863893== 
+==863893== LEAK SUMMARY:
+==863893==    definitely lost: 0 bytes in 0 blocks
+==863893==    indirectly lost: 0 bytes in 0 blocks
+==863893==      possibly lost: 0 bytes in 0 blocks
+==863893==    still reachable: 0 bytes in 0 blocks
+==863893==         suppressed: 208,500 bytes in 230 blocks
+==863893== 
+==863893== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
+--863893-- 
+--863893-- used_suppression:     67 ignore_libreadline_leaks readline.supp:2 suppressed: 208,500 bytes in 230 blocks
+==863893== 
+==863893== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)
