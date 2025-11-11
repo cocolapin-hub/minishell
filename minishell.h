@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/11 18:43:55 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/11 19:43:04 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,10 @@ void		set_env_value(t_local **env, char *key, char *value);
 void		unset_env_value(t_local **env, char *key);
 char		*get_env_value(t_local *env, char *key);
 t_local		*find_env_key(t_local *env, char *key);
+t_local		*env_init(char **envp, t_shell *all);
 void		print_export_var(char *var);
 char		**env_to_tab(t_local *env);
 void		sort_env_tab(char **tab);
-t_local		*env_init(char **envp, t_shell *all);
 
 /*__________________________________signal________________________________*/
 void		handles_ctrl_d(char *line, t_shell all, t_command *cmd_list);
@@ -124,6 +124,8 @@ void		setup_sig(void);
 void		print_err(const char *prefix, const char *cmd, const char *msg);
 void		clean_exit(t_shell *all, t_command *cmd_list, int code);
 int			error_code(const char *cmd, const char *msg, int code);
+void		exit_child_with_cleanup(t_command *cmd, char **envp,
+				char *path, int code);
 void		print_invalid_id(char *arg, t_shell *all);
 void		fatal_exit(const char *msg, int code);
 int			redir_error(char *file, char *msg);
@@ -180,6 +182,7 @@ void		fill_args(t_token *list, char ***args);
 /*_______________________________executable_______________________________*/
 /*EXEC*/
 void		pipe_child(t_command *cmd, int prev_fd, int *pipefd);
+int			process_heredocs_before_exec(t_command *cmd_list);
 int			validate_command(t_command *cmd, t_shell *all);
 void		restore_std(int saved_stdin, int saved_stdout);
 void		exec_pipe(t_command *cmd_list, t_shell *all);
@@ -189,7 +192,6 @@ void		run_parent(t_command *cmd, pid_t pid);
 void		exec_child_or_parent(t_command *cmd);
 int			is_valid_identifier(const char *key);
 void		run_command(t_command *cmd);
-int			process_heredocs_before_exec(t_command *cmd_list);
 
 /*BUILTINS*/
 int			builtin_exit(char **args, t_shell *all, t_command *cmd_list);
@@ -203,15 +205,15 @@ int			builtin_pwd(t_shell *all);
 int			is_builtin(char *cmd);
 
 /*REDIR*/
+int			handle_heredoc_and_errors(t_pipe *p, t_shell *all);
 int			handle_redirections(t_command *cmd, int saved_stdin,
 				int saved_stdout);
 int			create_heredoc(char *limiter, t_command *cmd);
-int			apply_redir(t_token *redir);
-int			check_ambiguous_redirect(char *value);
-int			handle_redir_only(t_command *cmd);
-int			handle_heredoc_and_errors(t_pipe *p, t_shell *all);
 void		heredoc_exit(int write_fd, char *limiter,
 				char *line, t_command *cmd);
+int			check_ambiguous_redirect(char *value);
+int			handle_redir_only(t_command *cmd);
+int			apply_redir(t_token *redir);
 
 /*__________________________________LIBFT_________________________________*/
 t_command	*ft_lstnew_cmd(char **args, t_token *elements, t_shell *all);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_char.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochkaoul <ochkaoul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 21:41:48 by ochkaoul         ###   ########.fr       */
+/*   Updated: 2025/11/11 19:44:22 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ static int	check_elem_special(t_token *elem, t_shell *all)
 	return (1);
 }
 
-static int	check_args_special(char **args, int has_echo, t_shell *all)
+static int	check_args_special(char **args, int is_built, t_shell *all)
 {
 	char	s;
 	int		i;
 
-	if (!args || has_echo)
+	if (!args || is_built)
 		return (1);
 	i = 0;
 	while (args[i])
@@ -77,17 +77,16 @@ static int	check_args_special(char **args, int has_echo, t_shell *all)
 
 int	check_special(t_command *cmd, t_shell *all)
 {
-	int	has_echo;
+	int	is_built;
 
 	if (!cmd)
 		return (1);
 	while (cmd)
 	{
-		has_echo = (cmd->args && cmd->args[0]
-				&& ft_strcmp(cmd->args[0], "echo") == 0);
+		is_built = is_builtin((cmd->args[0]));
 		if (!check_elem_special(cmd->elem, all))
 			return (0);
-		if (!check_args_special(cmd->args, has_echo, all))
+		if (!check_args_special(cmd->args, is_built, all))
 			return (0);
 		cmd = cmd->next;
 	}

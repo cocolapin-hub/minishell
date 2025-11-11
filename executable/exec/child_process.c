@@ -6,7 +6,7 @@
 /*   By: claffut <claffut@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 11:41:36 by ochkaoul          #+#    #+#             */
-/*   Updated: 2025/11/06 20:59:38 by claffut          ###   ########.fr       */
+/*   Updated: 2025/11/11 19:43:59 by claffut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,25 @@ static char	*command_path(char *cmd, t_local *env)
 	return (find_in_path(cmd, env));
 }
 
-static int	validate_path(char *path, char *cmd, char **envp)
+static int	validate_path(char *path, char *cmd_name,
+							char **envp, t_command *cmd)
 {
 	struct stat	st;
 
 	if (stat(path, &st) == -1)
 	{
-		free_split(envp);
-		free(path);
-		_exit(error_code(cmd, "No such file or directory", 127));
+		error_code(cmd_name, "No such file or directory", 127);
+		exit_child_with_cleanup(cmd, envp, path, 127);
 	}
 	if (S_ISDIR(st.st_mode))
 	{
-		free_split(envp);
-		free(path);
-		_exit(error_code(cmd, "Is a directory", 126));
+		error_code(cmd_name, "Is a directory", 126);
+		exit_child_with_cleanup(cmd, envp, path, 126);
 	}
 	if (access(path, X_OK) != 0)
 	{
-		free_split(envp);
-		free(path);
-		_exit(error_code(cmd, "Permission denied", 126));
+		error_code(cmd_name, "Permission denied", 126);
+		exit_child_with_cleanup(cmd, envp, path, 126);
 	}
 	return (0);
 }
@@ -86,12 +84,15 @@ void	child_process(t_command *cmd, t_local *env)
 	if (!path)
 	{
 		if (!get_env_value(env, "PATH"))
-			_exit(error_code(cmd->args[0], "No such file or directory", 127));
-		_exit(error_code(cmd->args[0], "command not found", 127));
+		{
+			error_code(cmd->args[0], "No such file or directory", 127);
+			exit_child_with_cleanup(cmd, envp, NULL, 127);
+		}
+		error_code(cmd->args[0], "command not found", 127);
+		exit_child_with_cleanup(cmd, envp, NULL, 127);
 	}
-	validate_path(path, cmd->args[0], envp);
+	validate_path(path, cmd->args[0], envp, cmd);
 	execve(path, cmd->args, envp);
-	free_split(envp);
-	free(path);
-	_exit(error_code(cmd->args[0], strerror(errno), 126));
+	error_code(cmd->args[0], strerror(errno), 126);
+	exit_child_with_cleanup(cmd, envp, path, 126);
 }
